@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supergo.mapper.OrderinfoMapper">
+  <resultMap id="BaseResultMap" type="com.supergo.pojo.Orderinfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <constructor>
+      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="order_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="itemCount" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="seller_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="pay_method" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pay_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="outTradeNo" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="distribute_method" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="expect_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="total_price" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="carriage_money" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="pay" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="state" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, order_number, itemCount, user_id, seller_id, order_time, pay_method, pay_time, 
+    outTradeNo, distribute_method, expect_time, total_price, carriage_money, pay, state
+  </sql>
+</mapper>

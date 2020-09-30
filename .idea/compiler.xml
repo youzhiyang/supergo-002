@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="supergo-base-service" />
+        <module name="supergo-common" />
+        <module name="supergo-eureka" />
+        <module name="supergo-manager-feign" />
+        <module name="supergo-manager-service" />
+        <module name="supergo-manager-web" />
+        <module name="supergo-mapper" />
+        <module name="supergo-page-feign" />
+        <module name="supergo-page-service" />
+        <module name="supergo-page1" />
+        <module name="supergo-pojo" />
+        <module name="supergo-portal-web" />
+        <module name="supergo-search-feign" />
+        <module name="supergo-search-service" />
+        <module name="supergo-sso-feign" />
+        <module name="supergo-sso-service" />
+        <module name="supergo-zuul" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="supergo-002" target="1.8" />
+      <module name="supergo-base-service" target="1.8" />
+      <module name="supergo-common" target="1.8" />
+      <module name="supergo-eureka" target="1.8" />
+      <module name="supergo-manager" target="1.8" />
+      <module name="supergo-manager-feign" target="1.8" />
+      <module name="supergo-manager-service" target="1.8" />
+      <module name="supergo-manager-web" target="1.8" />
+      <module name="supergo-mapper" target="8" />
+      <module name="supergo-page" target="1.8" />
+      <module name="supergo-page-feign" target="1.8" />
+      <module name="supergo-page-service" target="1.8" />
+      <module name="supergo-page1" target="1.8" />
+      <module name="supergo-pojo" target="1.8" />
+      <module name="supergo-portal-web" target="1.8" />
+      <module name="supergo-search" target="1.8" />
+      <module name="supergo-search-feign" target="1.8" />
+      <module name="supergo-search-service" target="1.8" />
+      <module name="supergo-sso" target="1.8" />
+      <module name="supergo-sso-feign" target="1.8" />
+      <module name="supergo-sso-service" target="1.8" />
+      <module name="supergo-zuul" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

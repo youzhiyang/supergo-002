@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎登入</title>
+</head>
+<body >
+
+    <span v-if="msg != ''" style="color: red" v-text="this.msg"/>
+
+    <div id="app">
+        <div>
+            用户名:<input type="text" id="username" v-model="userInfo.username"/>
+            <br>
+            密码:<input type="text" id="password" v-model="userInfo.password"/>
+            <br>
+            <button @click="doLogin()"> 登入 </button>
+        </div>
+    </div>
+
+</body>
+<script src="../js/vuejs-2.5.16.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+<script src="../js/jquery-3.4.1.js"></script>
+<script>
+    Vue.prototype.axios = 'axios';
+    new Vue({
+        el:'#app',
+        data:{
+            userInfo:{
+                username:'',
+                password:''
+            },
+            msg: ''
+        },
+        methods:{
+            doLogin(){
+                axios({
+                    method: 'post',
+                    url: 'http://www.supergo-sso.com/user/doLogin',
+                    data: {
+                        username: this.userInfo.username,
+                        password: this.userInfo.password
+                    }
+                }).then(function (res) {
+                    console.log(res);
+                    if(res.data.code == 200) {
+                        //window.location.href = 'http://localhost:9999/api/page/149187842868047.html';
+                        let token = res.data.data;
+                        console.log("token:  " + token);
+                        let url = 'http://www.supergo-page.com/page/html/build/149187842868088';
+                        //Bearer token认证
+                        let authorization = 'Bearer ' + token
+                        alert(authorization);
+                        axios({
+                            method: 'post',
+                            url: url,
+                            headers: {
+                                'Authorization': authorization
+                            }
+                        }).then(function (res) {
+                            console.log(res);
+                            window.location.href = 'http://www.supergo-page.com/149187842868088.html';
+                        }).catch(function (error) {
+                            alert("生成模板失败");
+                        });
+                    } else {
+                        alert(res.data.msg);
+                        this.msg = res.msg;
+                    }
+                }).catch(function (error) {
+                    alert(error);
+                });
+            }
+        },
+        beforeCreate() {
+            //js清楚input历史记录,防止返回出现记录
+            $("#username").attr('autocomplete', 'off');
+            $("#password").attr('autocomplete', 'off');
+        }
+    });
+
+
+</script>
+</html>

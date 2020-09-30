@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/supergo-002.iml" filepath="$PROJECT_DIR$/supergo-002.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-base-service/supergo-base-service.iml" filepath="$PROJECT_DIR$/supergo-base-service/supergo-base-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-common/supergo-common.iml" filepath="$PROJECT_DIR$/supergo-common/supergo-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-eureka/supergo-eureka.iml" filepath="$PROJECT_DIR$/supergo-eureka/supergo-eureka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager/supergo-manager.iml" filepath="$PROJECT_DIR$/supergo-manager/supergo-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager/supergo-manager-feign/supergo-manager-feign.iml" filepath="$PROJECT_DIR$/supergo-manager/supergo-manager-feign/supergo-manager-feign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager/supergo-manager-service/supergo-manager-service.iml" filepath="$PROJECT_DIR$/supergo-manager/supergo-manager-service/supergo-manager-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-manager-web/supergo-manager-web.iml" filepath="$PROJECT_DIR$/supergo-manager-web/supergo-manager-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-mapper/supergo-mapper.iml" filepath="$PROJECT_DIR$/supergo-mapper/supergo-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-page/supergo-page.iml" filepath="$PROJECT_DIR$/supergo-page/supergo-page.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-page/supergo-page-feign/supergo-page-feign.iml" filepath="$PROJECT_DIR$/supergo-page/supergo-page-feign/supergo-page-feign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-page/supergo-page-service/supergo-page-service.iml" filepath="$PROJECT_DIR$/supergo-page/supergo-page-service/supergo-page-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-page1/supergo-page1.iml" filepath="$PROJECT_DIR$/supergo-page1/supergo-page1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-pojo/supergo-pojo.iml" filepath="$PROJECT_DIR$/supergo-pojo/supergo-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-portal-web/supergo-portal-web.iml" filepath="$PROJECT_DIR$/supergo-portal-web/supergo-portal-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-search/supergo-search.iml" filepath="$PROJECT_DIR$/supergo-search/supergo-search.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-search/supergo-search-feign/supergo-search-feign.iml" filepath="$PROJECT_DIR$/supergo-search/supergo-search-feign/supergo-search-feign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-search/supergo-search-service/supergo-search-service.iml" filepath="$PROJECT_DIR$/supergo-search/supergo-search-service/supergo-search-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-sso/supergo-sso.iml" filepath="$PROJECT_DIR$/supergo-sso/supergo-sso.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-sso/supergo-sso-feign/supergo-sso-feign.iml" filepath="$PROJECT_DIR$/supergo-sso/supergo-sso-feign/supergo-sso-feign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-sso/supergo-sso-service/supergo-sso-service.iml" filepath="$PROJECT_DIR$/supergo-sso/supergo-sso-service/supergo-sso-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supergo-zuul/supergo-zuul.iml" filepath="$PROJECT_DIR$/supergo-zuul/supergo-zuul.iml" />
+    </modules>
+  </component>
+</project>

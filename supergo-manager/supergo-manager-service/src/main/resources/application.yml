@@ -1,0 +1,55 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: supergo-manager
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/supergo?serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+#    durid:
+#      initial-size: 5
+#      min-idle: 5
+#      max-active: 20
+#      max-wait: 1000
+#      time-between-eviction-runs-millis: 60000
+#      min-evictable-idle-time-millis: 300000
+#      validation-query: select 'x'
+#      test-while-idle: true
+#      test-on-borrow: false
+#      test-on-return: false
+#      pool-prepared-statements: true
+#      max-open-prepared-statements: 50
+#      max-pool-prepared-statement-per-connection-size: 20
+#      web-stat-filter:
+#        enabled: true
+#        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+#      stat-view-servlet:
+#        allow: 127.0.0.1 #IP 白名单
+#        url-pattern: /druid/* #监控地址,默认 /druid/*
+#        login-username: admin
+#        login-password: admin
+  servlet:
+    multipart:
+      max-file-size: 5MB
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+mybatis:
+  type-aliases-package: com.supergo.pojo
+management:
+  endpoint:
+    shutdown:
+      enabled: true #开启端点
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+jwt:
+  config:
+    key: abc123      #密匙
+    ttl: 3600        #过期时间

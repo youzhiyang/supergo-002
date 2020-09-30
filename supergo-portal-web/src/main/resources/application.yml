@@ -1,0 +1,22 @@
+#端口设置
+server:
+  port: 9002
+#应用名称
+spring:
+  application:
+    name: supergo-portal-web
+#添加redis支持
+  redis:
+    host: 127.0.0.1
+  # password: 123456
+#注册进入eureka注册中心
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    prefer-ip-address: true      #是否将ip注册到eureka注册中心
+    ip-address: 127.0.0.1        #ip地址
+    instance-id: ${eureka.instance.ip-address}.${server.port}  #注册到eureka服务器的注册名
+    lease-renewal-interval-in-seconds: 3   #获取服务信息间隔时间
+    lease-expiration-duration-in-seconds: 10  #心跳等待时间

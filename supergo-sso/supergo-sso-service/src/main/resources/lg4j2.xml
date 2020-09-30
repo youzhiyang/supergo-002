@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <!--自定义属性信息-->
+    <properties>
+        <property name="LOG_HOME">logs</property>
+        <property name="FILE_NAME">applog</property>
+    </properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!--滚动日志配置
+            filePattern用于设置滚动文件的命名规则
+                        若以.zip为结尾则会自动归档日志文件 也支持其他的格式.gz, .zip, .bz2, 等-->
+        <RollingRandomAccessFile name="RollingAppender"
+                                 fileName="${LOG_HOME}/${FILE_NAME}.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd HH-mm}-%i.log">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <!--滚动时间间隔 该参数需结合filePattern中的时间格式 此时表示为1分钟更换一个新文件
+                    若时间格式为%d{yyyy-MM-dd HH}则表示每小时更换一个新文件-->
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!--单个日志文件最大容量                -->
+                <SizeBasedTriggeringPolicy size="1 MB"/>
+            </Policies>
+            <!--最大保留的日志文件个数  默认为7个          -->
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger name="com.kkb.controller" level="debug">
+            <AppenderRef ref="RollingAppender"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>

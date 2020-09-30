@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supergo.mapper.OrderinvoiceMapper">
+  <resultMap id="BaseResultMap" type="com.supergo.pojo.Orderinvoice">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <constructor>
+      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="invoice_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="invoice_up" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="invoice_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="invoice_code" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="invoice_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="invoice_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="captcha" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password_area" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="service_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="spec_large" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="money" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="total" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="tax_rate" javaType="java.lang.Float" jdbcType="REAL" />
+      <arg column="rate_cap" javaType="java.lang.Float" jdbcType="REAL" />
+      <arg column="seller_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="identifier" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="phone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="account" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="payee" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="issuer" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, invoice_type, invoice_up, invoice_content, invoice_code, invoice_number, invoice_time, 
+    captcha, password_area, service_name, spec_large, number, price, money, total, tax_rate, 
+    rate_cap, seller_name, identifier, phone, account, remark, payee, issuer
+  </sql>
+</mapper>
