@@ -23,7 +23,7 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH")
+                .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH","OPTIONS")
                 .maxAge(3600 * 24);
     }
 }

@@ -26,7 +26,6 @@ public class GlobalExceptionResolver {
     public String authExceptionResolver(MyAuthException e,HttpServletRequest request) {
         String requestURL = request.getRequestURL().toString();
         System.out.println("requestURL:   " + requestURL);
-
         //如果认证失败，跳转到登入页
         return "redirect:http://www.supergo-sso.com/user/loginPage";
     }

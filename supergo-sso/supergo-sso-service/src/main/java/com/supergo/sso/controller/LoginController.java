@@ -38,7 +38,6 @@ public class LoginController {
     @GetMapping("/user/loginPage")
     public String loginPage(String url) {
         System.out.println("进入登入页111。。。。:  " + url);
-
         return "login";
     }
 

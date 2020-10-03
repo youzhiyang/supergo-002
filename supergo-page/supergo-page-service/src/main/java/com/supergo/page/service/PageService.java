@@ -32,7 +32,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Service
 public class PageService {
 
-    public static String pagePath = "E:\\supergo\\supergo-002\\supergo-page\\supergo-page-service\\src\\main\\resources\\goods\\";
+    public static String pagePath = "E:\\supergo\\supergo\\supergo\\supergo-002\\supergo-page\\supergo-page-service\\src\\main\\resources\\goods\\";
     public static String sufferHtml = ".html";
 
     @Autowired
@@ -95,15 +95,21 @@ public class PageService {
         UserInfo userInfo = new UserInfo();
         Claims claims = (Claims) request.getAttribute("userInfo");
         System.out.println("claims:  " + claims != null);
+        String token = null;
         if(claims != null) {
             //如果未登入用户信息设置为null
             userInfo.setId(claims.getId());
             userInfo.setUsername(claims.getSubject());
             System.out.println("claims:  " + claims.toString());
+            //获取token值
+            Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries("loginInfo" + claims.getId());
+            System.out.println(entries);
+            token = (String) entries.get(claims.getId());
         }
 
         //获取登入用户信息
         context.setVariable("userInfo",userInfo);
+        context.setVariable("token","Bearer " + token);
 
         // 获取商品信息
         Goods goods = goodsFeign.getGoodsById(goodsId);

@@ -91,22 +91,9 @@ public class LoginServiceImpl extends BaseServiceImpl<User> implements LoginServ
      */
     public void loginOut(HttpServletRequest request, HttpServletResponse response) {
         String userId = request.getParameter("userId");
-        //1、清楚cookie
-        Cookie[] cookies = request.getCookies();
-
-//        if(cookies != null) {
-//            for(Cookie cookie : cookies) {
-//                System.out.println("cookie:   " + cookie.toString());
-//                if(cookie.getName().equals("accessToken")) {
-//                    System.out.println("userId:-------------   " + userId);
-//                    //2、清除redis
-//                    stringRedisTemplate.delete("loginInfo" + userId);
-//                }
-//                cookie.setMaxAge(0);
-//                cookie.setPath("/");
-//                response.addCookie(cookie);
-//            }
-//        }
+        System.out.println(userId);
+        //删除缓存
+        stringRedisTemplate.delete("loginInfo" + userId);
     }
 
     /**
