@@ -1,8 +1,10 @@
 package com.supergo.manager.controller;
 
 import com.supergo.http.HttpResult;
+import com.supergo.manager.service.AreasService;
 import com.supergo.manager.service.CitiesService;
 import com.supergo.manager.service.ProvincesService;
+import com.supergo.pojo.Areas;
 import com.supergo.pojo.Cities;
 import com.supergo.pojo.Provinces;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +25,33 @@ public class ProvicesController {
     private CitiesService citiesService;
     @Autowired
     private ProvincesService provincesService;
+    @Autowired
+    private AreasService areasService;
 
+    /**
+     * 查询地址信息
+     * @return
+     */
     @RequestMapping("/getProvincesList")
-    public HttpResult getProvincesList() {
-
+    public List<Provinces> getProvincesList() {
+        //获取省级信息
         List<Provinces> provincesList = provincesService.getProvincesList();
         Cities cities = new Cities();
+        List<Cities> cittList = null;
         for(Provinces provinces : provincesList) {
-            citiesService.findByWhere(cities);
             cities.setId(provinces.getId());
-            provinces.setCitiesList(citiesService.findByWhere(cities));
+            //根据省级id获取城市信息
+            cittList = citiesService.findByWhere(cities);
+            provinces.setCitiesList(cittList);
+            List<Areas> areasList = null;
+            for(Cities cities1 : cittList) {
+                Areas areas = new Areas();
+                areas.setCityid(cities1.getCityid());
+                //根据城市id获取区域信息
+                areasList = areasService.findByWhere(areas);
+                cities1.setAreasList(areasList);
+            }
         }
-        return HttpResult.ok(provincesList);
+        return provincesList;
     }
 }

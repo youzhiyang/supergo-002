@@ -109,7 +109,7 @@ public class PageService {
 
         //获取登入用户信息
         context.setVariable("userInfo",userInfo);
-        context.setVariable("token","Bearer " + token);
+        context.setVariable("bearerToken","Bearer " + token);
 
         // 获取商品信息
         Goods goods = goodsFeign.getGoodsById(goodsId);

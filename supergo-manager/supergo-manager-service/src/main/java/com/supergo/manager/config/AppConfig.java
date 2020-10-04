@@ -3,6 +3,7 @@ package com.supergo.manager.config;
 import com.supergo.manager.interceptor.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -22,6 +23,19 @@ public class AppConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/**/goods/**")
                 .excludePathPatterns("/**/cities/**")
-                .excludePathPatterns("/**/itemcat/**");
+                .excludePathPatterns("/**/itemcat/**")
+                .excludePathPatterns("/**/provinces/**");
+    }
+
+    /**
+     * 跨域支持
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH","OPTIONS")
+                .maxAge(3600 * 24);
     }
 }

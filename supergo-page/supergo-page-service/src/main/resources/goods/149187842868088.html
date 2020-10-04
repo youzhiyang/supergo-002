@@ -15,8 +15,8 @@
 	<script src="js/vuejs-2.5.16.js"></script>
 	<script src="js/axios-0.18.0.js"></script>
 	<script>
-        var itemList = [{"id":1282248,"title":"\u8054\u60F3 X2-CU \u767D\u8272 \u8054\u901A4G\u624B\u673A \u53CC\u5361\u53CC\u5F85","sellPoint":"5\u540B\u516B\u68382.0GHz\uFF0C1300+500\u50CF\u7D20\uFF0C\u8000\u8272\u503E\u57CE\uFF01","price":1699.00,"stockCount":null,"num":99999,"barcode":null,"image":"http:\/\/img14.360buyimg.com\/n1\/s450x450_jfs\/t3736\/175\/107179033\/114926\/c0bca93e\/57ff5de0N8e231194.jpg","categoryId":560,"status":"1","createTime":"2015-03-08T21:29:11.000+08:00","updateTime":"2015-03-08T21:29:11.000+08:00","itemSn":null,"costPirce":null,"marketPrice":null,"isDefault":null,"goodsId":149187842868088,"sellerId":"1","cartThumbnail":null,"category":"\u624B\u673A","brand":"\u8054\u60F3","spec":"{\"\u673A\u8EAB\u5185\u5B58\":\"16G\",\"\u7F51\u7EDC\":\"\u8054\u901A4G\"}","seller":"\u8054\u60F3"}];
-        var userInfo = {"id":null,"username":null,"password":null};
+        var itemList = [{"id":1282248,"title":"\u8054\u60F3 X2-CU \u767D\u8272 \u8054\u901A4G\u624B\u673A \u53CC\u5361\u53CC\u5F85","sellPoint":"5\u540B\u516B\u68382.0GHz\uFF0C1300+500\u50CF\u7D20\uFF0C\u8000\u8272\u503E\u57CE\uFF01","price":1699.00,"stockCount":null,"num":99999,"barcode":null,"image":"http:\/\/img14.360buyimg.com\/n1\/s450x450_jfs\/t3736\/175\/107179033\/114926\/c0bca93e\/57ff5de0N8e231194.jpg","categoryId":560,"status":"1","createTime":"2015-03-08T21:29:11.000+08:00","updateTime":"2015-03-08T21:29:11.000+08:00","itemSn":null,"costPirce":null,"marketPrice":null,"isDefault":null,"goodsId":149187842868088,"sellerId":"1","cartThumbnail":null,"category":"\u624B\u673A","brand":"\u8054\u60F3","spec":"{\"network\":\"\u79FB\u52A83G\",\"rom\":\"16G\"}","seller":"\u8054\u60F3"}];
+        var userInfo = {"id":"16","username":"user_4","password":null};
 		var goods = {"id":149187842868088,"sellerId":"yijia","goodsName":"\u8054\u60F3 X2-CU \u767D\u8272 \u8054\u901A4G\u624B\u673A \u53CC\u5361\u53CC\u5F85","defaultItemId":1282248,"auditStatus":"1","isMarketable":"1","brandId":1,"caption":"5\u540B\u516B\u68382.0GHz\uFF0C1300+500\u50CF\u7D20\uFF0C\u8000\u8272\u503E\u57CE\uFF01","category1Id":558,"category2Id":559,"category3Id":560,"smallPic":"http:\/\/img14.360buyimg.com\/n1\/s450x450_jfs\/t3736\/175\/107179033\/114926\/c0bca93e\/57ff5de0N8e231194.jpg","price":1699.00,"typeTemplateId":35,"isEnableSpec":"0","isDelete":"0"};
 		var goodsDesc = {"goodsId":149187842868088,"introduction":"11<img src=\"http:\/\/localhost:9102\/plugins\/kindeditor\/plugins\/emoticons\/images\/10.gif\" border=\"0\" alt=\"\" \/><img src=\"http:\/\/localhost:9102\/plugins\/kindeditor\/plugins\/emoticons\/images\/20.gif\" border=\"0\" alt=\"\" \/>","specificationItems":"[{\"attributeName\":\"network\",\"attributeValue\":[\"\u79FB\u52A83G\",\"\u79FB\u52A84G\"]},{\"attributeName\":\"rom\",\"attributeValue\":[\"16G\",\"32G\"]}]","customAttributeItems":"[{\"attributeKey\":\"fromLocal\",\"optionName\":\"\u56FD\u822A\"},{\"attributeKey\":\"rom\",\"optionName\":\"64G\"}]","itemImages":"[{\"color\":\"\u767D\u8272\",\"url\":\"http:\/\/192.168.25.133\/group1\/M00\/00\/00\/wKgZhVnGbYuAO6AHAAjlKdWCzvg253.jpg\"},{\"color\":\"\u84DD\u8272\",\"url\":\"http:\/\/192.168.25.133\/group1\/M00\/00\/00\/wKgZhVnKX4yAbCC0AAFa4hmtWek406.jpg\"},{\"color\":\"\u9ED1\u8272\",\"url\":\"http:\/\/192.168.25.133\/group1\/M00\/00\/00\/wKgZhVnKX5WAOsqXAAETwD7A1Is409.jpg\"}]","packageList":"\u5851\u6599\u888B","saleService":"\u65E0"};
 		var itemCat1 = {"children":null,"id":558,"parentId":0,"name":"\u624B\u673A","typeId":35};
@@ -24,6 +24,7 @@
         var itemCat3 = {"children":null,"id":558,"parentId":0,"name":"\u624B\u673A","typeId":35};
 		var specificationList = [{"attributeValue":["\u79FB\u52A83G","\u79FB\u52A84G"],"attributeName":"network"},{"attributeValue":["16G","32G"],"attributeName":"rom"}];
         var customAttributeList = [{"attributeKey":"fromLocal","optionName":"\u56FD\u822A"},{"attributeKey":"rom","optionName":"64G"}];
+        var bearerToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxNiIsInN1YiI6InVzZXJfNCIsImlhdCI6MTYwMTgxOTg4OSwiZXhwIjoxNjAxODIzNDg5fQ.KzVBEduCPL7w1H6H9XnaeWOvgMV7NejWfk9gGCM-X-8"
 	</script>
 
 </head>
@@ -42,8 +43,14 @@
                 <div class="shortcut">
                     <ul class="fl">
                         <li class="f-item">品优购欢迎您！</li>
-                        <li class="f-item">请<a href="http://localhost:9999/api/sso/user/loginPage?url=http://localhost:9999/api/page/149187842868047.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
                         
+                        <li class="f-item">
+                            <span>user_4</span>
+                            <span id="loginOutSpan">
+                                <!--<a th:href="@{'http://localhost:9999/api/sso/user/loginOut?userId='+${userInfo.username}+'&goodsId='+${goods.id}}">退出</a>-->
+                                <a @click="loginOut()">退出</a>
+                            </span>
+                        </li>
                     </ul>
                     <ul class="fr">
                         <li class="f-item">我的订单</li>

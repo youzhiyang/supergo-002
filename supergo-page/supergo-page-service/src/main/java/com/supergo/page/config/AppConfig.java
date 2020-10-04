@@ -23,7 +23,8 @@ public class AppConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/**/*.html","/**/*.css","/**/*.js","/**/*.png","/**/*.jpg","/**/*.json","/**/*.min.map")
                 .excludePathPatterns("/**/*.eto","/**/*.svg","/**/*.ttf","/**/*.woff")
-                .excludePathPatterns("/error","/undefined");
+                .excludePathPatterns("/error","/undefined")
+                .excludePathPatterns("/**/provinces/**");  //对含有provinces接口放行
                 //.excludePathPatterns("/**/html/build/**");  //对html页面生成方法放行
 
     }
@@ -33,7 +34,6 @@ public class AppConfig implements WebMvcConfigurer {
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        System.out.print("aaa------------");
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowCredentials(true)

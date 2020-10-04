@@ -69,17 +69,10 @@ public class LoginServiceImpl extends BaseServiceImpl<User> implements LoginServ
         //设置过期时间
         stringRedisTemplate.expire("loginInfo" + user1.getId(),10, TimeUnit.MINUTES);
 
-        //登入成功
-        //将token保存至cookie中
-        Cookie cookie = new Cookie("accessToken", token);
-        response.addCookie(cookie);
-        //设置超时时间
-        cookie.setMaxAge(60 * 3);
-
         //封装httpResult数据
         HttpResult httpResult = new HttpResult();
         httpResult.setCode(200);
-        httpResult.setData(token);
+        httpResult.setData("Bearer " + token);
 
         return httpResult;
     }

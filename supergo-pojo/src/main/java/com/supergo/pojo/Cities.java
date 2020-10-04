@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
 
 @ApiModel(value="com.supergo.pojo.Cities")
 @Table(name = "tb_cities")
@@ -35,6 +36,8 @@ public class Cities implements Serializable {
     @ApiModelProperty(value="provinceid省份ID")
     private String provinceid;
 
+    private List<Areas> areasList;
+
     private static final long serialVersionUID = 1L;
 
     public Cities(Integer id, String cityid, String city, String provinceid) {
@@ -43,6 +46,8 @@ public class Cities implements Serializable {
         this.city = city;
         this.provinceid = provinceid;
     }
+
+
 
     public Cities() {
         super();
@@ -100,6 +105,14 @@ public class Cities implements Serializable {
      */
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Areas> getAreasList() {
+        return areasList;
+    }
+
+    public void setAreasList(List<Areas> areasList) {
+        this.areasList = areasList;
     }
 
     /**

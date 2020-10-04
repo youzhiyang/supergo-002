@@ -23,27 +23,12 @@ public class GlobalExceptionResolver {
      */
     @ExceptionHandler(MyAuthException.class)
     public String authExceptionResolver(MyAuthException e,HttpServletRequest request) {
-        System.out.println("aaaaaaaaaa");
+        System.out.println("进入认证失败异常处理器....");
         StringBuffer requestURL = request.getRequestURL();
         //String baseUrl = getPathPrefix(requestURL.toString());
         //如果认证失败，跳转到登入页
         return "redirect:http://localhost:9999/api/sso/user/loginPage?url=" + requestURL;
     }
-
-    /**
-     * 获取路径前缀
-     * @param url
-     * @return
-     */
-//    public String getPathPrefix(String url) {
-//        //url = "http://windows10.microdone.cn:9004/html/build/149187842868044";
-//        int index = url.lastIndexOf(":");
-//        String str1 = url.substring(0,index);
-//        String str2 = url.substring(index);
-//        String[] strArry = str2.split("/");
-//        String str3 = str1 + strArry[0];
-//        return str3;
-//    }
 
     /**
      * jwt的token过期

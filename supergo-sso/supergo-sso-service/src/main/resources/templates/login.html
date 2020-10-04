@@ -46,17 +46,14 @@
                     console.log(res);
                     if(res.data.code == 200) {
                         //window.location.href = 'http://localhost:9999/api/page/149187842868047.html';
-                        let token = res.data.data;
-                        console.log("token:  " + token);
+                        let bearerToken = res.data.data;
+                        console.log(bearerToken);
                         let url = 'http://www.supergo-page.com/page/html/build/149187842868088';
-                        //Bearer token认证
-                        let authorization = 'Bearer ' + token
-                        alert(authorization);
                         axios({
                             method: 'get',
                             url: url,
                             headers: {
-                                'Authorization': authorization
+                                'Authorization': bearerToken
                             }
                         }).then(function (res) {
                             console.log(res);
