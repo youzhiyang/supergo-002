@@ -151,7 +151,45 @@ window.onload = function () {
             },
             //获取地址
             getAddress: function (address) {
-                this.address += address;
+                //this.address += address;
+                var url = "http://www.supergo-page.com/page/provinces/getProvincesList";
+                axios({
+                    method: 'get',
+                    url: url,
+                    headers: {
+                        'Authorization': bearerToken
+                    }
+                }).then(function (res) {
+                    console.log(res);
+                    var provincesList = res.data.data;
+                    //定义省级列表数组
+                    var provinceArr = [];
+                    //定义市级列表数组
+                    var cityArr = [];
+                    //定义区域列表数组
+                    var areaArr = [];
+                    //遍历省级列表
+                    for(var i = 0;i < provincesList.length;i++) {
+                        var province = provincesList[i].province;
+                        var citiesList = provincesList[i].citiesList;
+                        //遍历市级列表
+                        for(var j = 0;citiesList.length;j++) {
+                            var city = citiesList[j].city;
+                            var areasList = citiesList[j].areasList;
+                            //遍历区域列表
+                            for(var k = 0;k < areasList.length;k++) {
+                                areaArr.push(areasList[k].area);
+                                citysArr.push(areaArr);
+                            }
+                            cityArr.push(city)
+                            citysArr.push(cityArr);
+                        }
+                        provinceArr.push(provincesList[i]);
+                        citysArr.push(provinceArr);
+                    }
+                }).catch(function (error) {
+                    alert("获取城市列表失败！");
+                });
             },
             setDefaultAddress: function () {
                 for(let i = 0;i < this.citysArr.length;i++) {
@@ -159,39 +197,14 @@ window.onload = function () {
                 }
                 console.log("address:   " + this.address);
             }
-            //设置选择边线的默认值
-            // defaultChange: function () {
-            //     //this.$nextTick()将回调延迟到下次 DOM 更新循环之后执行
-            //     this.$nextTick(function(){
-            //         //给n赋值
-            //         this.n = 0;
-            //         //获取第一个div坐标原点
-            //         let firstDiv = this.$refs.i[0];
-            //         let firstDivLeft = firstDiv.offsetLeft;
-            //         //获取点击的div坐标
-            //         let left = this.$refs.i[0].offsetLeft;
-            //         //左边线长度
-            //         let leftWidth = left - firstDivLeft;
-            //         console.log("leftWidth:   " + leftWidth);
-            //         //计算选中div宽度 5:左边距 + 字体个数 * 字体大小 + 字体右边距 + 图片宽度 + 边线宽度
-            //         let width = 5 + this.titleArr[0].length * 12 + 6 + 23 + 2;
-            //         console.log("width:  " + width);
-            //         let positionDiv = this.$refs.position.offsetLeft;
-            //         console.log("positionDiv:   " + positionDiv);
-            //         //右边线长的宽度 div总宽度 - 右边点横坐标 - 内边距 - 左内边距 + 右外边距；
-            //         //元素设置为none后，到左边的距离变为0，加载一个到左边距离
-            //         let rightWidth = 63 + 470 - (left + width) - 60 + 10;
-            //         console.log("rightWidth:  " + rightWidth);
-            //         this.leftWidth = leftWidth;
-            //         this.rightWidth = rightWidth;
-            //     });
-            // }
         },
         created:function () {
             //加载默认的SKU
             this.loadSku();
             //动态添加规格标签
             this.specificationLable1();
+            //加载默认地址
+            this.getAddress();
             //设置选择边线的默认值
             this.changeN(0);
             //设置配送地址默认值
