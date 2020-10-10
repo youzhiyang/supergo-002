@@ -4,13 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.supergo.http.HttpResult;
 import com.supergo.manager.feign.ApiGoodsFeign;
 import com.supergo.manager.feign.ApiItemCatFeign;
+import com.supergo.manager.feign.ApiProvincesFeign;
 import com.supergo.page.config.GoddsLock;
 import com.supergo.page.pojo.UserInfo;
 import com.supergo.page.util.FileUtil;
-import com.supergo.pojo.Goods;
-import com.supergo.pojo.Goodsdesc;
-import com.supergo.pojo.Item;
-import com.supergo.pojo.Itemcat;
+import com.supergo.pojo.*;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +39,8 @@ public class PageService {
     private ApiGoodsFeign goodsFeign;
     @Autowired
     private ApiItemCatFeign itemCatFeign;
+    @Autowired
+    private ApiProvincesFeign apiProvincesFeign;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -153,6 +153,9 @@ public class PageService {
             }
         }
 
+        //获取地址信息
+        List<Provinces> provincesList = apiProvincesFeign.getProvincesList();
+
         // 查询库存列表
         List<Item> itemList = goodsFeign.getItemList(goodsId);
         context.setVariable("goods", goods);
@@ -161,6 +164,7 @@ public class PageService {
         context.setVariable("itemCat2", itemCat2);
         context.setVariable("itemCat3", itemCat3);
         context.setVariable("itemList", itemList);
+        context.setVariable("provincesList",provincesList);
 
         return context;
     }

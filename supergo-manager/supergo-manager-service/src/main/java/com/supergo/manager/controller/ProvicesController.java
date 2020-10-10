@@ -37,14 +37,14 @@ public class ProvicesController {
         //获取省级信息
         List<Provinces> provincesList = provincesService.getProvincesList();
         Cities cities = new Cities();
-        List<Cities> cittList = null;
+        List<Cities> citiesList = null;
         for(Provinces provinces : provincesList) {
-            cities.setId(provinces.getId());
+            cities.setProvinceid(provinces.getProvinceid());
             //根据省级id获取城市信息
-            cittList = citiesService.findByWhere(cities);
-            provinces.setCitiesList(cittList);
+            citiesList = citiesService.findByWhere(cities);
+            provinces.setCitiesList(citiesList);
             List<Areas> areasList = null;
-            for(Cities cities1 : cittList) {
+            for(Cities cities1 : citiesList) {
                 Areas areas = new Areas();
                 areas.setCityid(cities1.getCityid());
                 //根据城市id获取区域信息

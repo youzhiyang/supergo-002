@@ -403,6 +403,11 @@ ul.goods-intro li {
     margin-bottom: 2px;
 }
 
+.city-title {
+    position: relative;
+    top: 2px;
+}
+
 .city-list div ul li{
     list-style: none;
     display: inline-block;
@@ -418,6 +423,7 @@ ul.goods-intro li {
     display: inline-block;
     color: #646FB0;
     margin-right: 10px;
+    border-bottom: none;
 }
 
 .a-position {
@@ -428,7 +434,7 @@ ul.goods-intro li {
     width: 470px;
     border:1px solid lightgrey;
     box-shadow: 0px 0px 2px 1px lightgrey;
-    padding: 10px 60px 15px 10px;
+    padding: 8px 60px 15px 10px;
     display: none;
 }
 
@@ -444,5 +450,9 @@ ul.goods-intro li {
     border-top: 2px solid red !important;
     border-right: 2px solid red !important;
     border-left: 2px solid red !important;
-    border-bottom: 0px solid red !important;
+    border-bottom: 2px solid white !important;
+}
+
+.l-width {
+    width: 470px;
 }

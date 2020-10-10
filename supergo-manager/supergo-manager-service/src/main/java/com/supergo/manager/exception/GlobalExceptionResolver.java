@@ -24,10 +24,8 @@ public class GlobalExceptionResolver {
     @ExceptionHandler(MyAuthException.class)
     public String authExceptionResolver(MyAuthException e,HttpServletRequest request) {
         System.out.println("进入认证失败异常处理器....");
-        StringBuffer requestURL = request.getRequestURL();
-        //String baseUrl = getPathPrefix(requestURL.toString());
         //如果认证失败，跳转到登入页
-        return "redirect:http://localhost:9999/api/sso/user/loginPage?url=" + requestURL;
+        return "redirect:http://www.supergo-sso.com/user/loginPage";
     }
 
     /**

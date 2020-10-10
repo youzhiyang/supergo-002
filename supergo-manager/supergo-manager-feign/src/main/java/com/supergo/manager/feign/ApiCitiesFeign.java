@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @FeignClient(serviceId = "supergo-manager")
 //@RequestMapping("/cities")   //不要在此注解上加载处理器映射器，会被处理器映射器扫描，进行误判
 public interface ApiCitiesFeign {
@@ -16,4 +18,7 @@ public interface ApiCitiesFeign {
 
     @RequestMapping("/cities/getCitiesList/{page}/{size}")
     public HttpResult getCitiesList(@PathVariable int page, @PathVariable int size, @RequestBody(required = false) Cities cities);
+
+    @RequestMapping("/cities/getCitiesByProvinceId/{provinceId}")
+    public List<Cities> getCitiesByProvinceId(@PathVariable String provinceId);
 }

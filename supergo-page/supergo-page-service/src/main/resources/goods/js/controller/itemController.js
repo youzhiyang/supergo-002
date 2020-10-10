@@ -10,7 +10,7 @@ window.onload = function () {
             specificationItems:{},  //记录用户选中的规格信息
             num:1,                    //记录用户购买的数量信息
             sku:{},                   //用户选中的sku对象
-            showAddress: {display:'none'},        //鼠标是否移入配送地址栏
+            showAddress: {display:'none',},        //鼠标是否移入配送地址栏
             n: 1,                                            //监听配送地址选择
             address: '',
             titleArr:["广西","桂林市","秀峰区","丽君街道"],
@@ -125,77 +125,172 @@ window.onload = function () {
             leave:function(){
                 this.showAddress = { display: 'inline-block' };
             },
-            //i:索引的键   v:索引的值
+            //i:索引的键
             changeN:function (i) {
                 //给n赋值
                 this.n = i;
-                this.$nextTick(function(){
-                    console.log(this.$refs.i);
-                    //获取第一个div坐标原点
-                    let firstDiv = this.$refs.i[0];
-                    let firstDivLeft = firstDiv.offsetLeft;
-                    //获取点击的div坐标
-                    let left = this.$refs.i[i].offsetLeft;
-                    //左边线长度
-                    let leftWidth = left - firstDivLeft;
-                    console.log("leftWidth:   " + leftWidth);
-                    //计算选中div宽度 5:左边距 + 字体个数 * 字体大小 + 字体右边距 + 图片宽度 + 边线宽度
-                    let width = 5 + this.titleArr[i].length * 12 + 6 + 23 + 2;
-                    let positionDiv = this.$refs.position.offsetLeft;
-                    //右边线长的宽度 div总宽度 - 右边点横坐标 - 内边距 - 左内边距 + 右外边距；
-                    let rightWidth = positionDiv + 470 - (left + width) - 60 + 10;
-                    console.log("rightWidth:  " + rightWidth);
-                    this.leftWidth = leftWidth;
-                    this.rightWidth = rightWidth;
-                })
             },
-            //获取地址
-            getAddress: function (address) {
-                //this.address += address;
-                var url = "http://www.supergo-page.com/page/provinces/getProvincesList";
-                axios({
-                    method: 'get',
-                    url: url,
-                    headers: {
-                        'Authorization': bearerToken
-                    }
-                }).then(function (res) {
-                    console.log(res);
-                    var provincesList = res.data.data;
-                    //定义省级列表数组
-                    var provinceArr = [];
-                    //定义市级列表数组
-                    var cityArr = [];
-                    //定义区域列表数组
-                    var areaArr = [];
-                    //遍历省级列表
-                    for(var i = 0;i < provincesList.length;i++) {
-                        var province = provincesList[i].province;
+            //设置默认地址信息
+            setDefaultAddress: function () {
+                this.titleArr = [];
+                this.citysArr = [];
+                var provincesArr = [];
+                var citiesArr = [];
+                var areasArr = [];
+                var flag = false;
+                //遍历省级列表
+                for(var i = 0;i < provincesList.length;i++) {
+                    //获取省级信息
+                    var province = provincesList[i].province;
+                    //获取第一个省的信息
+                    if(i == 0) {
+                        this.titleArr.push(province);
+                        //获取第一个省下的市级列表
                         var citiesList = provincesList[i].citiesList;
                         //遍历市级列表
-                        for(var j = 0;citiesList.length;j++) {
+                        for(var j = 0;j < citiesList.length;j++) {
+                            //获取市级信息
                             var city = citiesList[j].city;
-                            var areasList = citiesList[j].areasList;
-                            //遍历区域列表
-                            for(var k = 0;k < areasList.length;k++) {
-                                areaArr.push(areasList[k].area);
-                                citysArr.push(areaArr);
+                            //如果市市“市辖区”或则“县”
+                            if(city.startsWith("市辖区") || city.startsWith("县")) {
+                                //获取县级列表
+                                var areasList = citiesList[j].areasList;
+                                //遍历县级列表
+                                for(var k = 0;k < areasList.length;k++) {
+                                    //获取县级信息
+                                    var area = areasList[k].area;
+                                    if(k == 0) {
+                                        //如果已经添加了头部信息（可能添加多次）,就不在添加
+                                        if(!flag) {
+                                            this.titleArr.push(area);
+                                            flag = true;
+                                        }
+                                    }
+                                    //将县级信息存入数组
+                                    areasArr.push(area);
+                                }
+                            } else {
+                                //获取第一个市的信息
+                                if(j == 0) {
+                                    this.titleArr.push(city);
+                                    //获取县级列表
+                                    var areasList = citiesList[j].areasList;
+                                    //遍历县级列表
+                                    for(var k = 0;k < areasList.length;k++) {
+                                        //获取县级信息
+                                        var area = areasList[k].area;
+                                        if(k == 0) {
+                                            this.titleArr.push(area);
+                                        }
+                                        //将县级信息存入数组
+                                        areasArr.push(area);
+                                    }
+                                }
+                                //将市级信息存入数组
+                                citiesArr.push(city);
                             }
-                            cityArr.push(city)
-                            citysArr.push(cityArr);
                         }
-                        provinceArr.push(provincesList[i]);
-                        citysArr.push(provinceArr);
                     }
-                }).catch(function (error) {
-                    alert("获取城市列表失败！");
-                });
-            },
-            setDefaultAddress: function () {
-                for(let i = 0;i < this.citysArr.length;i++) {
-                    this.address += this.citysArr[i][0];
+                    //将省级信息存入数组
+                    provincesArr.push(province);
                 }
-                console.log("address:   " + this.address);
+                this.citysArr.splice(0,1,provincesArr);
+                if(citiesArr.length == 0) {
+                    this.citysArr.splice(1,1,areasArr);
+                } else {
+                    this.citysArr.splice(1,1,citiesArr)
+                    this.citysArr.splice(2,1,areasArr);
+                }
+                for(var m = 0;m < this.citysArr.length;m++) {
+                    this.address += this.citysArr[m][0];
+                }
+            },
+            getAddress: function(address) {
+                var provincesArr = [];
+                var citiesArr = [];
+                var areasArr = [];
+                //遍历省级列表
+                for(var i = 0;i < provincesList.length;i++) {
+                    var province = provincesList[i].province;
+                    //如果点击的是省级信息
+                    if(province == address) {
+                        //获取市级列表
+                        var citiesList = provincesList[i].citiesList;
+                        console.log(provincesList[i].citiesList);
+                        //遍历市级列表
+                        for(var j = 0;j < citiesList.length;j++) {
+                            var city = citiesList[j].city;
+                            console.log(city);
+                            if(city.startsWith("市辖区") || city.startsWith("县")) {
+                                //获取县级列表
+                                var areasList = citiesList[j].areasList;
+                                console.log(citiesList);
+                                for(var k = 0;k< areasList.length;k++) {
+                                    areasArr.push(areasList[k].area);
+                                }
+                            } else {
+                                console.log(city);
+                                //将city添加进入数组
+                                citiesArr.push(city);
+                                console.log(citiesArr);
+                            }
+                        }
+                        this.titleArr.splice(1,2,"请选择");
+                        if(city.startsWith("市辖区") || city.startsWith("县")) {
+                            this.citysArr.splice(1,2,areasArr);
+                        } else {
+                            this.citysArr.splice(1,2,citiesArr);
+                        }
+                        this.titleArr.splice(0,1,address);
+                        this.changeN(1);
+                    } else {   //如果点击的是市级信息
+                        var province1 = this.titleArr[0];
+                        //获取省级信息
+                        if(province == province1) {
+                            //获取市级列表
+                            var citiesList = provincesList[i].citiesList;
+                            //遍历市级列表
+                            for(var j = 0;j < citiesList.length;j++) {
+                                var city = citiesList[j].city;
+                                //如果点击的是市级列表
+                                if(city == address) {
+                                    //获取县级列表
+                                    var areasList = citiesList[j].areasList;
+                                    for(var k = 0;k< areasList.length;k++) {
+                                        areasArr.push(areasList[k].area);
+                                    }
+                                    this.titleArr.splice(1,1,address);
+                                    this.citysArr.splice(2,1,areasArr);
+                                    console.log("--------------------");
+                                    this.titleArr.splice(2,1,"请选择");
+                                    this.changeN(2);
+                                } else {
+                                    var areasList = citiesList[j].areasList;
+                                    for(var k = 0;k< areasList.length;k++) {
+                                        var area = areasList[k].area;
+                                        if(area == address) {
+                                            if(this.titleArr.length == 2) {
+                                                this.titleArr.splice(1,1,address);
+                                            } else {
+                                                this.titleArr.splice(2,1,address);
+                                            }
+                                            this.address = '';
+                                            for(var m = 0;m < this.titleArr.length;m++) {
+                                                this.address += this.titleArr[m];
+                                            }
+                                            this.showAddress = { display: 'none' };
+                                        }
+                                    }
+                                }
+                                // if(!city.startsWith("市辖区") && !city.startsWith("县")) {
+                                //     citiesArr.push(city);
+                                // }
+                            }
+                        }
+                    }
+                    provincesArr.push(province);
+                }
+
             }
         },
         created:function () {
@@ -203,8 +298,6 @@ window.onload = function () {
             this.loadSku();
             //动态添加规格标签
             this.specificationLable1();
-            //加载默认地址
-            this.getAddress();
             //设置选择边线的默认值
             this.changeN(0);
             //设置配送地址默认值

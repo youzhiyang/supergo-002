@@ -41,3 +41,9 @@ jwt:   #jwt测试数据
     key: abc123      #密匙
     ttl: 3600        #过期时间
 
+#配置超时时间
+supergo-manager:
+  ribbon:
+    ReadTimeout: 60000
+    ConnectTimeout: 60000
+
