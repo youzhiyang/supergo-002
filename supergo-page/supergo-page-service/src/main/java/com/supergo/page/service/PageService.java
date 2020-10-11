@@ -4,15 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.supergo.http.HttpResult;
 import com.supergo.manager.feign.ApiGoodsFeign;
 import com.supergo.manager.feign.ApiItemCatFeign;
+import com.supergo.manager.feign.ApiOrderCartFeign;
 import com.supergo.manager.feign.ApiProvincesFeign;
 import com.supergo.page.config.GoddsLock;
-import com.supergo.page.pojo.UserInfo;
+import com.supergo.page.util.Const;
 import com.supergo.page.util.FileUtil;
 import com.supergo.pojo.*;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -30,15 +30,14 @@ import java.util.concurrent.locks.ReentrantLock;
 @Service
 public class PageService {
 
-    public static String pagePath = "E:\\supergo\\supergo\\supergo\\supergo-002\\supergo-page\\supergo-page-service\\src\\main\\resources\\goods\\";
-    public static String sufferHtml = ".html";
-
     @Autowired
     private TemplateEngine templateEngine;
     @Autowired
     private ApiGoodsFeign goodsFeign;
     @Autowired
     private ApiItemCatFeign itemCatFeign;
+    @Autowired
+    private ApiOrderCartFeign apiOrderCartFeign;
     @Autowired
     private ApiProvincesFeign apiProvincesFeign;
     @Autowired
@@ -67,10 +66,10 @@ public class PageService {
      * @throws IOException
      */
     public HttpResult buildGoodsPage(long goodsId, HttpServletRequest request) throws IOException {
-        FileWriter fileWriter = new FileWriter(pagePath +goodsId+sufferHtml);
+        FileWriter fileWriter = new FileWriter(Const.pagePath +goodsId+Const.sufferHtml);
         Context context = getGoodsData(goodsId,request);
         //每次创建模板前删除原来的模板
-        boolean b = FileUtil.deleteFile(pagePath + goodsId + sufferHtml);
+        boolean b = FileUtil.deleteFile(Const.pagePath + goodsId + Const.sufferHtml);
         if(b) {
             System.out.println("删除模板成功！");
             templateEngine.process("item", context, fileWriter);
@@ -92,13 +91,13 @@ public class PageService {
         Context context = new Context();
         System.out.println("goods:  aaaaa");
 
-        UserInfo userInfo = new UserInfo();
+        User userInfo = new User();
         Claims claims = (Claims) request.getAttribute("userInfo");
         System.out.println("claims:  " + claims != null);
         String token = null;
         if(claims != null) {
             //如果未登入用户信息设置为null
-            userInfo.setId(claims.getId());
+            userInfo.setId(Long.valueOf(claims.getId()));
             userInfo.setUsername(claims.getSubject());
             System.out.println("claims:  " + claims.toString());
             //获取token值
@@ -109,8 +108,11 @@ public class PageService {
 
         //获取登入用户信息
         context.setVariable("userInfo",userInfo);
-        context.setVariable("bearerToken","Bearer " + token);
-
+        if(token != null) {
+            context.setVariable("bearerToken","Bearer " + token);
+        } else {
+            context.setVariable("bearerToken",token);
+        }
         // 获取商品信息
         Goods goods = goodsFeign.getGoodsById(goodsId);
         System.out.println("goods:  " + goodsId.toString());
@@ -224,5 +226,27 @@ public class PageService {
             }
             return getItemStocks(goodsId);
         }
+    }
+
+    /**
+     * 用户未登录情况下添加购物车
+     */
+    public HttpResult unloginAddOrderCart(int itemId,String clientId,int num,int sellerId) {
+        try {
+            FileWriter fileWriter = new FileWriter(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
+            //Map<Object, Object> skuMap = apiOrderCartFeign.unloginAddOrderCart(itemId, clientId, num, sellerId);
+            Context context = new Context();
+            User userInfo = new User();
+            //获取登入用户信息
+            context.setVariable("userInfo",userInfo);
+            context.setVariable("skuMap",null);
+            //每次创建模板前删除原来的模板
+            boolean b = FileUtil.deleteFile(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
+            templateEngine.process("unloginAddOrderCart", context, fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return HttpResult.ok();
     }
 }
