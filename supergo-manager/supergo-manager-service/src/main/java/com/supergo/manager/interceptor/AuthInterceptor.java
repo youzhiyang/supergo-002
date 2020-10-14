@@ -1,6 +1,7 @@
 package com.supergo.manager.interceptor;
 
 import com.supergo.manager.exception.MyAuthException;
+import com.supergo.manager.util.Const;
 import com.supergo.manager.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
@@ -35,8 +36,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         //从request对象中去请求头的Authorization信息，从而取token
         String authorization = request.getHeader("Authorization");
         System.out.println("authorization:   " + authorization);
+        String requestURL = request.getRequestURL().toString();
+        System.out.println("requestURL:   " + requestURL);
+
         //判断token是否合法
         if(StringUtils.isBlank(authorization)) {
+            if(requestURL.contains(Const.unloginAddOrderCart)) {
+                System.out.println("````````````````");
+                return true;
+            }
             throw new MyAuthException("无认证信息");
         }
         //如果不合法，返回错误小消息

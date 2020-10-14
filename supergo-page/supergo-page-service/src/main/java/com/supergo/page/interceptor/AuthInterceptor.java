@@ -39,11 +39,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         System.out.println("00000:   " + requestURL.toString());
         System.out.println("llll:   " + StringUtils.isBlank(authorization));
 
+        String parameter = request.getParameter("itemId");
+        System.out.println("parameter:  " + parameter);
+
 
         //判断token是否合法
         if(StringUtils.isBlank(authorization)) {
             //判断是否是刷新页面请求，放行
-            if(requestURL.contains(Const.htmlFlash)) {
+            if(requestURL.contains(Const.htmlFlash) || requestURL.contains(Const.unloginAddOrderCart)) {
                 System.out.println("````````````````");
                 request.setAttribute("userInfo",null);
                 return true;

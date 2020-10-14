@@ -234,14 +234,15 @@ public class PageService {
     public HttpResult unloginAddOrderCart(int itemId,String clientId,int num,int sellerId) {
         try {
             FileWriter fileWriter = new FileWriter(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
-            //Map<Object, Object> skuMap = apiOrderCartFeign.unloginAddOrderCart(itemId, clientId, num, sellerId);
+            Map<Object, Object> skuMap = apiOrderCartFeign.unloginAddOrderCart(itemId, clientId, num, sellerId);
             Context context = new Context();
             User userInfo = new User();
             //获取登入用户信息
             context.setVariable("userInfo",userInfo);
-            context.setVariable("skuMap",null);
+            context.setVariable("skuMap",skuMap);
             //每次创建模板前删除原来的模板
             boolean b = FileUtil.deleteFile(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
+            System.out.println("删除文件成功！");
             templateEngine.process("unloginAddOrderCart", context, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();

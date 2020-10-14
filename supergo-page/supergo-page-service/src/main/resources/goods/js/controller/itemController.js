@@ -26,19 +26,38 @@ window.onload = function () {
         methods:{
             //加入购物车实现
             addCart:function () {
-                alert('恭喜您，已经将商品加入到购物车！ID：'+app.sku.id+',价格是：'+app.sku.price+',购买了'+app.num);
-
-                //发送远程请求，加入购物车操作
-                let url = 'http://localhost:18093/cart/add.shtml?itemId='+app.sku.id+'&num='+app.num;
-
-                //加入购物车  {'withCredentials':true}:发送客户端的Cookie数据
-                // axios.get(url,{'withCredentials':true}).then(function (response) {
-                //     if(response.data.success){
-                //         location.href='http://localhost:18093/cart.html';
-                //     }else{
-                //         alert(response.data.message);
-                //     }
-                // })
+                if(bearerToken != null) {  //用户登录情况下添加购物车操作
+                    var url = "http://www.supergo-page.com/page/goods/addOrderCart";
+                    axios({
+                        method: 'get',
+                        url: url,
+                        headers: {
+                            'Authorization': bearerToken
+                        }
+                    }).then(function (res) {
+                        console.log(res);
+                        window.location.href = 'http://www.supergo-page.com/149187842868088.html';
+                    }).catch(function (error) {
+                        alert("生成模板失败");
+                    });
+                } else {  //用户未登录情况下添加购物车操作
+                    var url = "http://www.supergo-page.com/page/goods/unloginAddOrderCart";
+                    axios({
+                        method: 'get',
+                        url: url,
+                        params: {
+                            itemId: this.sku.id,
+                            clientId: '123456',
+                            num: this.num,
+                            sellerId: this.sku.sellerId
+                        }
+                    }).then(function (res) {
+                        console.log(res);
+                        window.location.href = 'http://www.supergo-page.com/unloginAddOrderCart.html';
+                    }).catch(function (error) {
+                        alert("生成模板失败");
+                    });
+                }
             },
 
             //判断2个Map结构是否匹配
@@ -95,9 +114,7 @@ window.onload = function () {
             //key:规格   网络  network
             //value:规格选项   移动4G
             selectSpecification:function (key,value) {
-                console.log("key: " + key + "  value:  " + value);
                 this.$set(this.specificationItems,key,value);
-
                 //查找当前SKU
                 this.searchSku();
             },
@@ -123,7 +140,7 @@ window.onload = function () {
             },
             //鼠标移出方法
             leave:function(){
-                this.showAddress = { display: 'inline-block' };
+                this.showAddress = { display: 'none' };
             },
             //i:索引的键
             changeN:function (i) {
@@ -152,7 +169,7 @@ window.onload = function () {
                             //获取市级信息
                             var city = citiesList[j].city;
                             //如果市市“市辖区”或则“县”
-                            if(city.startsWith("市辖区") || city.startsWith("县")) {
+                            if(city.startsWith("市辖区") || city.startsWith("县") || city.startsWith("市")) {
                                 //获取县级列表
                                 var areasList = citiesList[j].areasList;
                                 //遍历县级列表
@@ -214,29 +231,33 @@ window.onload = function () {
                     var province = provincesList[i].province;
                     //如果点击的是省级信息
                     if(province == address) {
+                        if(province.startsWith("香港") || province.startsWith("澳门") || province.startsWith("台湾")) {
+                            this.titleArr.splice(0,3,address);
+                            this.showAddress = { display: 'none' };
+                            this.address = '';
+                            for (var m = 0; m < this.titleArr.length; m++) {
+                                this.address += this.titleArr[m];
+                            }
+                            return;
+                        }
                         //获取市级列表
                         var citiesList = provincesList[i].citiesList;
-                        console.log(provincesList[i].citiesList);
                         //遍历市级列表
                         for(var j = 0;j < citiesList.length;j++) {
                             var city = citiesList[j].city;
-                            console.log(city);
-                            if(city.startsWith("市辖区") || city.startsWith("县")) {
+                            if(city.startsWith("市辖区") || city.startsWith("县") || city.startsWith("市")) {
                                 //获取县级列表
                                 var areasList = citiesList[j].areasList;
-                                console.log(citiesList);
                                 for(var k = 0;k< areasList.length;k++) {
                                     areasArr.push(areasList[k].area);
                                 }
                             } else {
-                                console.log(city);
                                 //将city添加进入数组
                                 citiesArr.push(city);
-                                console.log(citiesArr);
                             }
                         }
                         this.titleArr.splice(1,2,"请选择");
-                        if(city.startsWith("市辖区") || city.startsWith("县")) {
+                        if(city.startsWith("市辖区") || city.startsWith("县") || city.startsWith("市")) {
                             this.citysArr.splice(1,2,areasArr);
                         } else {
                             this.citysArr.splice(1,2,citiesArr);
@@ -246,51 +267,46 @@ window.onload = function () {
                     } else {   //如果点击的是市级信息
                         var province1 = this.titleArr[0];
                         //获取省级信息
-                        if(province == province1) {
+                        if (province == province1) {
                             //获取市级列表
                             var citiesList = provincesList[i].citiesList;
                             //遍历市级列表
-                            for(var j = 0;j < citiesList.length;j++) {
+                            for (var j = 0; j < citiesList.length; j++) {
                                 var city = citiesList[j].city;
                                 //如果点击的是市级列表
-                                if(city == address) {
+                                if (city == address) {
                                     //获取县级列表
                                     var areasList = citiesList[j].areasList;
-                                    for(var k = 0;k< areasList.length;k++) {
+                                    for (var k = 0; k < areasList.length; k++) {
                                         areasArr.push(areasList[k].area);
                                     }
-                                    this.titleArr.splice(1,1,address);
-                                    this.citysArr.splice(2,1,areasArr);
-                                    console.log("--------------------");
-                                    this.titleArr.splice(2,1,"请选择");
+                                    this.titleArr.splice(1, 1, address);
+                                    this.citysArr.splice(2, 1, areasArr);
+                                    this.titleArr.splice(2, 1, "请选择");
                                     this.changeN(2);
                                 } else {
                                     var areasList = citiesList[j].areasList;
-                                    for(var k = 0;k< areasList.length;k++) {
+                                    for (var k = 0; k < areasList.length; k++) {
                                         var area = areasList[k].area;
-                                        if(area == address) {
-                                            if(this.titleArr.length == 2) {
-                                                this.titleArr.splice(1,1,address);
+                                        if (area == address) {
+                                            if (this.titleArr.length == 2) {
+                                                this.titleArr.splice(1, 1, address);
                                             } else {
-                                                this.titleArr.splice(2,1,address);
+                                                this.titleArr.splice(2, 1, address);
                                             }
                                             this.address = '';
-                                            for(var m = 0;m < this.titleArr.length;m++) {
+                                            for (var m = 0; m < this.titleArr.length; m++) {
                                                 this.address += this.titleArr[m];
                                             }
-                                            this.showAddress = { display: 'none' };
+                                            this.showAddress = {display: 'none'};
                                         }
                                     }
                                 }
-                                // if(!city.startsWith("市辖区") && !city.startsWith("县")) {
-                                //     citiesArr.push(city);
-                                // }
                             }
                         }
                     }
                     provincesArr.push(province);
                 }
-
             }
         },
         created:function () {

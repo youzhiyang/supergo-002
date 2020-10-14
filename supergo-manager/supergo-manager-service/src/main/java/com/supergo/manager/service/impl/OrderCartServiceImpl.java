@@ -6,6 +6,7 @@ import com.supergo.mapper.ItemMapper;
 import com.supergo.pojo.User;
 import com.supergo.service.base.impl.BaseServiceImpl;
 import com.supergo.user.utils.JsonUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,73 +34,55 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
      */
     @Override
     public Map<Object, Object> addOrderCart(HttpServletRequest request, int itemId, int num,String sellerId) {
-        //获取剩余库存数量
-        //int itemStock = itemService.getItemStock(itemId);
-        User user = (User) request.getSession().getAttribute("user");
-        //获取sku库存信息
-        Map<String, String> skuMap = itemMapper.selectBySellerIdAndSkuId(itemId, sellerId);
-        Map<Object, Object> ordercartMap= new HashMap<>();
-        //如果用户未登入
-        if(user == null) {
-            Cookie[] cookies = request.getCookies();
-            //获取添加商品数据
-            for(int i = 0;i < cookies.length;i++) {
-                String cookieStr = cookies[i].getValue();
-                //如果为购物车cookie
-                if(cookieStr.equals("CART_COOKIE")) {
-                    //获取cookie中数据
-                    ordercartMap = parseCookieValue(cookieStr);
-                    //当cookie中存在购物车数据时
-                    Map<Object, Object> cartDetail1 = addCartSku(ordercartMap, num, itemId, skuMap.toString());
-                    break;
-                }
-            }
-        } else {   //如果用户登入
-            //redis取店铺缓存
-            Map<Object, Object> cartInfo = stringRedisTemplate.opsForHash().entries("cart:" + user.getId() + ":info");
-            //redis取上品缓存
-            Map<Object, Object> cartDetail = stringRedisTemplate.opsForHash().entries("cart:" + user.getId() + ":detail");
-            ordercartMap.put("cartInfo",cartInfo);
-            ordercartMap.put("cartDetail",cartDetail);
-            //向购物车添加sku
-            Map<Object, Object> cartDetail1 = addCartSku(ordercartMap, num, itemId, skuMap.toString());
-
-            //遍历保存购物车信息
-            cartDetail1.forEach((k,v)->{
-                int i = 1;
-                //保存购物车信息
-                stringRedisTemplate.opsForHash().put("cart:" + user.getId() + ":detail","sku"+i,v);
-                i++;
-            });
-        }
-
-        return ordercartMap;
-    }
-
-    /**
-     * 解析cookie信息
-     * @param cookieStr
-     * @return
-     */
-    private Map<Object, Object> parseCookieValue(String cookieStr) {
 
 
         return null;
     }
 
+    /**
+     * 用户未登录情况下添加购物车
+     * @return
+     */
+    public Map<Object, Object> unloginAddOrderCart(int itemId, int num,int sellerId,String clientId) {
+        //获取sku库存信息
+        Map<Object, Object> skuMap = itemMapper.selectBySellerIdAndSkuId(itemId, sellerId);
+        //redis取店铺缓存
+//        Map<Object, Object> cartInfo = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":info");
+        //redis取商品缓存
+        Map<Object, Object> cartDetail = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":detail");
+        //如果购物车已经存在
+        Map<Object, Object> cartDetail1 = null;
+        if(!cartDetail.isEmpty()) {
+            //向购物车添加sku
+            cartDetail1 = addCartSku(cartDetail, num, itemId, skuMap);
+            //保存购物车信息
+            cartDetail1.forEach((k,v)->{
+                //保存购物车信息
+                stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",k,JsonUtils.objectToJson(v));
+            });
+        } else {
+            skuMap.put("num",String.valueOf(num));
+            //如果不存在购物车，初始化购物车信息
+            stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
+        }
+        skuMap.put("selectedNum",num);
+        return skuMap;
+    }
+
     //向购物车添加sku
-    private Map<Object, Object> addCartSku(Map<Object, Object> ordercartMap,int num,int itemId,String sku) {
-        Map<Object, Object> cartDetail = (Map<Object, Object>) ordercartMap.get("cartDetail");
+    private Map<Object, Object> addCartSku(Map<Object, Object> cartDetail,int num,int itemId,Map<Object, Object> skuMap) {
         for(Map.Entry<Object, Object> it : cartDetail.entrySet()){
+            //如果购物车已经存在该商品
             if(it.getKey().equals(itemId + "")) {
                 String skuJson = (String)it.getValue();
-                Map<String, String> skuMap = JsonUtils.jsonToMap(skuJson, String.class, String.class);
-                //存在sku，sku相加
-                skuMap.put("num",(skuMap.get(num) + num));
-                cartDetail.put(it.getKey(),skuMap.toString());
+                Map<String, String> skuMap1 = JsonUtils.jsonToMap(skuJson, String.class, String.class);
+                //商品数量相加
+                skuMap.put("num",(Integer.parseInt(skuMap1.get("num")) + num));
+                cartDetail.put(it.getKey(),skuMap);
             } else {
-                //向购物车添加sku
-                cartDetail.put(it.getKey(),sku);
+                skuMap.put("num",num);
+                //如果购物车中不存在该商品，将商品添加进入购物车
+                cartDetail.put(itemId,skuMap);
             }
         }
         return cartDetail;

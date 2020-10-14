@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>产品详情页</title>
+	 <link rel="icon" href="assets/img/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="css/webbase.css" />
+    <link rel="stylesheet" type="text/css" href="css/pages-item.css" />
+	<script src="js/vuejs-2.5.16.js"></script>
+	<script src="js/axios-0.18.0.js"></script>
+	<script th:inline="javascript">
+
+	</script>
+
+</head>
+
+<body>
+
+<!--页面顶部 开始-->
+<div th:replace="head::orderCartHead"></div>
+
+
+<!--页面底部  开始 -->
+<div th:replace="~{foot::footer}"></div>
+<!--页面底部  结束 -->
+<script type="text/javascript" src="js/controller/itemController.js"></script>
+
+</body>
+	<div>
+		<div>
+			<img src=""/>
+			<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
+			<a>立即登录</a>
+		</div>
+		<div>
+			<div>
+				<span>全部商品1</span>
+				<span>配送至:</span>
+				<input type="text" value="广西桂林秀峰区秀峰街道"/>
+			</div>
+		</div>
+	</div>
+</html>

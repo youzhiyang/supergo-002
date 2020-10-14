@@ -3,10 +3,7 @@ package com.supergo.page.controller;
 import com.supergo.http.HttpResult;
 import com.supergo.page.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -32,8 +29,6 @@ public class PageController {
         return httpResult;
     }
 
-
-
     /**
      * 获取商品库存
      * @param goodsId
@@ -43,6 +38,16 @@ public class PageController {
     public Map getGoodsStock(@PathVariable long goodsId) {
         Map itemStocks = pageService.getItemStocks(goodsId);
         return itemStocks;
+    }
+
+    /**
+     * 未登录情况下添加购物车
+     * @return
+     */
+    @RequestMapping("/goods/unloginAddOrderCart")
+    public HttpResult unloginAddOrderCart(Integer itemId,String clientId,Integer num,Integer sellerId) {
+        System.out.println("进入unloginAddOrderCart接口...");
+        return pageService.unloginAddOrderCart(itemId, clientId, num, sellerId);
     }
 
 }

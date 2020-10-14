@@ -123,28 +123,29 @@
 								<em class="t-gray">有货</em>
 							</div>
 						</div>
-						<div class="a-position" ref="position" :style="[ showAddress ]" @mouseenter="enter()" @mouseleave="leave()">
-							<div class="city-title">
-								<ul>
-									<li :class="n==i?'l-active':''" v-for="(v,i) in titleArr" :key="i" @click="changeN(i)">
-										<div :id="i" ref="i">
-											<em>{{v}}</em>
-											<img src="img/deliver01.png">
-										</div>
-									</li>
-								</ul>
-							</div>
-							<!--设置边线-->
-							<div>
-								<div class="l-width l-color"></div>
-							</div>
+					</div>
+					<!-- 地址框 -->
+					<div class="a-position" ref="position" :style="[ showAddress ]" @mouseenter="enter()" @mouseleave="leave()">
+						<div class="city-title">
+							<ul>
+								<li :class="n==i?'l-active':''" v-for="(v,i) in titleArr" :key="i" @click="changeN(i)">
+									<div :id="i" ref="i">
+										<em>{{v}}</em>
+										<img src="img/deliver01.png">
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!--设置边线-->
+						<div>
+							<div class="l-width l-color"></div>
+						</div>
 
-							<div class="city-list">
-								<div v-for="(v,i) in citysArr" :key="i" v-show="n==i">
-									<ul v-for="(city,j) in v" :key="j">
-										<li @click="getAddress(city)" :class="city == titleArr[n]?'a-color':''">{{city}}</li>
-									</ul>
-								</div>
+						<div class="city-list">
+							<div v-for="(v,i) in citysArr" :key="i" v-show="n==i">
+								<ul v-for="(city,j) in v" :key="j">
+									<li @click="getAddress(city)" :class="city == titleArr[n]?'a-color':''">{{city}}</li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -188,6 +189,9 @@
 					</div>
 				</div>
 			</div>
+
+
+
 			<!--product-detail-->
 			<div class="clearfix product-detail">
 				<div class="fl aside">

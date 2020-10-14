@@ -1,0 +1,74 @@
+.success-contain {
+    width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.contain {
+    background: #F5F5F5;
+}
+
+.success-top {
+    padding: 20px 0px;
+}
+
+.success-top > span {
+    font-size: 18px;
+    position: relative;
+    top: 3px;
+}
+
+.success-middle {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.success-middle > div {
+    position: absolute;
+    margin-left: 70px;
+    top: 5px;
+}
+
+.success-middle-size {
+    font-size: 14px;
+}
+
+.success-middle-color {
+    color: #B1AAAA;
+}
+
+.success-middle > img {
+    width: 60px;
+    height: 60px;
+}
+
+.success-bottom {
+    position: absolute;
+    bottom: 20px;
+    right: 0px;
+}
+
+.success-bottom > a {
+    font-size: 16px;
+    padding: 10px 30px;
+    text-decoration: none;
+}
+
+.success-bottom > a:first-child {
+    background: white;
+    color: red;
+}
+
+.success-bottom > a:first-child:hover {
+    border: 1px solid red;
+}
+
+.success-bottom > a:last-child:hover {
+    background: #B1191A;
+}
+
+.success-bottom > a:last-child {
+    background: #E2231A;
+    color: white;
+    margin-left: 10px;
+}
