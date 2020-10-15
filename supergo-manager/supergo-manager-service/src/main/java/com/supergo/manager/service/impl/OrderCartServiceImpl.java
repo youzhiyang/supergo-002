@@ -1,18 +1,17 @@
 package com.supergo.manager.service.impl;
 
 import com.supergo.manager.service.OrderCartService;
-import com.supergo.pojo.Ordercart;
 import com.supergo.mapper.ItemMapper;
-import com.supergo.pojo.User;
+import com.supergo.mapper.OrdercartMapper;
+import com.supergo.pojo.Ordercart;
 import com.supergo.service.base.impl.BaseServiceImpl;
 import com.supergo.user.utils.JsonUtils;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -23,6 +22,10 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
 
     @Autowired
     private ItemMapper itemMapper;
+
+    @Autowired
+    private OrdercartMapper ordercartMapper;
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -33,10 +36,38 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
      * @param num
      */
     @Override
-    public Map<Object, Object> addOrderCart(HttpServletRequest request, int itemId, int num,String sellerId) {
+    public Map<Object, Object> addOrderCart(HttpServletRequest request, int itemId, int num,int sellerId) {
 
+        //获取sku库存信息
+        Map<Object, Object> skuMap = itemMapper.selectBySellerIdAndSkuId(itemId, sellerId);
+        //1、判断购物车是否存在该商品
+        Ordercart ordercart = ordercartMapper.selectGoodsIsExist(itemId, 16, sellerId);
+        //如果购物车已有该商品
+        if(ordercart != null) {
+            //商品数量相加
+            ordercart.setNum(ordercart.getNum() + num);
+            update(ordercart);
+        } else {
+            ordercart = skuToOrderCart(skuMap, 16, num);
+            //保存该商品信息
+            add(ordercart);
+        }
 
-        return null;
+        skuMap.put("selectedNum",num);
+        return skuMap;
+    }
+
+    private Ordercart skuToOrderCart(Map<Object, Object> skuMap,int userId,int num ) {
+        Ordercart ordercart = new Ordercart();
+        ordercart.setItemId((Long) skuMap.get("id"));
+        ordercart.setGoodsId((Long) skuMap.get("goods_id"));
+        ordercart.setUserId((long) userId);
+        ordercart.setSellerId((Long) skuMap.get("seller_id"));
+        ordercart.setGoodsName((String) skuMap.get("title"));
+        ordercart.setNum(num);
+        ordercart.setPrice((BigDecimal) skuMap.get("price"));
+        ordercart.setStatus(0);
+        return ordercart;
     }
 
     /**

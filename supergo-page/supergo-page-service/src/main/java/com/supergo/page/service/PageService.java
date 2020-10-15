@@ -89,8 +89,6 @@ public class PageService {
      */
     public Context getGoodsData(Long goodsId,HttpServletRequest request){
         Context context = new Context();
-        System.out.println("goods:  aaaaa");
-
         User userInfo = new User();
         Claims claims = (Claims) request.getAttribute("userInfo");
         System.out.println("claims:  " + claims != null);
@@ -249,5 +247,48 @@ public class PageService {
         }
 
         return HttpResult.ok();
+    }
+
+    /**
+     * 登录情况下添加购物车
+     * @param itemId
+     * @param num
+     * @param sellerId
+     * @return
+     */
+    public HttpResult addOrderCart(HttpServletRequest request,Integer itemId,Integer num, Integer sellerId) {
+        try {
+            User userInfo = new User();
+            Claims claims = (Claims) request.getAttribute("userInfo");
+            System.out.println("claims:  " + claims != null);
+            String token = null;
+            if(claims != null) {
+                //如果未登入用户信息设置为null
+                userInfo.setId(Long.valueOf(claims.getId()));
+                userInfo.setUsername(claims.getSubject());
+                System.out.println("claims:  " + claims.toString());
+                //获取token值
+                Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries("loginInfo" + claims.getId());
+                System.out.println(entries);
+                token = (String) entries.get(claims.getId());
+            }
+
+            FileWriter fileWriter = new FileWriter(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
+            System.out.println("1---------------------");
+            Map<Object, Object> skuMap = apiOrderCartFeign.addOrderCart(itemId, num, sellerId);
+            System.out.println("122---------------------");
+            Context context = new Context();
+            //获取登入用户信息
+            context.setVariable("userInfo",userInfo);
+            context.setVariable("bearerToken","Bearer " + token);
+            context.setVariable("skuMap",skuMap);
+            //每次创建模板前删除原来的模板
+            boolean b = FileUtil.deleteFile(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
+            System.out.println("删除文件成功！");
+            templateEngine.process("unloginAddOrderCart", context, fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

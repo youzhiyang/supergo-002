@@ -31,4 +31,6 @@ public interface ItemMapper extends Mapper<Item> {
             "AND i.id = #{itemId}\n" +
             "AND i.seller_id = #{sellerId}")
     public Map<Object,Object> selectBySellerIdAndSkuId(@Param("itemId") int itemId, @Param("sellerId") int sellerId);
+
+
 }

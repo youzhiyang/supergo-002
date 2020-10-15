@@ -141,16 +141,16 @@
 <!--        <table schema="" tableName="tb_type_template" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
 <!--            <domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
 <!--        </table>-->
-        <table schema="" tableName="tb_user" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
-            <domainObjectRenamingRule searchString="^Tb" replaceString=""/>
-        </table>
+        <!--<table schema="" tableName="tb_user" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
+            <!--<domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
+        <!--</table>-->
 <!--        <table schema="" tableName="tb_user_bak" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
 <!--            <domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
 <!--        </table>-->
 
-        <!--<table schema="" tableName="order_cart" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
-            <!--<domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
-        <!--</table>-->
+        <table schema="" tableName="order_cart" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <domainObjectRenamingRule searchString="^Tb" replaceString=""/>
+        </table>
         <!--<table schema="" tableName="order_info" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
             <!--<domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
         <!--</table>-->
@@ -167,6 +167,9 @@
             <!--<domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
         <!--</table>-->
         <!--<table schema="" tableName="order_product" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
+            <!--<domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
+        <!--</table>-->
+        <!--<table schema="" tableName="order_product_comment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
             <!--<domainObjectRenamingRule searchString="^Tb" replaceString=""/>-->
         <!--</table>-->
     </context>

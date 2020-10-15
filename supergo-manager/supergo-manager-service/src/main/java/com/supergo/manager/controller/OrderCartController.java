@@ -1,14 +1,13 @@
 package com.supergo.manager.controller;
 
 import com.supergo.manager.service.OrderCartService;
-import com.supergo.pojo.Ordercart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,17 +20,21 @@ public class OrderCartController {
     @Autowired
     private OrderCartService orderCartService;
 
+    @Autowired
+    private HttpServletRequest httpRequest;
+
     /**
      * 用户登录情况下添加购物车
-     * @param httpRequest
      * @param itemId
      * @param num
      * @param sellerId
      */
-    @RequestMapping("/add/{item_id}/{client_id}/{seller_id}")
-    public void addOrderCart(HttpServletRequest httpRequest, @PathVariable("item_id")int itemId,
-                             @PathVariable int num,@PathVariable("seller_id")String sellerId) {
+    @RequestMapping("/addOrderCart/{item_id}/{num}/{seller_id}")
+    public Map<Object, Object> addOrderCart( @PathVariable("item_id")int itemId,
+                             @PathVariable("num") int num,@PathVariable("seller_id")int sellerId) {
+        System.out.println("进入addOrderCart接口...");
         Map<Object, Object> objectObjectMap = orderCartService.addOrderCart(httpRequest, itemId, num,sellerId);
+        return objectObjectMap;
     }
 
     /**

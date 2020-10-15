@@ -50,4 +50,14 @@ public class PageController {
         return pageService.unloginAddOrderCart(itemId, clientId, num, sellerId);
     }
 
+    /**
+     * 登录情况下添加购物车
+     * @return
+     */
+    @RequestMapping("/goods/addOrderCart")
+    public HttpResult addOrderCart(HttpServletRequest request,Integer itemId,Integer num,Integer sellerId) {
+        System.out.println("进入addOrderCart接口...");
+        return pageService.addOrderCart(request,itemId, num, sellerId);
+    }
+
 }

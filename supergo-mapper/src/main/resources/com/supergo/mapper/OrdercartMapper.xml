@@ -7,20 +7,20 @@
     -->
     <constructor>
       <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="skuId" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="spuId" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="seller_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="item_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="goods_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="seller_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="goods_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="num" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="state" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbg.generated
     -->
-    id, skuId, spuId, user_id, seller_id, goods_name, num, price, state
+    id, item_id, goods_id, user_id, seller_id, goods_name, num, price, status
   </sql>
 </mapper>

@@ -2,8 +2,6 @@ package com.supergo.manager.service.impl;
 
 import com.supergo.manager.service.AreasService;
 import com.supergo.pojo.Areas;
-import com.supergo.pojo.Ordercart;
-import com.supergo.service.base.BaseService;
 import com.supergo.service.base.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
