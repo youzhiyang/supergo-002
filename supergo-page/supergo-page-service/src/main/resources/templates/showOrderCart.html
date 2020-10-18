@@ -9,7 +9,7 @@
 	 <link rel="icon" href="assets/img/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
-    <link rel="stylesheet" type="text/css" href="css/pages-item.css" />
+    <link rel="stylesheet" type="text/css" href="css/pages-showOrderCart.css" />
 	<script src="js/vuejs-2.5.16.js"></script>
 	<script src="js/axios-0.18.0.js"></script>
 	<script th:inline="javascript">
@@ -21,27 +21,90 @@
 <body>
 
 <!--页面顶部 开始-->
-<div th:replace="head::orderCartHead"></div>
-
+<div th:replace="orderCartHead::header"></div>
+<div class="body-container">
+	<div class="unlogin-div">
+		<img src="img/icon_sprite.png"/>
+		<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
+		<a>立即登录</a>
+	</div>
+	<div class="all-goods">
+		<span class="div-span">全部商品1</span>
+		<div class="div-address">
+			<span>配送至:</span>
+			<input type="text" value="广西桂林秀峰区秀峰街道"/>
+		</div>
+	</div>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th><input type="checkbox"/>全选</th>
+					<th>商品</th>
+					<th>单价</th>
+					<th>数量</th>
+					<th>小计</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input type="checkbox"/></td>
+					<td>
+						<div class="goods-div ">
+							<img class="input-img" src="img/68d0ac29ce4a326d.jpg"/>
+							<div class="goods-name-div">
+								<span>Redmi 8A 5000mAh大电量 大字体大音量大内存 骁龙八核处理器 AI人脸解dadfasdfdsf</span>
+							</div>
+							<div class="spec-div">
+								<span>耀夜黑</span>
+								<span>4GB+64GB</span>
+							</div>
+						</div>
+					</td>
+					<td>
+						¥699.00
+					</td>
+					<td>
+						<input class="input-left" type="text" value="-"/>
+						<input class="input-middle" type="text" value="1"/>
+						<input class="input-right" type="text" value="+"/>
+						<div>
+							<span>有货</span>
+						</div>
+					</td>
+					<td>
+						¥699.00
+					</td>
+					<td>
+						<a>删除</a>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6">
+						<div class="footer-div">
+							<input type="checkbox"/>全选
+							<a>删除选中商品</a>
+							<span class="haveChose">已选择1件商品</span>
+							<span class="total">总价:¥699.00</span>
+							<img src="">
+							<span class="promotion">促销：-¥0.00</span>
+							<a class="account">去结算</a>
+						</div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>
 
 <!--页面底部  开始 -->
 <div th:replace="~{foot::footer}"></div>
 <!--页面底部  结束 -->
-<script type="text/javascript" src="js/controller/itemController.js"></script>
+<script type="text/javascript" src="js/controller/showOrderCart.js"></script>
 
 </body>
-	<div>
-		<div>
-			<img src=""/>
-			<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
-			<a>立即登录</a>
-		</div>
-		<div>
-			<div>
-				<span>全部商品1</span>
-				<span>配送至:</span>
-				<input type="text" value="广西桂林秀峰区秀峰街道"/>
-			</div>
-		</div>
-	</div>
+
 </html>

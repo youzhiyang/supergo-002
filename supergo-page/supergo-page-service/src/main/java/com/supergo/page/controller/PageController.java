@@ -14,6 +14,8 @@ public class PageController {
 
     @Autowired
     private PageService pageService;
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * 生成商品模板
@@ -55,9 +57,19 @@ public class PageController {
      * @return
      */
     @RequestMapping("/goods/addOrderCart")
-    public HttpResult addOrderCart(HttpServletRequest request,Integer itemId,Integer num,Integer sellerId) {
+    public HttpResult addOrderCart(Integer itemId,Integer num,Integer sellerId) {
         System.out.println("进入addOrderCart接口...");
         return pageService.addOrderCart(request,itemId, num, sellerId);
+    }
+
+    /**
+     * 用户登录情况下，显示购物车数据
+     * @return
+     */
+    @RequestMapping("/goods/showOrderCart")
+    public HttpResult showOrderCart() {
+        System.out.println("进入showOrderCart接口...");
+        return pageService.showOrderCart(request);
     }
 
 }

@@ -80,7 +80,7 @@
                         <div class="fr shopcar">
                             <div class="show-shopcar" id="shopcar">
                                 <span class="car"></span>
-                                <a class="sui-btn btn-default btn-xlarge" href="cart.html" target="_blank">
+                                <a class="sui-btn btn-default btn-xlarge" @click="showOrderCart()" target="_blank">
                                     <span>我的购物车</span>
                                     <i class="shopnum">0</i>
                                 </a>
@@ -137,6 +137,22 @@
                                 }
                             })
                         }
+                    });
+                },
+                //显示购物车信息
+                showOrderCart: function () {
+                    var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                    axios({
+                        method: 'get',
+                        url: url,
+                        headers: {
+                            'Authorization': bearerToken
+                        }
+                    }).then(function (res) {
+                        console.log(res);
+                        window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                    }).catch(function (error) {
+                        alert("生成模板失败");
                     });
                 }
             }

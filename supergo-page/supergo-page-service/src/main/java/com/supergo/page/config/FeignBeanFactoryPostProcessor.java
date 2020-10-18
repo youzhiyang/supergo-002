@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * 为了解决某个bug
+ */
 @Component
 public class FeignBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 

@@ -39,10 +39,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         System.out.println("00000:   " + requestURL.toString());
         System.out.println("llll:   " + StringUtils.isBlank(authorization));
 
-        String parameter = request.getParameter("itemId");
-        System.out.println("parameter:  " + parameter);
-
-
         //判断token是否合法
         if(StringUtils.isBlank(authorization)) {
             //判断是否是刷新页面请求，放行

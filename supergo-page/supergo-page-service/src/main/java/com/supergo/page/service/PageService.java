@@ -274,9 +274,7 @@ public class PageService {
             }
 
             FileWriter fileWriter = new FileWriter(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
-            System.out.println("1---------------------");
             Map<Object, Object> skuMap = apiOrderCartFeign.addOrderCart(itemId, num, sellerId);
-            System.out.println("122---------------------");
             Context context = new Context();
             //获取登入用户信息
             context.setVariable("userInfo",userInfo);
@@ -286,6 +284,41 @@ public class PageService {
             boolean b = FileUtil.deleteFile(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
             System.out.println("删除文件成功！");
             templateEngine.process("unloginAddOrderCart", context, fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return HttpResult.ok();
+    }
+
+    /**
+     * 用户登录情况下显示购物车数据
+     * @return
+     */
+    public HttpResult showOrderCart(HttpServletRequest request) {
+        User userInfo = new User();
+        Claims claims = (Claims) request.getAttribute("userInfo");
+        String token = null;
+        if(claims != null) {
+            //如果未登入用户信息设置为null
+            userInfo.setId(Long.valueOf(claims.getId()));
+            userInfo.setUsername(claims.getSubject());
+            System.out.println("claims:  " + claims.toString());
+            //获取token值
+            Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries("loginInfo" + claims.getId());
+            System.out.println(entries);
+            token = (String) entries.get(claims.getId());
+        }
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(Const.pagePath + "showOrderCart" + Const.sufferHtml);
+            Context context = new Context();
+            //获取登入用户信息
+            context.setVariable("userInfo",userInfo);
+            context.setVariable("bearerToken","Bearer " + token);
+            //每次创建模板前删除原来的模板
+            boolean b = FileUtil.deleteFile(Const.pagePath + "showOrderCart" + Const.sufferHtml);
+            System.out.println("删除文件成功！");
+            templateEngine.process("showOrderCart", context, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }

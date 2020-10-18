@@ -1,0 +1,193 @@
+.py-container {
+    width: 990px;
+    margin: 0 auto;
+}
+
+.search-div {
+    margin: 30px 0px 30px auto;
+}
+
+.search-div > input {
+    line-height: 18px;
+    padding: 3px 6px;
+    width: 270px;
+    border: 2px solid #c91623;
+}
+
+.search-div > button {
+    line-height: 18px;
+    padding: 3px 12px;
+    background: #c91623;
+    border: 2px solid #c91623;
+    color: white;
+}
+
+.body-container {
+    width: 990px;
+    margin: auto;
+}
+
+.unlogin-div {
+    line-height: 50px;
+    border: 1px solid yellow;
+    margin-bottom: 30px;
+    vertical-align: 50px;
+    padding-left: 10px;
+}
+
+.unlogin-div > a {
+    padding: 5px 10px;
+    background: red;
+    color: white;
+    text-decoration: none;
+}
+
+.div-span {
+    font-size: 18px;
+    color: red;
+}
+
+.div-address {
+    display: inline-block;
+    float: right;
+}
+
+.div-address > input {
+    padding: 3px;
+}
+
+.all-goods {
+    width: 100%;
+    height: 38px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table thead {
+    background: #f3f3f3;
+    line-height: 45px;
+}
+
+table thead tr th:first-child {
+    margin: 5px auto 5px 5px;
+    width: 60px;
+}
+
+table tbody tr {
+    background: #FFF4E8
+}
+
+table tbody tr td input:first-child {
+    margin: auto auto auto 10px;
+}
+
+table tbody tr td:nth-child(2) {
+    width: 400px;
+}
+
+table tbody tr td:nth-child(n + 3) {
+    text-align: center;
+}
+
+table tfoot tr td input:first-child {
+    margin: auto auto auto 10px;
+}
+
+.table tfoot tr {
+    line-height: 50px;
+}
+
+.input-left {
+    text-align: center;
+    width: 16px;
+    position: relative;
+    left: 5px;
+}
+
+.input-middle {
+    width: 40px;
+    text-align: center;
+}
+
+.input-right {
+    width: 18px;
+    text-align: center;
+    position: relative;
+    right: 5px;
+}
+
+.input-img {
+    width: 80px;
+    height: 80px;
+}
+
+.goods-div {
+    position: relative;
+    margin: 15px 0px;
+}
+
+.goods-name-div {
+    position: absolute;
+    width: 200px;
+    margin-left: 90px;
+    bottom: 35px;
+}
+
+.goods-name-div > span {
+    display: -webkit-box;
+    word-break: break-all;
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: pre-line;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp:2;
+}
+
+.spec-div {
+    position: absolute;
+    margin-left: 310px;
+    bottom: 33px;
+}
+
+.spec-div span:first-child {
+    display: block;
+}
+
+.account {
+    float: right;
+    font-size: 18px;
+    background: #e54346;
+    color: white;
+    padding: 0px 15px;
+}
+
+.total {
+    position: absolute;
+    right: 94px;
+    bottom: 10px;
+}
+
+.promotion {
+    position: absolute;
+    right: 95px;
+    top: 10px;
+}
+
+.footer-div {
+    border: 1px solid #f0f0f0;
+    line-height: 50px;
+    position: relative;
+    top: 20px;
+    margin-bottom: 50px;
+}
+
+.haveChose {
+    position: absolute;
+    right: 175px;
+    margin-top: -10px;
+}
+
+
