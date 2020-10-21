@@ -35,4 +35,6 @@ public class ItemCatServiceImpl extends BaseServiceImpl<Itemcat> implements Item
         list.forEach(itemcat -> itemcat.setChildren(getCategroyList(itemcat.getId())));
         return list;
     }
+
+
 }

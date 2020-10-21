@@ -120,7 +120,7 @@
 								<img src="img/deliver01.png">
 							</div>
 							<div class="fl">
-								<em class="t-gray">有货</em>
+								<strong v-text="haveGoods" class="t-gray goods-position"></strong>
 							</div>
 						</div>
 					</div>
@@ -172,7 +172,7 @@
 							<div class="fl title">
 								<div class="control-group">
 									<div class="controls">
-										<input autocomplete="off" type="text" v-model="num" minnum="1" class="itxt" />
+										<input autocomplete="off" type="text" v-model="num" @input="change()" class="itxt" />
 										<a href="javascript:void(0)" @click="addNum(1)" class="increment plus">+</a>
 										<a href="javascript:void(0)" @click="addNum(-1)" class="increment mins">-</a>
 									</div>

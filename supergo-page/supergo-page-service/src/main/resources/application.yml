@@ -39,7 +39,7 @@ management:
 jwt:   #jwt测试数据
   config:
     key: abc123      #密匙
-    ttl: 3600        #过期时间
+    ttl: -1          #过期时间
 
 #配置超时时间
 supergo-manager:

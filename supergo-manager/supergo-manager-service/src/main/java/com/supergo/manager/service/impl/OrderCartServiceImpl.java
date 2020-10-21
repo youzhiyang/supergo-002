@@ -4,8 +4,10 @@ import com.supergo.manager.service.OrderCartService;
 import com.supergo.mapper.ItemMapper;
 import com.supergo.mapper.OrdercartMapper;
 import com.supergo.pojo.Ordercart;
+import com.supergo.pojo.User;
 import com.supergo.service.base.impl.BaseServiceImpl;
 import com.supergo.user.utils.JsonUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -38,17 +40,22 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
     @Override
     public Map<Object, Object> addOrderCart(HttpServletRequest request, int itemId, int num,int sellerId) {
 
+        User userInfo = new User();
+        Claims claims = (Claims)request.getAttribute("userInfo");
+        System.out.println(claims.toString());
+
         //获取sku库存信息
         Map<Object, Object> skuMap = itemMapper.selectBySellerIdAndSkuId(itemId, sellerId);
+        System.out.println(skuMap.toString());
         //1、判断购物车是否存在该商品
-        Ordercart ordercart = ordercartMapper.selectGoodsIsExist(itemId, 16, sellerId);
+        Ordercart ordercart = ordercartMapper.selectGoodsIsExist(itemId, Integer.parseInt(claims.getId()), sellerId);
         //如果购物车已有该商品
         if(ordercart != null) {
             //商品数量相加
             ordercart.setNum(ordercart.getNum() + num);
             update(ordercart);
         } else {
-            ordercart = skuToOrderCart(skuMap, 16, num);
+            ordercart = skuToOrderCart(skuMap, Integer.parseInt(claims.getId()), num);
             //保存该商品信息
             add(ordercart);
         }
@@ -81,6 +88,7 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
 //        Map<Object, Object> cartInfo = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":info");
         //redis取商品缓存
         Map<Object, Object> cartDetail = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":detail");
+        System.out.println(cartDetail);
         //如果购物车已经存在
         Map<Object, Object> cartDetail1 = null;
         if(!cartDetail.isEmpty()) {
@@ -88,8 +96,10 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
             cartDetail1 = addCartSku(cartDetail, num, itemId, skuMap);
             //保存购物车信息
             cartDetail1.forEach((k,v)->{
+                System.out.println(v);
+                System.out.println(JsonUtils.objectToJson(v));
                 //保存购物车信息
-                stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",k,JsonUtils.objectToJson(v));
+                stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",String.valueOf(k),JsonUtils.objectToJson(v));
             });
         } else {
             skuMap.put("num",String.valueOf(num));
@@ -118,5 +128,4 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
         }
         return cartDetail;
     }
-
 }

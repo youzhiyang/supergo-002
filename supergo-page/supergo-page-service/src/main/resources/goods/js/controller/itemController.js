@@ -22,6 +22,7 @@ window.onload = function () {
             ],
             leftWidth: 0,                                   //配置色底线，左边边线宽度
             rightWidth: 0,                                  //配置色底线，右边边线宽度
+            haveGoods: '有货'                               //判断商品是否有货
         },
         methods:{
             //加入购物车实现
@@ -89,6 +90,12 @@ window.onload = function () {
                     if(this.matchObject(this.specificationItems,JSON.parse(itemList[i].spec))){
                         //如果相同，则把当前被循环的SKU赋值给app.sku  深克隆
                         this.sku=JSON.parse(JSON.stringify(itemList[i]));
+                        //判断是否有货
+                        if(this.sku.num <= 0) {
+                            this.haveGoods = '无货';
+                        } else {
+                            this.haveGoods = '有货';
+                        }
                         return;
                     }
                 }
@@ -100,19 +107,45 @@ window.onload = function () {
 
             //定义方法获取SKU数据
             loadSku:function () {
+                var sku = '';
                 //从集合中获取第1个记录
-                //深克隆
-                this.sku =JSON.parse(JSON.stringify(itemList[0]));
-                //将spce赋值给选中的specificationItems
-                this.specificationItems=JSON.parse(this.sku.spec);
+                for (var i = 0;i < itemList.length;i++) {
+                    sku =JSON.parse(JSON.stringify(itemList[0]));
+                    //如果是默认规格
+                    if(sku.isDefault == 1) {
+                        this.sku = sku;
+                        //将spce赋值给选中的specificationItems
+                        this.specificationItems=JSON.parse(this.sku.spec);
+                        //判断是否有货
+                        if(this.sku.num <= 0) {
+                            this.haveGoods = '无货';
+                        } else {
+                            this.haveGoods = '有货'
+                        }
+                    }
+                }
             },
 
             //创建方法，实现用户购买数量增加操作
             addNum:function (x) {
-                this.num+=x;
+                this.num = parseInt(this.num);
+                this.num += parseInt(x);
                 if(this.num<1){
                     this.num=1;
+                } else if(this.num >= 200) {
+                    this.num = 200;
                 }
+            },
+
+            change:function () {
+              if(this.num > 200) {
+                  this.num = 200;
+              } else if(this.num <= 1) {
+                  this.num = 1;
+              }
+              // if(this.sku.num < this.num) {
+              //
+              // }
             },
 
             //创建一个方法实现记录操作
@@ -120,8 +153,24 @@ window.onload = function () {
             //value:规格选项   移动4G
             selectSpecification:function (key,value) {
                 this.$set(this.specificationItems,key,value);
-                //查找当前SKU
-                this.searchSku();
+                var _this = this;
+                var url = "http://www.supergo-page.com/page/goods/getItemByGoodsId";
+                axios({
+                    method: 'get',
+                    url: url,
+                    params: {
+                        goodsId: this.sku.goodsId,
+                    }
+                }).then(function (res) {
+                    console.log(res);
+                    //更新库存列表
+                    itemList = res.data.data;
+                    console.log(itemList);
+                    _this.searchSku();
+                }).catch(function (error) {
+                    alert("生成模板失败");
+                });
+
             },
             //动态对规格参数html进行拼接（th:onclick监听事件行不通）
             specificationLable1:function () {

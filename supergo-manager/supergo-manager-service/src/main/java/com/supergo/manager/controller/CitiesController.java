@@ -16,11 +16,17 @@ public class CitiesController {
 
     @RequestMapping("/{citiesId}")
     public Cities getCitiesById(@PathVariable long citiesId) {
-
         Cities cities = citiesService.findOne(citiesId);
         return cities;
     }
 
+    /**
+     * 获取城市列表
+     * @param page
+     * @param size
+     * @param cities
+     * @return
+     */
     @RequestMapping("/getCitiesList/{page}/{size}")
     public HttpResult getCitiesList(@PathVariable int page, @PathVariable int size, @RequestBody(required = false) Cities cities) {
         PageResult page1 = citiesService.findPage(page, size, cities);

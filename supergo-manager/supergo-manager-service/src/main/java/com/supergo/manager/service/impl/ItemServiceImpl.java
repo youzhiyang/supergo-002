@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemService {

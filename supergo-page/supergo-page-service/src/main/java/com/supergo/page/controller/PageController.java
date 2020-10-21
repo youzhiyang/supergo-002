@@ -2,11 +2,13 @@ package com.supergo.page.controller;
 
 import com.supergo.http.HttpResult;
 import com.supergo.page.service.PageService;
+import com.supergo.pojo.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -70,6 +72,18 @@ public class PageController {
     public HttpResult showOrderCart() {
         System.out.println("进入showOrderCart接口...");
         return pageService.showOrderCart(request);
+    }
+
+    /**
+     * 根据id获取库存信息
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping("/goods/getItemByGoodsId")
+    public HttpResult getItemByGoodsId(long goodsId) {
+        System.out.println("进入getItemByGoodsId接口...");
+        List<Item> itemList = pageService.getItemByGoodsId(goodsId);
+        return HttpResult.ok(itemList);
     }
 
 }

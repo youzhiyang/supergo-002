@@ -52,4 +52,4 @@ management:
 jwt:
   config:
     key: abc123      #密匙
-    ttl: 3600        #过期时间
+    ttl: -1        #过期时间

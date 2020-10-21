@@ -2,14 +2,12 @@ package com.supergo.page.service;
 
 import com.alibaba.fastjson.JSON;
 import com.supergo.http.HttpResult;
-import com.supergo.manager.feign.ApiGoodsFeign;
-import com.supergo.manager.feign.ApiItemCatFeign;
-import com.supergo.manager.feign.ApiOrderCartFeign;
-import com.supergo.manager.feign.ApiProvincesFeign;
+import com.supergo.manager.feign.*;
 import com.supergo.page.config.GoddsLock;
 import com.supergo.page.util.Const;
 import com.supergo.page.util.FileUtil;
 import com.supergo.pojo.*;
+import com.supergo.user.utils.JsonUtils;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -235,9 +233,12 @@ public class PageService {
             Map<Object, Object> skuMap = apiOrderCartFeign.unloginAddOrderCart(itemId, clientId, num, sellerId);
             Context context = new Context();
             User userInfo = new User();
+            String spec = (String) skuMap.get("spec");
+            Map<String, String> stringStringMap = JsonUtils.jsonToMap(spec, String.class, String.class);
             //获取登入用户信息
             context.setVariable("userInfo",userInfo);
             context.setVariable("skuMap",skuMap);
+            context.setVariable("spec",stringStringMap);
             //每次创建模板前删除原来的模板
             boolean b = FileUtil.deleteFile(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
             System.out.println("删除文件成功！");
@@ -275,11 +276,15 @@ public class PageService {
 
             FileWriter fileWriter = new FileWriter(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
             Map<Object, Object> skuMap = apiOrderCartFeign.addOrderCart(itemId, num, sellerId);
+            System.out.println(skuMap.toString());
             Context context = new Context();
+            String spec = (String) skuMap.get("spec");
+            Map<String, String> stringStringMap = JsonUtils.jsonToMap(spec, String.class, String.class);
             //获取登入用户信息
             context.setVariable("userInfo",userInfo);
             context.setVariable("bearerToken","Bearer " + token);
             context.setVariable("skuMap",skuMap);
+            context.setVariable("spec",stringStringMap);
             //每次创建模板前删除原来的模板
             boolean b = FileUtil.deleteFile(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
             System.out.println("删除文件成功！");
@@ -323,5 +328,16 @@ public class PageService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 根据id获取库存信息
+     * @param goodsId
+     * @return
+     */
+    public List<Item> getItemByGoodsId(long goodsId) {
+        // 查询库存列表
+        List<Item> itemList = goodsFeign.getItemList(goodsId);
+        return itemList;
     }
 }

@@ -15,6 +15,7 @@
 	<script th:inline="javascript">
         var skuMap = [[${skuMap}]];
         var userInfo = [[${userInfo}]];
+        var spec = [[${spec}]];
 	</script>
 
 </head>
@@ -23,7 +24,7 @@
 
 <!--页面顶部 开始-->
 <div th:replace="head::header"></div>
-<div class="contain">
+<div class="contain" id="app">
 	<div class="success-contain">
 		<div class="success-top">
 			<img src="img/addtocart-icons.png"/>
@@ -33,20 +34,44 @@
 			<img th:src="${skuMap.image}"/>
 			<div>
 				<div>
-					<span class="success-middle-size">Redmi 8A 5000mAh大电量 大字体大音量大内存 骁龙八核处理器 AI人脸解锁 莱茵</span>
+					<span th:text="${skuMap.title}" class="success-middle-size"></span>
 				</div>
 				<div>
-					<span class="success-middle-color ">颜色：耀夜黑尺码：4GB+64GB/ 数量：1</span>
+					<span class="success-middle-color" th:each="entity:${spec}" th:text="${entity.key}+':'+${entity.value}+' '"> </span>
+					<span class="success-middle-color" th:text="'数量：'+${skuMap.selectedNum}"></span>
 				</div>
 			</div>
 		</div>
 		<div class="success-bottom">
-			<a>查看商品详情</a>
-			<a>去购物车结算</a>
+			<a @click="showGoodsDetail();">查看商品详情</a>
+			<a @click="">去购物车结算</a>
 		</div>
 	</div>
 </div>
-
 </body>
-
+<script src="../js/vuejs-2.5.16.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+<script>
+    Vue.prototype.axios = 'axios';
+    new Vue({
+        el:'#app',
+        data:{
+            skuMap : skuMap
+        },
+        methods:{
+            showGoodsDetail: function(){
+                let url = 'http://www.supergo-page.com/page/html/build/' + this.skuMap.goods_id;
+                axios({
+                    method: 'get',
+                    url: url
+                }).then(function (res) {
+                    console.log(res);
+                    window.location.href = 'http://www.supergo-page.com/'+this.skuMap.goods_id+'.html';
+                }).catch(function (error) {
+                    alert("生成模板失败");
+                });
+            }
+        }
+    });
+</script>
 </html>

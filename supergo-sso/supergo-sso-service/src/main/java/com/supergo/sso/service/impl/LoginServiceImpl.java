@@ -67,7 +67,7 @@ public class LoginServiceImpl extends BaseServiceImpl<User> implements LoginServ
         //保存用户信息到redis中
         stringRedisTemplate.opsForHash().put("loginInfo" + user1.getId(),user1.getId()+"",token);
         //设置过期时间
-        stringRedisTemplate.expire("loginInfo" + user1.getId(),10, TimeUnit.MINUTES);
+        stringRedisTemplate.expire("loginInfo" + user1.getId(),10 , TimeUnit.MINUTES);
 
         //封装httpResult数据
         HttpResult httpResult = new HttpResult();

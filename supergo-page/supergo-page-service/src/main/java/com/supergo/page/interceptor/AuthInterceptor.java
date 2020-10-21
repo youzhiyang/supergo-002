@@ -6,11 +6,14 @@ import com.supergo.page.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 身份认证拦截器
@@ -20,6 +23,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 前置处理器
@@ -42,7 +47,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         //判断token是否合法
         if(StringUtils.isBlank(authorization)) {
             //判断是否是刷新页面请求，放行
-            if(requestURL.contains(Const.htmlFlash) || requestURL.contains(Const.unloginAddOrderCart)) {
+            if(requestURL.contains(Const.htmlFlash) || requestURL.contains(Const.unloginAddOrderCart) || requestURL.contains(Const.getItemByGoodsId)) {
                 System.out.println("````````````````");
                 request.setAttribute("userInfo",null);
                 return true;
@@ -58,10 +63,18 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         //如果合法，执行以下处理
         final String token = authorization.substring(7);
-        //判断token是否合法
+            //判断token是否合法
         Claims claims = jwtUtil.parseToken(token);
         System.out.println("claims----:  " + claims.toString());
-
+        //获取token值
+        Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries("loginInfo" + claims.getId());
+        //如果缓存存在，自动续缓存时间
+        if(!entries.isEmpty()) {
+            //刷新token过期时间
+            stringRedisTemplate.expire("loginInfo" + claims.getId(),10 , TimeUnit.MINUTES);
+        } else {
+            throw new MyAuthException("会话过期请从新登录");
+        }
         request.setAttribute("userInfo",claims);
 
         return true;

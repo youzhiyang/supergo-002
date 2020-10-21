@@ -8,4 +8,5 @@ import java.util.List;
 public interface ItemCatService extends BaseService<Itemcat> {
 
     List<Itemcat> getItemCatList();
+
 }

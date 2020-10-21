@@ -13,5 +13,7 @@ public class Const {
     public static String sufferHtml = ".html";
     //用户未登录添加购物车html页面名称(对该请求放行)
     public static String unloginAddOrderCart = "goods/unloginAddOrderCart";
+    //获取商品库存列表
+    public static String getItemByGoodsId = "goods/getItemByGoodsId";
 
 }

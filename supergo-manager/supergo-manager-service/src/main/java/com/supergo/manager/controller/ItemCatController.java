@@ -26,4 +26,5 @@ public class ItemCatController {
         Itemcat itemcat = itemCatService.findOne(categoryId);
         return itemcat;
     }
+
 }

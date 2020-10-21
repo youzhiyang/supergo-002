@@ -458,3 +458,8 @@ ul.goods-intro li {
 .l-width {
     width: 470px;
 }
+
+.goods-position {
+    position: relative;
+    left: 5px;
+}
