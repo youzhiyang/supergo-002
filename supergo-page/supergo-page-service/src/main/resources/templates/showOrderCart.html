@@ -13,7 +13,8 @@
 	<script src="js/vuejs-2.5.16.js"></script>
 	<script src="js/axios-0.18.0.js"></script>
 	<script th:inline="javascript">
-
+        var userInfo = [[${userInfo}]];
+        var bearerToken = [[${bearerToken}]];
 	</script>
 
 </head>
@@ -23,10 +24,10 @@
 <!--页面顶部 开始-->
 <div th:replace="orderCartHead::header"></div>
 <div class="body-container">
-	<div class="unlogin-div">
+	<div class="unlogin-div" th:if="${bearerToken == null}">
 		<img src="img/icon_sprite.png"/>
 		<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
-		<a>立即登录</a>
+		<a href="http://www.supergo-sso.com/user/loginPage" target="_blank">立即登录</a>
 	</div>
 	<div class="all-goods">
 		<span class="div-span">全部商品1</span>

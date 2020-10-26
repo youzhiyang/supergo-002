@@ -15,5 +15,7 @@ public class Const {
     public static String unloginAddOrderCart = "goods/unloginAddOrderCart";
     //获取商品库存列表
     public static String getItemByGoodsId = "goods/getItemByGoodsId";
+    //显示购物车列表
+    public static String showOrderCart = "goods/showOrderCart";
 
 }

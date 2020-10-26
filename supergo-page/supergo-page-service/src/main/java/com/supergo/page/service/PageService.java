@@ -319,7 +319,11 @@ public class PageService {
             Context context = new Context();
             //获取登入用户信息
             context.setVariable("userInfo",userInfo);
-            context.setVariable("bearerToken","Bearer " + token);
+            if(token != null) {
+                context.setVariable("bearerToken","Bearer " + token);
+            } else {
+                context.setVariable("bearerToken",token);
+            }
             //每次创建模板前删除原来的模板
             boolean b = FileUtil.deleteFile(Const.pagePath + "showOrderCart" + Const.sufferHtml);
             System.out.println("删除文件成功！");
@@ -327,7 +331,7 @@ public class PageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return HttpResult.ok();
     }
 
     /**

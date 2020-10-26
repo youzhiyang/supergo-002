@@ -141,12 +141,16 @@
                 },
                 //显示购物车信息
                 showOrderCart: function () {
+                    var bearerToken1 = '';
+                    if(bearerToken != null) {
+                        bearerToken1 = bearerToken;
+                    }
                     var url = "http://www.supergo-page.com/page/goods/showOrderCart";
                     axios({
                         method: 'get',
                         url: url,
                         headers: {
-                            'Authorization': bearerToken
+                            'Authorization': bearerToken1
                         }
                     }).then(function (res) {
                         console.log(res);

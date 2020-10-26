@@ -39,7 +39,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         //获得request对象
         //从request对象中去请求头的Authorization信息，从而取token
         String authorization = request.getHeader("Authorization");
-        System.out.println("authorization:   " + authorization);
+        System.out.println("authorization:" + authorization);
         String requestURL = request.getRequestURL().toString();
         System.out.println("00000:   " + requestURL.toString());
         System.out.println("llll:   " + StringUtils.isBlank(authorization));
@@ -47,7 +47,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         //判断token是否合法
         if(StringUtils.isBlank(authorization)) {
             //判断是否是刷新页面请求，放行
-            if(requestURL.contains(Const.htmlFlash) || requestURL.contains(Const.unloginAddOrderCart) || requestURL.contains(Const.getItemByGoodsId)) {
+            if(requestURL.contains(Const.htmlFlash) || requestURL.contains(Const.unloginAddOrderCart) ||
+                    requestURL.contains(Const.getItemByGoodsId) || requestURL.contains(Const.showOrderCart)) {
                 System.out.println("````````````````");
                 request.setAttribute("userInfo",null);
                 return true;

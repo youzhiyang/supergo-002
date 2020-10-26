@@ -93,14 +93,7 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
         Map<Object, Object> cartDetail1 = null;
         if(!cartDetail.isEmpty()) {
             //向购物车添加sku
-            cartDetail1 = addCartSku(cartDetail, num, itemId, skuMap);
-            //保存购物车信息
-            cartDetail1.forEach((k,v)->{
-                System.out.println(v);
-                System.out.println(JsonUtils.objectToJson(v));
-                //保存购物车信息
-                stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",String.valueOf(k),JsonUtils.objectToJson(v));
-            });
+            cartDetail1 = addCartSku(cartDetail, num, itemId, skuMap,clientId);
         } else {
             skuMap.put("num",String.valueOf(num));
             //如果不存在购物车，初始化购物车信息
@@ -111,20 +104,30 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
     }
 
     //向购物车添加sku
-    private Map<Object, Object> addCartSku(Map<Object, Object> cartDetail,int num,int itemId,Map<Object, Object> skuMap) {
+    private Map<Object, Object> addCartSku(Map<Object, Object> cartDetail,int num,int itemId,Map<Object, Object> skuMap,String clientId) {
+        //判断购物车中是否存在该商品
+        boolean isExist = false;
         for(Map.Entry<Object, Object> it : cartDetail.entrySet()){
             //如果购物车已经存在该商品
             if(it.getKey().equals(itemId + "")) {
+                isExist = true;
                 String skuJson = (String)it.getValue();
                 Map<String, String> skuMap1 = JsonUtils.jsonToMap(skuJson, String.class, String.class);
                 //商品数量相加
                 skuMap.put("num",(Integer.parseInt(skuMap1.get("num")) + num));
-                cartDetail.put(it.getKey(),skuMap);
+                //如果不存在购物车，初始化购物车信息
+                stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
             } else {
-                skuMap.put("num",num);
-                //如果购物车中不存在该商品，将商品添加进入购物车
-                cartDetail.put(itemId,skuMap);
+                String skuJson = (String) it.getValue();
+                //如果不存在购物车，初始化购物车信息
+                stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",it.getKey() + "",skuJson);
             }
+        }
+        //如果购物车不存在该商品
+        if(!isExist) {
+            skuMap.put("num",num);
+            //如果不存在购物车，初始化购物车信息
+            stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
         }
         return cartDetail;
     }

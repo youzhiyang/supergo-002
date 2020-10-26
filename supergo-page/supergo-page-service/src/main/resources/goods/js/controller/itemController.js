@@ -22,11 +22,18 @@ window.onload = function () {
             ],
             leftWidth: 0,                                   //配置色底线，左边边线宽度
             rightWidth: 0,                                  //配置色底线，右边边线宽度
-            haveGoods: '有货'                               //判断商品是否有货
+            haveGoods: '有货',                             //判断商品是否有货
+            disable: false
         },
         methods:{
             //加入购物车实现
             addCart:function () {
+
+                //如果为无货或声誉库存大于当前库存禁止跳转
+                if(this.sku.num <= 0 || this.sku.num <= this.num) {
+                    return false;
+                }
+
                 if(bearerToken != null) {  //用户登录情况下添加购物车操作
                     var url = "http://www.supergo-page.com/page/goods/addOrderCart";
                     axios({
@@ -93,8 +100,10 @@ window.onload = function () {
                         //判断是否有货
                         if(this.sku.num <= 0) {
                             this.haveGoods = '无货';
+                            this.disable = true;
                         } else {
                             this.haveGoods = '有货';
+                            this.disable = false;
                         }
                         return;
                     }
@@ -119,8 +128,10 @@ window.onload = function () {
                         //判断是否有货
                         if(this.sku.num <= 0) {
                             this.haveGoods = '无货';
+                            this.disable = true;
                         } else {
-                            this.haveGoods = '有货'
+                            this.haveGoods = '有货';
+                            this.disable = false;
                         }
                     }
                 }
@@ -135,6 +146,15 @@ window.onload = function () {
                 } else if(this.num >= 200) {
                     this.num = 200;
                 }
+                if(this.sku.num <= this.num) {
+                    this.num = this.sku.num;
+                    this.haveGoods = '无货';
+                    this.disable = true;
+                } else {
+                    this.haveGoods = '有货';
+                    this.disable = false;
+
+                }
             },
 
             change:function () {
@@ -143,9 +163,14 @@ window.onload = function () {
               } else if(this.num <= 1) {
                   this.num = 1;
               }
-              // if(this.sku.num < this.num) {
-              //
-              // }
+              if(this.sku.num <= this.num) {
+                  this.num = this.sku.num;
+                  this.haveGoods = '无货';
+                  this.disable = true;
+              } else {
+                  this.haveGoods = '有货';
+                  this.disable = false;
+              }
             },
 
             //创建一个方法实现记录操作

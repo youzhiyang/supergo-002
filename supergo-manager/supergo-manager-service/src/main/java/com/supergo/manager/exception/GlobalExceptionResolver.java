@@ -33,8 +33,8 @@ public class GlobalExceptionResolver {
      */
     @ExceptionHandler(ExpiredJwtException.class)
     @ResponseBody
-    public HttpResult authExceptionResolver(ExpiredJwtException e) {
-        return HttpResult.error("token已经过期");
+    public String authExceptionResolver(ExpiredJwtException e) {
+        return "redirect:http://www.supergo-sso.com/user/loginPage";
     }
 
     /**
