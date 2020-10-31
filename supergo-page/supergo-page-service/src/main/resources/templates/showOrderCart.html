@@ -15,6 +15,9 @@
 	<script th:inline="javascript">
         var userInfo = [[${userInfo}]];
         var bearerToken = [[${bearerToken}]];
+        var provincesList = [[${provincesList}]];
+        var orderCartList = [[${orderCartList}]];
+        var spec = [[${spec}]];
 	</script>
 
 </head>
@@ -23,17 +26,45 @@
 
 <!--页面顶部 开始-->
 <div th:replace="orderCartHead::header"></div>
-<div class="body-container">
+<div class="body-container" id="app">
 	<div class="unlogin-div" th:if="${bearerToken == null}">
 		<img src="img/icon_sprite.png"/>
 		<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
 		<a href="http://www.supergo-sso.com/user/loginPage" target="_blank">立即登录</a>
 	</div>
 	<div class="all-goods">
-		<span class="div-span">全部商品1</span>
+		<span class="div-span">全部商品{{orderCartList.length}}</span>
 		<div class="div-address">
-			<span>配送至:</span>
-			<input type="text" value="广西桂林秀峰区秀峰街道"/>
+			<span class="fl">配送至:</span>
+			<div @mouseenter="enter()" @mouseleave="leave()" class="fl g-color">
+				<em class="t-gray" v-text="address"></em>
+				<img src="img/deliver01.png">
+			</div>
+		</div>
+		<!-- 地址框 -->
+		<div class="a-position" ref="position" :style="[ showAddress ]" @mouseenter="enter()" @mouseleave="leave()">
+			<div class="city-title">
+				<ul>
+					<li :class="n==i?'l-active':''" v-for="(v,i) in titleArr" :key="i" @click="changeN(i)">
+						<div :id="i" ref="i">
+							<em>{{v}}</em>
+							<img src="img/deliver01.png">
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!--设置边线-->
+			<div>
+				<div class="l-width l-color"></div>
+			</div>
+
+			<div class="city-list">
+				<div v-for="(v,i) in citysArr" :key="i" v-show="n==i">
+					<ul v-for="(city,j) in v" :key="j">
+						<li @click="getAddress(city)" :class="city == titleArr[n]?'a-color':''">{{city}}</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div>
@@ -49,33 +80,32 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><input type="checkbox"/></td>
+				<tr v-for="(v,i) in orderCartList" :key="i">
+					<td><input type="checkbox" id="v.id"/></td>
 					<td>
 						<div class="goods-div ">
 							<img class="input-img" src="img/68d0ac29ce4a326d.jpg"/>
 							<div class="goods-name-div">
-								<span>Redmi 8A 5000mAh大电量 大字体大音量大内存 骁龙八核处理器 AI人脸解dadfasdfdsf</span>
+								<span v-text="v.goods_name"></span>
 							</div>
 							<div class="spec-div">
-								<span>耀夜黑</span>
-								<span>4GB+64GB</span>
+								<span v-for="(spec,j) in v.spec" v-text="spec"></span>
 							</div>
 						</div>
 					</td>
 					<td>
-						¥699.00
+						<span v-text="v.price"></span>
 					</td>
 					<td>
-						<input class="input-left" type="text" value="-"/>
-						<input class="input-middle" type="text" value="1"/>
-						<input class="input-right" type="text" value="+"/>
+						<input class="input-left" type="text" @click="addNum(-1,v.id,i)" value="-"/>
+						<input ref="inputMiddle" class="input-middle" type="text" @input="change()" :value="v.num"/>
+						<input class="input-right" type="text" @click="addNum(1,v.id,i)" value="+"/>
 						<div>
 							<span>有货</span>
 						</div>
 					</td>
 					<td>
-						¥699.00
+						<strong v-text="v.price * v.num"></strong>
 					</td>
 					<td>
 						<a>删除</a>

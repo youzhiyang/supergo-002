@@ -75,6 +75,16 @@ public class PageController {
     }
 
     /**
+     * 用户未登录情况下，显示购物车数据
+     * @return
+     */
+//    @RequestMapping("/goods/unloginShowOrderCart")
+//    public HttpResult unloginShowOrderCart() {
+//        System.out.println("进入unloginShowOrderCart接口...");
+//        return pageService.unloginShowOrderCart(request);
+//    }
+
+    /**
      * 根据id获取库存信息
      * @param goodsId
      * @return

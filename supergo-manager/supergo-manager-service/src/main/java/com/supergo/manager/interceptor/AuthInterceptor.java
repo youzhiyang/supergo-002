@@ -41,7 +41,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         //判断token是否合法
         if(StringUtils.isBlank(authorization)) {
-            if(requestURL.contains(Const.unloginAddOrderCart) || requestURL.contains(Const.getItemByGoodsId)) {
+            if(requestURL.contains(Const.unloginAddOrderCart) || requestURL.contains(Const.getItemByGoodsId) ||
+                    requestURL.contains(Const.getOrderCart) || requestURL.contains(Const.getItemStock) ||
+                    requestURL.contains(Const.getOrderCartList) || requestURL.contains(Const.selectByPrimaryKey) ||
+                    requestURL.contains(Const.updateOrderCart)) {
                 System.out.println("````````````````");
                 return true;
             }

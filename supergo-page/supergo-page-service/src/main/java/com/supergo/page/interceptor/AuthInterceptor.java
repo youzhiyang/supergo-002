@@ -48,7 +48,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         if(StringUtils.isBlank(authorization)) {
             //判断是否是刷新页面请求，放行
             if(requestURL.contains(Const.htmlFlash) || requestURL.contains(Const.unloginAddOrderCart) ||
-                    requestURL.contains(Const.getItemByGoodsId) || requestURL.contains(Const.showOrderCart)) {
+                    requestURL.contains(Const.getItemByGoodsId) || requestURL.contains(Const.showOrderCart) ||
+                    requestURL.contains(Const.updateOrderCart) || requestURL.contains(Const.getItemStock) ||
+                    requestURL.contains(Const.getOrderCartList) ) {
                 System.out.println("````````````````");
                 request.setAttribute("userInfo",null);
                 return true;

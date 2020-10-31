@@ -1,6 +1,7 @@
 package com.supergo.manager.controller;
 
 import com.supergo.manager.service.OrderCartService;
+import com.supergo.pojo.Ordercart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,5 +50,31 @@ public class OrderCartController {
         System.out.println("进入unloginAddOrderCart接口...");
         Map<Object, Object> objectObjectMap = orderCartService.unloginAddOrderCart(itemId, num, sellerId, clientId);
         return objectObjectMap;
+    }
+
+    /**
+     * 用户登录情况下，查询购物车
+     * @return
+     */
+    @RequestMapping("/getOrderCart")
+    public List<Map<Object,Object>> getOrderCart() {
+        List<Map<Object,Object>> orderCart = orderCartService.getOrderCart();
+        return orderCart;
+    }
+
+    /**
+     * 更新购物车数据
+     */
+    @RequestMapping("/updateOrderCart/{id}/{num}")
+    public void updateOrderCart(@PathVariable("id")int id,@PathVariable("num")int num) {
+        orderCartService.updateOrderCart(id,num);
+    }
+
+    /**
+     * 根据主键查询购物车
+     */
+    @RequestMapping("/selectByPrimaryKey/{id}")
+    public Ordercart selectByPrimaryKey(@PathVariable("id") long id) {
+        return orderCartService.selectByPrimaryKey(id);
     }
 }

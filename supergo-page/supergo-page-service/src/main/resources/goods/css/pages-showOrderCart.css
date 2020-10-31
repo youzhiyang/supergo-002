@@ -25,6 +25,7 @@
 .body-container {
     width: 990px;
     margin: auto;
+    position: relative;
 }
 
 .unlogin-div {
@@ -184,10 +185,74 @@ table tfoot tr td input:first-child {
     margin-bottom: 50px;
 }
 
-.haveChose {
+.have-chose {
     position: absolute;
     right: 175px;
     margin-top: -10px;
 }
+
+.city-list div ul li{
+    list-style: none;
+    display: inline-block;
+    color: #646FB0;
+    width: 100px;
+    float: left;
+}
+
+.city-title ul li{
+    border: 1px solid lightgrey;
+    padding-left: 5px;
+    line-height: 28px;
+    display: inline-block;
+    color: #646FB0;
+    margin-right: 10px;
+    border-bottom: none;
+}
+
+.a-position {
+    position: absolute;
+    background: white;
+    z-index: 10;
+    left: 447px;
+    width: 470px;
+    border:1px solid lightgrey;
+    box-shadow: 0px 0px 2px 1px lightgrey;
+    padding: 8px 60px 15px 10px;
+    display: none;
+    top: 26.5px;
+}
+
+.a-color {
+    color: red !important;
+}
+
+.l-color {
+    border: 1px solid red;
+}
+
+.l-active {
+    border-top: 2px solid red !important;
+    border-right: 2px solid red !important;
+    border-left: 2px solid red !important;
+    border-bottom: 2px solid white !important;
+}
+
+.l-width {
+    width: 470px;
+}
+
+.t-gray {
+    color: #999
+}
+
+.g-color {
+    border:1px solid lightgrey;
+    padding: 0px 5px;
+}
+
+.fl {
+    float: left;
+}
+
 
 

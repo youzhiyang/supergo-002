@@ -17,5 +17,11 @@ public class Const {
     public static String getItemByGoodsId = "goods/getItemByGoodsId";
     //显示购物车列表
     public static String showOrderCart = "goods/showOrderCart";
+    //更新购物车
+    public static String updateOrderCart = "orderCart/updateOrderCart";
+    //获取购物车列表信息
+    public static String getOrderCartList = "orderCart/getOrderCartList";
+    //获取剩余库存
+    public static String getItemStock = "orderCart/getItemStock";
 
 }

@@ -41,4 +41,15 @@ public class GoodsController {
         return items;
     }
 
+    /**
+     * 获取剩余库存信息
+     * @param itemId
+     * @return
+     */
+    @GetMapping("/getItemStock/{itemId}")
+    public int getItemStock(@PathVariable("itemId") long itemId) {
+        int itemStock = itemService.getItemStock(itemId);
+        return itemStock;
+    }
+
 }

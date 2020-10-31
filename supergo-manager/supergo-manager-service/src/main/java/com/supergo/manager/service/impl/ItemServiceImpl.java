@@ -37,8 +37,8 @@ public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemServic
     public int getItemStock(long itemId) {
         Item item = new Item();
         item.setId(itemId);
-        Item result = itemMapper.selectOne(item);
-        return result.getStockCount();
+        Item result = itemMapper.selectByPrimaryKey(item);
+        return result.getNum();
     }
 
 }

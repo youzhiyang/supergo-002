@@ -28,7 +28,6 @@ window.onload = function () {
         methods:{
             //加入购物车实现
             addCart:function () {
-
                 //如果为无货或声誉库存大于当前库存禁止跳转
                 if(this.sku.num <= 0 || this.sku.num <= this.num) {
                     return false;
@@ -153,7 +152,6 @@ window.onload = function () {
                 } else {
                     this.haveGoods = '有货';
                     this.disable = false;
-
                 }
             },
 

@@ -65,11 +65,18 @@
             el: '#nav-bottom',
             methods: {
                 loginOut:function () {
+                    var bearerToken1 = '';
+                    if(bearerToken1 != null) {
+                        bearerToken1 = bearerToken;
+                    }
                     $.ajax({
                         url: "http://www.supergo-sso.com/user/loginOut",
                         type: "get",
                         data: {
                             userId: userInfo.id
+                        },
+                        headers: {
+                            'Authorization': bearerToken1
                         },
                         success: function (res) {
                             console.log(res);

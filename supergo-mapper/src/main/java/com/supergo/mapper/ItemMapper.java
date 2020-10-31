@@ -17,10 +17,10 @@ public interface ItemMapper extends Mapper<Item> {
      * @return
      */
     @Select("SELECT\n" +
-            "\tg.default_item_id AS item_id,\n" +
+            "\ti.id AS item_id,\n" +
             "\ti.title AS title,\n" +
             "\tg.caption AS sku_info,\n" +
-            "\tg.price,\n" +
+            "\ti.price,\n" +
             "\ti.image,\n" +
             "\tg.id AS goods_id,\n" +
             "\ti.seller_id,\n" +

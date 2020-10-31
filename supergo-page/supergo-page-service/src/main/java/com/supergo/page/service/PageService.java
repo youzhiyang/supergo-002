@@ -19,6 +19,7 @@ import org.thymeleaf.context.Context;
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -314,6 +315,17 @@ public class PageService {
             token = (String) entries.get(claims.getId());
         }
         FileWriter fileWriter = null;
+        //获取地址信息
+        List<Provinces> provincesList = apiProvincesFeign.getProvincesList();
+        //获取购物车列表信息
+        List<Map<Object,Object>> orderCartList = apiOrderCartFeign.getOrderCart();
+        List<Object> orderCartList1 = new ArrayList<>();
+        for(Map<Object,Object> map : orderCartList) {
+            String spec = (String) map.get("spec");
+            Map<String, String> specMap = JsonUtils.jsonToMap(spec, String.class, String.class);
+            map.put("spec",specMap);
+            orderCartList1.add(map);
+        }
         try {
             fileWriter = new FileWriter(Const.pagePath + "showOrderCart" + Const.sufferHtml);
             Context context = new Context();
@@ -324,6 +336,8 @@ public class PageService {
             } else {
                 context.setVariable("bearerToken",token);
             }
+            context.setVariable("provincesList",provincesList);
+            context.setVariable("orderCartList",orderCartList1);
             //每次创建模板前删除原来的模板
             boolean b = FileUtil.deleteFile(Const.pagePath + "showOrderCart" + Const.sufferHtml);
             System.out.println("删除文件成功！");
@@ -343,5 +357,14 @@ public class PageService {
         // 查询库存列表
         List<Item> itemList = goodsFeign.getItemList(goodsId);
         return itemList;
+    }
+
+    /**
+     * 用户未登录情况下，显示购物车
+     * @param request
+     * @return
+     */
+    public HttpResult unloginShowOrderCart(HttpServletRequest request) {
+        return null;
     }
 }

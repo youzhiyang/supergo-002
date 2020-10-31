@@ -18,4 +18,11 @@ public interface ApiGoodsFeign {
     @GetMapping("/goods/item/{goodsId}")
     public List<Item> getItemList(@PathVariable("goodsId") long goodsId);
 
+    /**
+     * 获取剩余库存信息
+     * @param itemId
+     * @return
+     */
+    @GetMapping("/goods/getItemStock/{itemId}")
+    public int getItemStock(@PathVariable("itemId") long itemId);
 }

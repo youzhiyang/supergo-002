@@ -66,7 +66,7 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
 
     private Ordercart skuToOrderCart(Map<Object, Object> skuMap,int userId,int num ) {
         Ordercart ordercart = new Ordercart();
-        ordercart.setItemId((Long) skuMap.get("id"));
+        ordercart.setItemId((Long) skuMap.get("item_id"));
         ordercart.setGoodsId((Long) skuMap.get("goods_id"));
         ordercart.setUserId((long) userId);
         ordercart.setSellerId((Long) skuMap.get("seller_id"));
@@ -130,5 +130,39 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
             stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
         }
         return cartDetail;
+    }
+
+    /**
+     * 用户登录情况下添加购物车
+     */
+    public List<Map<Object,Object>> getOrderCart() {
+        List<Map<Object,Object>> orderCart = ordercartMapper.getOrderCart();
+        return orderCart;
+    }
+
+    /**
+     * 用户未登录情况下添加购物车
+     */
+//    public List<Map<Object,Object>> getUnloginOrderCart() {
+//
+//        return orderCart;
+//    }
+
+    /**
+     * 更新购物车数据
+     */
+    public void updateOrderCart(int id,int num) {
+        Ordercart ordercart = new Ordercart();
+        ordercart.setNum(num);
+        ordercart.setId((long) id);
+        //1、根据id查询购物车信息
+        ordercartMapper.updateByPrimaryKeySelective(ordercart);
+    }
+
+    /**
+     * 根据主键查询购物车
+     */
+    public Ordercart selectByPrimaryKey(long id) {
+        return ordercartMapper.selectByPrimaryKey(id);
     }
 }
