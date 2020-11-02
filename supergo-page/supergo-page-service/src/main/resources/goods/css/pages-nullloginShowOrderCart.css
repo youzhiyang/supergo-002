@@ -1,0 +1,27 @@
+.null-container {
+    width: 990px;
+    margin: 80px auto;
+}
+
+.img {
+    position: relative;
+    left: 290px;
+}
+
+.shopping-div {
+    display: inline-block;
+    position: relative;
+    left: 300px;
+    top: 5px;
+}
+
+.shopping-div > span {
+    font-size: 14px;
+}
+
+.shopping-div > div > a {
+    text-decoration: none;
+    position: relative;
+    top: 10px;
+    cursor: pointer;
+}

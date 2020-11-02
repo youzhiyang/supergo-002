@@ -1,0 +1,38 @@
+.null-container {
+    width: 990px;
+    margin: 80px auto;
+}
+
+.img {
+    position: relative;
+    left: 290px;
+}
+
+.shopping-div {
+    display: inline-block;
+    position: relative;
+    left: 300px;
+    top: 5px;
+}
+
+.shopping-div > span {
+    font-size: 14px;
+}
+
+.shopping-div > div > a:first-child {
+    text-decoration: none;
+    padding: 5px 10px;
+    background: red;
+    color: white;
+    border-radius: 5px;
+    position: relative;
+    top: 10px;
+    cursor: pointer;
+}
+
+.shopping-div > div > a:last-child {
+    text-decoration: none;
+    position: relative;
+    top: 10px;
+    cursor: pointer;
+}

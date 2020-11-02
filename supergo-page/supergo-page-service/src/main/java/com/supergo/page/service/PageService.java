@@ -6,7 +6,9 @@ import com.supergo.manager.feign.*;
 import com.supergo.page.config.GoddsLock;
 import com.supergo.page.util.Const;
 import com.supergo.page.util.FileUtil;
+import com.supergo.page.util.UUIDUtil;
 import com.supergo.pojo.*;
+import com.supergo.user.utils.CookieUtil;
 import com.supergo.user.utils.JsonUtils;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -228,8 +232,23 @@ public class PageService {
     /**
      * 用户未登录情况下添加购物车
      */
-    public HttpResult unloginAddOrderCart(int itemId,String clientId,int num,int sellerId) {
+    public HttpResult unloginAddOrderCart(HttpServletRequest request, HttpServletResponse response, int itemId, int num, int sellerId) {
         try {
+            String clientId = "";
+            Cookie[] cookies = request.getCookies();
+            //如果cookie不为空，直接获取cookie值
+            if(cookies != null) {
+                Map<String, String> clientId1 = CookieUtil.readCookie(request, "clientId");
+                clientId = clientId1.get("clientId");
+            } else {
+                clientId = UUIDUtil.getUUID2();
+                //如果是第一次访问，创建cookie
+                Cookie cookie = new Cookie("clientId", clientId);
+                cookie.setMaxAge(3 * 24 * 3600);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
+            System.out.println("clientId:  " + clientId);
             FileWriter fileWriter = new FileWriter(Const.pagePath + "unloginAddOrderCart" + Const.sufferHtml);
             Map<Object, Object> skuMap = apiOrderCartFeign.unloginAddOrderCart(itemId, clientId, num, sellerId);
             Context context = new Context();
@@ -314,38 +333,122 @@ public class PageService {
             System.out.println(entries);
             token = (String) entries.get(claims.getId());
         }
+        Context context = new Context();
+        //获取登入用户信息
+        context.setVariable("userInfo",userInfo);
         FileWriter fileWriter = null;
-        //获取地址信息
-        List<Provinces> provincesList = apiProvincesFeign.getProvincesList();
-        //获取购物车列表信息
-        List<Map<Object,Object>> orderCartList = apiOrderCartFeign.getOrderCart();
-        List<Object> orderCartList1 = new ArrayList<>();
+        String template = null;
+        try {
+            if(token != null) {
+                context.setVariable("bearerToken","Bearer " + token);
+                //获取购物车列表信息
+                List<Map<Object,Object>> orderCartList = apiOrderCartFeign.getOrderCart();
+                System.out.println("orderCartList：  " + orderCartList);
+                System.out.println(orderCartList.isEmpty());
+                if(!orderCartList.isEmpty()) {
+                    System.out.println("111111111");
+                    fileWriter = new FileWriter(Const.pagePath + "showOrderCart" + Const.sufferHtml);
+                    List<Map<Object, Object>> orderCartList1 = parseOrderCartList(orderCartList);
+                    context.setVariable("orderCartList",orderCartList1);
+                    //获取地址信息
+                    List<Provinces> provincesList = apiProvincesFeign.getProvincesList();
+                    context.setVariable("provincesList",provincesList);
+                    //每次创建模板前删除原来的模板
+                    boolean b = FileUtil.deleteFile(Const.pagePath + "showOrderCart" + Const.sufferHtml);
+                    System.out.println("删除文件成功！");
+                    templateEngine.process("showOrderCart", context, fileWriter);
+                    template = "showOrderCart";
+                } else {
+                    System.out.println("222222222");
+                    fileWriter = new FileWriter(Const.pagePath + "nullloginShowOrderCart" + Const.sufferHtml);
+                    //每次创建模板前删除原来的模板
+                    boolean b = FileUtil.deleteFile(Const.pagePath + "nullloginShowOrderCart" + Const.sufferHtml);
+                    System.out.println("删除文件成功！");
+                    templateEngine.process("nullloginShowOrderCart", context, fileWriter);
+                    template = "nullloginShowOrderCart";
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return HttpResult.ok(template);
+    }
+
+    /**
+     * 解析购物车列表
+     */
+    public List<Map<Object,Object>> parseOrderCartList(List<Map<Object,Object>> orderCartList) {
+        List<Map<Object,Object>> orderCartList1 = new ArrayList<>();
         for(Map<Object,Object> map : orderCartList) {
             String spec = (String) map.get("spec");
             Map<String, String> specMap = JsonUtils.jsonToMap(spec, String.class, String.class);
             map.put("spec",specMap);
             orderCartList1.add(map);
         }
-        try {
-            fileWriter = new FileWriter(Const.pagePath + "showOrderCart" + Const.sufferHtml);
-            Context context = new Context();
-            //获取登入用户信息
-            context.setVariable("userInfo",userInfo);
-            if(token != null) {
-                context.setVariable("bearerToken","Bearer " + token);
+        return orderCartList1;
+    }
+
+    /**
+     * 用户未登录情况下，显示购物车
+     * @param request
+     * @return
+     */
+    public HttpResult unloginShowOrderCart(HttpServletRequest request) {
+        String clientId = null;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            //获取cookie信息
+            Map<String, String> clientId1 = CookieUtil.readCookie(request, "clientId");
+            clientId = clientId1.get("clientId");
+        }
+        //如果用户
+        if(clientId != null) {
+            List<Map<Object, Object>> unloginOrderCart = apiOrderCartFeign.getUnloginOrderCart(clientId);
+            if(unloginOrderCart.size() > 0) {
+                //获取地址信息
+                List<Provinces> provincesList = apiProvincesFeign.getProvincesList();
+                List<Map<Object, Object>> orderCartList = parseOrderCartList(unloginOrderCart);
+                FileWriter fileWriter = null;
+                try {
+                    fileWriter = new FileWriter(Const.pagePath + "showOrderCart" + Const.sufferHtml);
+                    Context context = new Context();
+                    User user = new User();
+                    //获取登入用户信息
+                    context.setVariable("userInfo",user);
+                    context.setVariable("provincesList",provincesList);
+                    context.setVariable("orderCartList",orderCartList);
+                    //每次创建模板前删除原来的模板
+                    boolean b = FileUtil.deleteFile(Const.pagePath + "showOrderCart" + Const.sufferHtml);
+                    System.out.println("删除文件成功！");
+                    templateEngine.process("showOrderCart", context, fileWriter);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
-                context.setVariable("bearerToken",token);
+                nullShowOrderCartTemplate();
             }
-            context.setVariable("provincesList",provincesList);
-            context.setVariable("orderCartList",orderCartList1);
+        } else {
+            nullShowOrderCartTemplate();
+        }
+        return HttpResult.ok();
+    }
+
+    public void nullShowOrderCartTemplate() {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(Const.pagePath + "nullShowOrderCart" + Const.sufferHtml);
+            Context context = new Context();
+            User user = new User();
+            //获取登入用户信息
+            context.setVariable("userInfo",user);
             //每次创建模板前删除原来的模板
-            boolean b = FileUtil.deleteFile(Const.pagePath + "showOrderCart" + Const.sufferHtml);
+            boolean b = FileUtil.deleteFile(Const.pagePath + "nullShowOrderCart" + Const.sufferHtml);
             System.out.println("删除文件成功！");
-            templateEngine.process("showOrderCart", context, fileWriter);
+            templateEngine.process("nullShowOrderCart", context, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return HttpResult.ok();
     }
 
     /**
@@ -357,14 +460,5 @@ public class PageService {
         // 查询库存列表
         List<Item> itemList = goodsFeign.getItemList(goodsId);
         return itemList;
-    }
-
-    /**
-     * 用户未登录情况下，显示购物车
-     * @param request
-     * @return
-     */
-    public HttpResult unloginShowOrderCart(HttpServletRequest request) {
-        return null;
     }
 }

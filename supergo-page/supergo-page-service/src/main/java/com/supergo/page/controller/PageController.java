@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ public class PageController {
     private PageService pageService;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private HttpServletResponse response;
 
     /**
      * 生成商品模板
@@ -51,7 +54,7 @@ public class PageController {
     @RequestMapping("/goods/unloginAddOrderCart")
     public HttpResult unloginAddOrderCart(Integer itemId,String clientId,Integer num,Integer sellerId) {
         System.out.println("进入unloginAddOrderCart接口...");
-        return pageService.unloginAddOrderCart(itemId, clientId, num, sellerId);
+        return pageService.unloginAddOrderCart(request,response,itemId, num, sellerId);
     }
 
     /**
@@ -78,11 +81,11 @@ public class PageController {
      * 用户未登录情况下，显示购物车数据
      * @return
      */
-//    @RequestMapping("/goods/unloginShowOrderCart")
-//    public HttpResult unloginShowOrderCart() {
-//        System.out.println("进入unloginShowOrderCart接口...");
-//        return pageService.unloginShowOrderCart(request);
-//    }
+    @RequestMapping("/goods/unloginShowOrderCart")
+    public HttpResult unloginShowOrderCart() {
+        System.out.println("进入unloginShowOrderCart接口...");
+        return pageService.unloginShowOrderCart(request);
+    }
 
     /**
      * 根据id获取库存信息

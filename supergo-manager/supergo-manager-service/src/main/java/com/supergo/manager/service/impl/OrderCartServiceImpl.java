@@ -133,7 +133,7 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
     }
 
     /**
-     * 用户登录情况下添加购物车
+     * 用户登录情况下获取购物车数据
      */
     public List<Map<Object,Object>> getOrderCart() {
         List<Map<Object,Object>> orderCart = ordercartMapper.getOrderCart();
@@ -141,12 +141,21 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
     }
 
     /**
-     * 用户未登录情况下添加购物车
+     * 用户未登录情况下获取购物车数据
      */
-//    public List<Map<Object,Object>> getUnloginOrderCart() {
-//
-//        return orderCart;
-//    }
+    public List<Map<Object,Object>> getUnloginOrderCart(String clientId) {
+        //redis取商品缓存
+        Map<Object, Object> cartDetail = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":detail");
+        System.out.println(cartDetail);
+        List<Map<Object, Object>> list = new ArrayList<>();
+        cartDetail.forEach((k,v) -> {
+            String value = (String) v;
+            Map<Object, Object> objectObjectMap = JsonUtils.jsonToMap(value, Object.class, Object.class);
+            list.add(objectObjectMap);
+        });
+        System.out.println(list);
+        return list;
+    }
 
     /**
      * 更新购物车数据

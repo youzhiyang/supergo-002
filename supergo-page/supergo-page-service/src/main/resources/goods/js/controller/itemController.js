@@ -59,7 +59,6 @@ window.onload = function () {
                         url: url,
                         params: {
                             itemId: this.sku.id,
-                            clientId: '123456',
                             num: this.num,
                             sellerId: this.sku.sellerId
                         }

@@ -19,5 +19,7 @@ public class Const {
     public static String getItemStock = "orderCart/getItemStock";
     //根据主键查询购物车
     public static String selectByPrimaryKey = "orderCart/selectByPrimaryKey";
+    //未登录情况下添加购物车
+    public static String unloginShowOrderCart = "orderCart/unloginOrderCart";
 
 }

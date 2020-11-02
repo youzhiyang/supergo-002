@@ -48,6 +48,13 @@ public interface ApiOrderCartFeign {
     public List<Map<Object,Object>> getOrderCart();
 
     /**
+     * 用户未登录情况下，查询购物车
+     * @return
+     */
+    @RequestMapping("/orderCart/unloginOrderCart/{clientId}")
+    public List<Map<Object,Object>> getUnloginOrderCart(@PathVariable("clientId")String clientId);
+
+    /**
      * 更新购物车数据
      */
     @RequestMapping("/orderCart/updateOrderCart/{id}/{num}")

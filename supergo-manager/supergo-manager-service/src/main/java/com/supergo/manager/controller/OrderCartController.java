@@ -63,6 +63,16 @@ public class OrderCartController {
     }
 
     /**
+     * 用户未登录情况下，查询购物车
+     * @return
+     */
+    @RequestMapping("/unloginOrderCart/{clientId}")
+    public List<Map<Object,Object>> getUnloginOrderCart(@PathVariable("clientId")String clientId) {
+        List<Map<Object, Object>> unloginOrderCart = orderCartService.getUnloginOrderCart(clientId);
+        return unloginOrderCart;
+    }
+
+    /**
      * 更新购物车数据
      */
     @RequestMapping("/updateOrderCart/{id}/{num}")

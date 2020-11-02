@@ -50,7 +50,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             if(requestURL.contains(Const.htmlFlash) || requestURL.contains(Const.unloginAddOrderCart) ||
                     requestURL.contains(Const.getItemByGoodsId) || requestURL.contains(Const.showOrderCart) ||
                     requestURL.contains(Const.updateOrderCart) || requestURL.contains(Const.getItemStock) ||
-                    requestURL.contains(Const.getOrderCartList) ) {
+                    requestURL.contains(Const.getOrderCartList) || requestURL.contains(Const.unloginShowOrderCart) ) {
                 System.out.println("````````````````");
                 request.setAttribute("userInfo",null);
                 return true;

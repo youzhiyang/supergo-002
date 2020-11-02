@@ -23,5 +23,7 @@ public class Const {
     public static String getOrderCartList = "orderCart/getOrderCartList";
     //获取剩余库存
     public static String getItemStock = "orderCart/getItemStock";
+    //未登录情况下添加购物车
+    public static String unloginShowOrderCart = "goods/unloginShowOrderCart";
 
 }

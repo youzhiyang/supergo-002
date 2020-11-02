@@ -21,4 +21,6 @@ public interface OrderCartService extends BaseService<Ordercart> {
     public void updateOrderCart(int id,int num);
 
     public Ordercart selectByPrimaryKey(long id);
+
+    public List<Map<Object,Object>> getUnloginOrderCart(String clientId);
 }
