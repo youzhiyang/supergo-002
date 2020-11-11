@@ -21,5 +21,11 @@ public class Const {
     public static String selectByPrimaryKey = "orderCart/selectByPrimaryKey";
     //未登录情况下添加购物车
     public static String unloginShowOrderCart = "orderCart/unloginOrderCart";
+    //更新redis购物车
+    public static String updateRedisOrderCart = "orderCart/updateRedisOrderCart";
+    //删除购物车数据
+    public static String delete = "orderCart/delete";
+    //批量删除
+    public static String deleteRedisPatch = "orderCart/deleteRedisPatch";
 
 }

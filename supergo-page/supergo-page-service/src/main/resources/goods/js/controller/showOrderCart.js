@@ -7,7 +7,7 @@ window.onload = function () {
     var app = new Vue({
         el:'#app',
         data:{
-            showAddress: {display:'none',},        //鼠标是否移入配送地址栏
+            showAddress: {display:'none'},        //鼠标是否移入配送地址栏
             n: 1,                                            //监听配送地址选择
             address: '',
             titleArr:["广西","桂林市","秀峰区","丽君街道"],
@@ -17,9 +17,101 @@ window.onload = function () {
                 ["秀峰区","灌阳县","恭城瑶族自治县","荔浦县","叠彩区"],
                 ["秀峰街道","甲山街道","丽君街道"]
             ],
-            orderCartList:orderCartList
+            orderCartList:orderCartList,
+            userInfo: userInfo,
+            isCheckedAll: false,      //是否全选
+            checkModel: []            //双向数据绑定
         },
         methods:{
+            //批量删除
+            deletePatch () {
+                var bearerToken1 = '';
+                if(bearerToken != null) {
+                    bearerToken1 = bearerToken;
+                    var url = "http://www.supergo-page.com/page/orderCart/deletePatch";
+                    axios({
+                        method: 'post',
+                        url: url,
+                        params: {
+                            ids: this.checkModel
+                        },
+                        headers: {
+                            'Authorization': bearerToken1
+                        }
+                    }).then(function (res) {
+                        if(res.data.code == 200) {
+                            var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                            axios({
+                                method: 'get',
+                                url: url,
+                                headers: {
+                                    'Authorization': bearerToken1
+                                }
+                            }).then(function (res) {
+                                console.log(res);
+                                window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                            }).catch(function (error) {
+                                alert("生成模板失败");
+                            });
+                        }
+                    }).catch(function (error) {
+                        alert("生成模板失败");
+                    });
+                } else {
+                    var url = "http://www.supergo-page.com/page/orderCart/deleteRedisPatch";
+                    axios({
+                        method: 'get',
+                        url: url,
+                        params: {
+                            ids: this.checkModel
+                        },
+                        headers: {
+                            'Authorization': bearerToken1
+                        }
+                    }).then(function (res) {
+                        var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                        axios({
+                            method: 'get',
+                            url: url,
+                            headers: {
+                                'Authorization': bearerToken1
+                            }
+                        }).then(function (res) {
+                            window.location.href = "http://www.supergo-page.com/"+res.data.msg+".html";
+                        }).catch(function (error) {
+                            alert("生成模板失败");
+                        });
+                    }).catch(function (error) {
+                        alert("生成模板失败");
+                    });
+                }
+            },
+            //单选
+            checkedOne:function (itemId) {
+                let idIndex = this.checkModel.indexOf(itemId)
+                if (idIndex >= 0) {
+                    // 如果已经包含了该id, 则去除(单选按钮由选中变为非选中状态)
+                    this.checkModel.splice(idIndex, 1)
+                } else {
+                    // 选中该checkbox
+                    this.checkModel.push(itemId)
+                }
+                console.log(this.checkModel);
+            },
+            //点击全选按钮时，判断全选是选中还是未选中状态
+            checkAll:function(){
+                this.isCheckedAll = !this.isCheckedAll
+                if (this.isCheckedAll) {
+                    // 全选时
+                    this.checkModel = []
+                    this.orderCartList.forEach(function (v) {
+                        this.checkModel.push(v.item_id)
+                    }, this)
+                } else {
+                    this.checkModel = []
+                }
+                console.log(this.checkModel);
+            },
             //鼠标移入方法
             enter:function () {
                 this.showAddress = { display: 'inline-block'};
@@ -108,6 +200,7 @@ window.onload = function () {
                     this.address += this.citysArr[m][0];
                 }
             },
+            //获取地址信息
             getAddress: function(address) {
                 var provincesArr = [];
                 var citiesArr = [];
@@ -195,11 +288,7 @@ window.onload = function () {
                 }
             },
             //创建方法，实现用户购买数量增加操作
-            addNum:function (x,id,index) {
-                var bearerToken1 = '';
-                if(bearerToken != null) {
-                    bearerToken1 = bearerToken;
-                }
+            addNum:function (x,id,index,itemId) {
                 var num = parseInt(this.$refs.inputMiddle[index].value) + parseInt(x);
                 var _this = this;
                 if(num > 200) {
@@ -207,42 +296,101 @@ window.onload = function () {
                 } else if(num < 1) {
                     num = 1;
                 } else {
-                    var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
-                    axios({
-                        method: 'get',
-                        url: url,
-                        params: {
-                            id:id
-                        },
-                        headers: {
-                            'Authorization': bearerToken1
-                        }
-                    }).then(function (res) {
-                        console.log(res);
-                        var stock = res.data.data;
-                        //如果当前数量大于剩余库
-                        if(stock < num) {
-                            alert("库存不足,无法继续添加");
-                        } else {
-
-                            var url = "http://www.supergo-page.com/page/orderCart/updateOrderCart";
-                            //更新购物车
-                            axios({
-                                method: 'get',
-                                url: url,
-                                params: {
-                                    id: id,
-                                    num: num
-                                },
-                                headers: {
-                                    'Authorization': bearerToken1
-                                },
-                            }).then(function (res) {
-                                if(res.data.code == 200) {
+                    var bearerToken1 = '';
+                    if(bearerToken != null) {
+                        bearerToken1 = bearerToken;
+                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        axios({
+                            method: 'get',
+                            url: url,
+                            params: {
+                                itemId:itemId
+                            },
+                            headers: {
+                                'Authorization': bearerToken1
+                            }
+                        }).then(function (res) {
+                            console.log(res);
+                            var stock = res.data.data;
+                            //如果当前数量大于剩余库
+                            if(stock < num) {
+                                alert("库存不足,无法继续添加");
+                            } else {
+                                var url = "http://www.supergo-page.com/page/orderCart/updateOrderCart";
+                                //更新购物车
+                                axios({
+                                    method: 'get',
+                                    url: url,
+                                    params: {
+                                        id: id,
+                                        num: num
+                                    },
+                                    headers: {
+                                        'Authorization': bearerToken1
+                                    },
+                                }).then(function (res) {
+                                    if(res.data.code == 200) {
+                                        //更新输入框数据
+                                        _this.$refs.inputMiddle[index].value = num;
+                                        //库存信息改变，从新生成购物车模板(刷新页面)
+                                        var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                                        axios({
+                                            method: 'get',
+                                            url: url,
+                                            headers: {
+                                                'Authorization': bearerToken1
+                                            }
+                                        }).then(function (res) {
+                                            console.log(res);
+                                            window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                                        }).catch(function (error) {
+                                            alert("生成模板失败");
+                                        });
+                                    }
+                                }).catch(function (error) {
+                                    console.log(error);
+                                    alert("更新购物车失败");
+                                });
+                            }
+                            //更新价格
+                        }).catch(function (error) {
+                            console.log(error);
+                            alert("获取库存信息失败");
+                        });
+                    } else {
+                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        axios({
+                            method: 'get',
+                            url: url,
+                            params: {
+                                itemId:itemId
+                            },
+                            headers: {
+                                'Authorization': bearerToken1
+                            }
+                        }).then(function (res) {
+                            var stock = res.data.data;
+                            //如果当前数量大于剩余库
+                            if(stock < num) {
+                                alert("库存不足,无法继续添加");
+                            } else {
+                                var url = "http://www.supergo-page.com/page/orderCart/updateRedisOrderCart";
+                                //更新购物车
+                                axios({
+                                    method: 'get',
+                                    url: url,
+                                    params: {
+                                        itemId: itemId,
+                                        num: num
+                                    },
+                                    headers: {
+                                        'Authorization': bearerToken1
+                                    },
+                                }).then(function (res) {
                                     //更新输入框数据
                                     _this.$refs.inputMiddle[index].value = num;
                                     //库存信息改变，从新生成购物车模板(刷新页面)
-                                    var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                                    var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
                                     axios({
                                         method: 'get',
                                         url: url,
@@ -255,23 +403,217 @@ window.onload = function () {
                                     }).catch(function (error) {
                                         alert("生成模板失败");
                                     });
-                                }
-                            }).catch(function (error) {
-                                console.log(error);
-                                alert("生成模板失败");
-                            });
-                        }
-                        //更新价格
-                    }).catch(function (error) {
-                        console.log(error);
-                        alert("获取库存信息失败");
-                    });
+                                }).catch(function (error) {
+                                    console.log(error);
+                                    alert("更新购物车失败");
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                            alert("获取库存信息失败");
+                        });
+                    }
                 }
             },
             //监听商品数量修改时数据变化
-            change:function () {
-
-            }
+            change:function (id,index,itemId) {
+                var num = parseInt(this.$refs.inputMiddle[index].value);
+                var _this = this;
+                if(num > 200) {
+                    num = 200;
+                    _this.$refs.inputMiddle[index].value = num;
+                } else if(num < 1 || isNaN(num)) {
+                    num = 1;
+                    _this.$refs.inputMiddle[index].value = num;
+                } else {
+                    var bearerToken1 = '';
+                    if(bearerToken != null) {
+                        bearerToken1 = bearerToken;
+                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        axios({
+                            method: 'get',
+                            url: url,
+                            params: {
+                                itemId:itemId
+                            },
+                            headers: {
+                                'Authorization': bearerToken1
+                            },
+                        }).then(function (res) {
+                            console.log(res);
+                            var stock = res.data.data;
+                            //如果当前数量大于剩余库
+                            if(stock < num) {
+                                alert("库存不足,无法修改");
+                            } else {
+                                var url = "http://www.supergo-page.com/page/orderCart/updateOrderCart";
+                                //更新购物车
+                                axios({
+                                    method: 'get',
+                                    url: url,
+                                    params: {
+                                        id: id,
+                                        num: num
+                                    },
+                                    headers: {
+                                        'Authorization': bearerToken1
+                                    },
+                                }).then(function (res) {
+                                    if(res.data.code == 200) {
+                                        //更新输入框数据
+                                        _this.$refs.inputMiddle[index].value = num;
+                                        //库存信息改变，从新生成购物车模板(刷新页面)
+                                        var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                                        axios({
+                                            method: 'get',
+                                            url: url,
+                                            headers: {
+                                                'Authorization': bearerToken1
+                                            }
+                                        }).then(function (res) {
+                                            console.log(res);
+                                            window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                                        }).catch(function (error) {
+                                            alert("生成模板失败");
+                                        });
+                                    }
+                                }).catch(function (error) {
+                                    console.log(error);
+                                    alert("更新购物车失败");
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                            alert("获取库存信息失败");
+                        });
+                    } else {
+                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        axios({
+                            method: 'get',
+                            url: url,
+                            params: {
+                                itemId:itemId
+                            },
+                            headers: {
+                                'Authorization': bearerToken1
+                            },
+                        }).then(function (res) {
+                            console.log(res);
+                            var stock = res.data.data;
+                            //如果当前数量大于剩余库
+                            if(stock < num) {
+                                alert("库存不足,无法修改");
+                            } else {
+                                var url = "http://www.supergo-page.com/page/orderCart/updateRedisOrderCart";
+                                //更新购物车
+                                axios({
+                                    method: 'get',
+                                    url: url,
+                                    params: {
+                                        itemId: itemId,
+                                        num: num
+                                    },
+                                    headers: {
+                                        'Authorization': bearerToken1
+                                    },
+                                }).then(function (res) {
+                                    //更新输入框数据
+                                    _this.$refs.inputMiddle[index].value = num;
+                                    //库存信息改变，从新生成购物车模板(刷新页面)
+                                    var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                                    axios({
+                                        method: 'get',
+                                        url: url,
+                                        headers: {
+                                            'Authorization': bearerToken1
+                                        }
+                                    }).then(function (res) {
+                                        console.log(res);
+                                        window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                                    }).catch(function (error) {
+                                        alert("生成模板失败");
+                                    });
+                                }).catch(function (error) {
+                                    console.log(error);
+                                    alert("更新购物车失败");
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                            alert("获取库存信息失败");
+                        });
+                    }
+                }
+            },
+            //删除商品
+            deleteGoods: function (id,itemId) {
+                alert(itemId);
+                var bearerToken1 = '';
+                if(bearerToken != null) {
+                    bearerToken1 = bearerToken;
+                    var url = "http://www.supergo-page.com/page/orderCart/delete";
+                    axios({
+                        method: 'get',
+                        url: url,
+                        params: {
+                            id:id
+                        },
+                        headers: {
+                            'Authorization': bearerToken1
+                        },
+                    }).then(function (res) {
+                        if(res.data.code == 200) {
+                            var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                            axios({
+                                method: 'get',
+                                url: url,
+                                headers: {
+                                    'Authorization': bearerToken1
+                                }
+                            }).then(function (res) {
+                                console.log(res);
+                                window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                            }).catch(function (error) {
+                                alert("生成模板失败");
+                            });
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                        alert("删除商品信息失败");
+                    });
+                } else {
+                    var url = "http://www.supergo-page.com/page/orderCart/deleteRedis";
+                    axios({
+                        method: 'get',
+                        url: url,
+                        params: {
+                            itemId:itemId
+                        },
+                        headers: {
+                            'Authorization': bearerToken1
+                        },
+                    }).then(function (res) {
+                        if(res.data.code == 200) {
+                            var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                            axios({
+                                method: 'get',
+                                url: url,
+                                headers: {
+                                    'Authorization': bearerToken1
+                                }
+                            }).then(function (res) {
+                                console.log(res);
+                                window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                            }).catch(function (error) {
+                                alert("生成模板失败");
+                            });
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                        alert("删除商品信息失败");
+                    });
+                }
+            } 
         },
         created:function () {
             //设置选择边线的默认值

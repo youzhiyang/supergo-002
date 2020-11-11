@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 购物车service
@@ -70,7 +71,7 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
         ordercart.setGoodsId((Long) skuMap.get("goods_id"));
         ordercart.setUserId((long) userId);
         ordercart.setSellerId((Long) skuMap.get("seller_id"));
-        ordercart.setGoodsName((String) skuMap.get("title"));
+        ordercart.setGoodsName((String) skuMap.get("goods_name"));
         ordercart.setNum(num);
         ordercart.setPrice((BigDecimal) skuMap.get("price"));
         ordercart.setStatus(0);
@@ -98,6 +99,8 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
             skuMap.put("num",String.valueOf(num));
             //如果不存在购物车，初始化购物车信息
             stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
+            //设置过期时间
+            stringRedisTemplate.expire("cart:" + clientId + ":detail",3 , TimeUnit.DAYS);
         }
         skuMap.put("selectedNum",num);
         return skuMap;
@@ -117,10 +120,14 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
                 skuMap.put("num",(Integer.parseInt(skuMap1.get("num")) + num));
                 //如果不存在购物车，初始化购物车信息
                 stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
+                //设置过期时间
+                stringRedisTemplate.expire("cart:" + clientId + ":detail",3 , TimeUnit.DAYS);
             } else {
                 String skuJson = (String) it.getValue();
                 //如果不存在购物车，初始化购物车信息
                 stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",it.getKey() + "",skuJson);
+                //设置过期时间
+                stringRedisTemplate.expire("cart:" + clientId + ":detail",3 , TimeUnit.DAYS);
             }
         }
         //如果购物车不存在该商品
@@ -128,6 +135,8 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
             skuMap.put("num",num);
             //如果不存在购物车，初始化购物车信息
             stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
+            //设置过期时间
+            stringRedisTemplate.expire("cart:" + clientId + ":detail",3 , TimeUnit.DAYS);
         }
         return cartDetail;
     }
@@ -146,7 +155,6 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
     public List<Map<Object,Object>> getUnloginOrderCart(String clientId) {
         //redis取商品缓存
         Map<Object, Object> cartDetail = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":detail");
-        System.out.println(cartDetail);
         List<Map<Object, Object>> list = new ArrayList<>();
         cartDetail.forEach((k,v) -> {
             String value = (String) v;
@@ -169,9 +177,62 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
     }
 
     /**
+     * 更新redis购物车数据
+     */
+    public void updateRedisOrderCart(int itemId,int num,String clientId) {
+        //redis取商品缓存
+        Map<Object, Object> cartDetail = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":detail");
+        //获取到对应的json数据
+        String skuJson = (String) cartDetail.get(itemId + "");
+        Map<String, String> skuMap = JsonUtils.jsonToMap(skuJson, String.class, String.class);
+        skuMap.put("num",String.valueOf(num));
+        //如果不存在购物车，初始化购物车信息
+        stringRedisTemplate.opsForHash().put("cart:" + clientId + ":detail",itemId + "",JsonUtils.objectToJson(skuMap));
+        //设置过期时间
+        stringRedisTemplate.expire("cart:" + clientId + ":detail",3 , TimeUnit.DAYS);
+    }
+
+    /**
      * 根据主键查询购物车
      */
     public Ordercart selectByPrimaryKey(long id) {
         return ordercartMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 根据id删除
+     */
+    public void delete(long id) {
+        Ordercart ordercart = new Ordercart();
+        ordercart.setId(id);
+        ordercartMapper.delete(ordercart);
+    }
+
+    /**
+     * 删除redis购物车数据
+     * @param itemId
+     */
+    public void deleteRedis(int itemId,String clientId) {
+        stringRedisTemplate.opsForHash().delete("cart:" + clientId + ":detail",String.valueOf(itemId));
+    }
+
+    /**
+     * 批量删除
+     */
+    public void deletePatch(String[] ids) {
+        for(int i = 0;i < ids.length;i++) {
+            Ordercart ordercart = new Ordercart();
+            ordercart.setItemId(Long.parseLong(ids[i]));
+            ordercartMapper.delete(ordercart);
+        }
+    }
+
+    /**
+     * 批量删除redis购物车数据
+     */
+    public void deleteRedisPatch(String[] ids,String clientId) {
+        for(int i = 0;i < ids.length;i++) {
+            stringRedisTemplate.opsForHash().delete("cart:" + clientId + ":detail",String.valueOf(ids[i]));
+        }
     }
 }

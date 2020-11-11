@@ -44,6 +44,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             if(requestURL.contains(Const.unloginAddOrderCart) || requestURL.contains(Const.getItemByGoodsId) ||
                     requestURL.contains(Const.getOrderCart) || requestURL.contains(Const.getItemStock) ||
                     requestURL.contains(Const.getOrderCartList) || requestURL.contains(Const.selectByPrimaryKey) ||
+                    requestURL.contains(Const.updateRedisOrderCart) || requestURL.contains(Const.delete) || requestURL.contains(Const.deleteRedisPatch) ||
                     requestURL.contains(Const.updateOrderCart) || requestURL.contains(Const.unloginShowOrderCart)) {
                 System.out.println("````````````````");
                 return true;

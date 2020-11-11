@@ -18,7 +18,7 @@ public interface ItemMapper extends Mapper<Item> {
      */
     @Select("SELECT\n" +
             "\ti.id AS item_id,\n" +
-            "\ti.title AS title,\n" +
+            "\ti.title AS goods_name,\n" +
             "\tg.caption AS sku_info,\n" +
             "\ti.price,\n" +
             "\ti.image,\n" +

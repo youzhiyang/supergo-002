@@ -25,5 +25,13 @@ public class Const {
     public static String getItemStock = "orderCart/getItemStock";
     //未登录情况下添加购物车
     public static String unloginShowOrderCart = "goods/unloginShowOrderCart";
+    //更新redis购物车
+    public static String updateRedisOrderCart = "orderCart/updateRedisOrderCart";
+    //删除购物车数据
+    public static String delete = "orderCart/delete";
+    //批量删除
+    public static String deletePatch = "orderCart/deletePatch";
+    //批量删除
+    public static String deleteRedisPatch = "orderCart/deleteRedisPatch";
 
 }

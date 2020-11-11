@@ -343,10 +343,8 @@ public class PageService {
                 context.setVariable("bearerToken","Bearer " + token);
                 //获取购物车列表信息
                 List<Map<Object,Object>> orderCartList = apiOrderCartFeign.getOrderCart();
-                System.out.println("orderCartList：  " + orderCartList);
-                System.out.println(orderCartList.isEmpty());
+                System.out.println(orderCartList);
                 if(!orderCartList.isEmpty()) {
-                    System.out.println("111111111");
                     fileWriter = new FileWriter(Const.pagePath + "showOrderCart" + Const.sufferHtml);
                     List<Map<Object, Object>> orderCartList1 = parseOrderCartList(orderCartList);
                     context.setVariable("orderCartList",orderCartList1);
@@ -359,7 +357,6 @@ public class PageService {
                     templateEngine.process("showOrderCart", context, fileWriter);
                     template = "showOrderCart";
                 } else {
-                    System.out.println("222222222");
                     fileWriter = new FileWriter(Const.pagePath + "nullloginShowOrderCart" + Const.sufferHtml);
                     //每次创建模板前删除原来的模板
                     boolean b = FileUtil.deleteFile(Const.pagePath + "nullloginShowOrderCart" + Const.sufferHtml);
@@ -396,6 +393,7 @@ public class PageService {
      */
     public HttpResult unloginShowOrderCart(HttpServletRequest request) {
         String clientId = null;
+        String template = null;
         Cookie[] cookies = request.getCookies();
         if(cookies != null) {
             //获取cookie信息
@@ -422,19 +420,20 @@ public class PageService {
                     boolean b = FileUtil.deleteFile(Const.pagePath + "showOrderCart" + Const.sufferHtml);
                     System.out.println("删除文件成功！");
                     templateEngine.process("showOrderCart", context, fileWriter);
+                    template = "showOrderCart";
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
-                nullShowOrderCartTemplate();
+                template = nullShowOrderCartTemplate();
             }
         } else {
-            nullShowOrderCartTemplate();
+            template = nullShowOrderCartTemplate();
         }
-        return HttpResult.ok();
+        return HttpResult.ok(template);
     }
 
-    public void nullShowOrderCartTemplate() {
+    public String nullShowOrderCartTemplate() {
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(Const.pagePath + "nullShowOrderCart" + Const.sufferHtml);
@@ -449,6 +448,7 @@ public class PageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "nullShowOrderCart";
     }
 
     /**

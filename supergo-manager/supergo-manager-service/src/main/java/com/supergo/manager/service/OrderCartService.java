@@ -23,4 +23,14 @@ public interface OrderCartService extends BaseService<Ordercart> {
     public Ordercart selectByPrimaryKey(long id);
 
     public List<Map<Object,Object>> getUnloginOrderCart(String clientId);
+
+    public void updateRedisOrderCart(int itemId,int num,String clientId);
+
+    public void delete(long id);
+
+    public void deleteRedis(int itemId,String clientId);
+
+    public void deletePatch(String[] ids);
+
+    public void deleteRedisPatch(String[] ids,String clientId);
 }

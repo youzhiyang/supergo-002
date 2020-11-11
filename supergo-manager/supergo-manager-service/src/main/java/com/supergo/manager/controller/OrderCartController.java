@@ -81,10 +81,53 @@ public class OrderCartController {
     }
 
     /**
+     * 更新redis购物车数据
+     */
+    @RequestMapping("/updateRedisOrderCart/{itemId}/{num}/{clientId}")
+    public void updateRedisOrderCart(@PathVariable("itemId")int itemId,@PathVariable("num")int num,@PathVariable("clientId")String clientId) {
+        orderCartService.updateRedisOrderCart(itemId,num,clientId);
+    }
+
+    /**
      * 根据主键查询购物车
      */
     @RequestMapping("/selectByPrimaryKey/{id}")
     public Ordercart selectByPrimaryKey(@PathVariable("id") long id) {
         return orderCartService.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 根据id删除
+     */
+    @RequestMapping("/delete/{id}")
+    public void delete(@PathVariable("id")long id) {
+        orderCartService.delete(id);
+    }
+
+    /**
+     * 删除redis购物车数据
+     * @param itemId
+     */
+    @RequestMapping("/deleteRedis/{itemId}/{clientId}")
+    public void deleteRedis(@PathVariable("itemId")int itemId,@PathVariable("clientId")String clientId) {
+        orderCartService.deleteRedis(itemId,clientId);
+    }
+
+    /**
+     * 批量删除
+     */
+    @RequestMapping("/deletePatch/{ids}")
+    public void deletePatch(@PathVariable("ids")String[] ids) {
+        System.out.println("进入deletePatch接口....");
+        orderCartService.deletePatch(ids);
+    }
+
+    /**
+     * 批量删除redis购物车数据
+     */
+    @RequestMapping("/deleteRedisPatch/{ids}/{clientId}")
+    public void deleteRedisPatch(@PathVariable("ids")String[] ids,@PathVariable("clientId")String clientId) {
+        System.out.println("进入deleteRedisPatch接口....");
+        orderCartService.deleteRedisPatch(ids,clientId);
     }
 }

@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<!-- 地址框 -->
-		<div class="a-position" ref="position" :style="[ showAddress ]" @mouseenter="enter()" @mouseleave="leave()">
+		<div :class="[userInfo.id != null ? 'a-position' : 'a-position1']" ref="position" :style="[ showAddress ]" @mouseenter="enter()" @mouseleave="leave()">
 			<div class="city-title">
 				<ul>
 					<li :class="n==i?'l-active':''" v-for="(v,i) in titleArr" :key="i" @click="changeN(i)">
@@ -71,7 +71,7 @@
 		<table>
 			<thead>
 				<tr>
-					<th><input type="checkbox"/>全选</th>
+					<th><input type="checkbox" :checked="checkModel.length === orderCartList.length" @click='checkAll()'/>全选</th>
 					<th>商品</th>
 					<th>单价</th>
 					<th>数量</th>
@@ -81,7 +81,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="(v,i) in orderCartList" :key="i">
-					<td><input type="checkbox" id="v.id"/></td>
+					<td><input type="checkbox" id="v.item_id" :checked="checkModel.indexOf(v.item_id)>=0" @click="checkedOne(v.item_id)"/></td>
 					<td>
 						<div class="goods-div ">
 							<img class="input-img" src="img/68d0ac29ce4a326d.jpg"/>
@@ -97,9 +97,9 @@
 						<span v-text="v.price"></span>
 					</td>
 					<td>
-						<input class="input-left" type="text" @click="addNum(-1,v.id,i)" value="-"/>
-						<input ref="inputMiddle" class="input-middle" type="text" @input="change()" :value="v.num"/>
-						<input class="input-right" type="text" @click="addNum(1,v.id,i)" value="+"/>
+						<input class="input-left" type="text" @click="addNum(-1,v.id,i,v.item_id)" value="-"/>
+						<input ref="inputMiddle" class="input-middle" type="text" @input="change(v.id,i,v.item_id)" :value="v.num"/>
+						<input class="input-right" type="text" @click="addNum(1,v.id,i,v.item_id)" value="+"/>
 						<div>
 							<span>有货</span>
 						</div>
@@ -108,7 +108,7 @@
 						<strong v-text="v.price * v.num"></strong>
 					</td>
 					<td>
-						<a>删除</a>
+						<a @click="deleteGoods(v.id,v.item_id)">删除</a>
 					</td>
 				</tr>
 			</tbody>
@@ -116,9 +116,9 @@
 				<tr>
 					<td colspan="6">
 						<div class="footer-div">
-							<input type="checkbox"/>全选
-							<a>删除选中商品</a>
-							<span class="haveChose">已选择1件商品</span>
+							<input type="checkbox" :checked="checkModel.length === orderCartList.length" @click='checkAll()'/>全选
+							<a @click="deletePatch()">删除选中商品</a>
+							<span class="haveChose">已选择{{checkModel.length}}件商品</span>
 							<span class="total">总价:¥699.00</span>
 							<span class="promotion">促销：-¥0.00</span>
 							<a class="account">去结算</a>

@@ -15,6 +15,7 @@
 	<script src="js/axios-0.18.0.js"></script>
 	<script th:inline="javascript">
         var userInfo = [[${userInfo}]];
+        var bearerToken = [[${bearerToken}]];
 	</script>
 
 </head>
@@ -34,8 +35,6 @@
 </div>
 <!--页面底部  开始 -->
 <div th:replace="~{foot::footer}"></div>
-<!--页面底部  结束 -->
-<script type="text/javascript" src="js/controller/showOrderCart.js"></script>
 
 </body>
 

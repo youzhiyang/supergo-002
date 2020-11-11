@@ -65,4 +65,35 @@ public interface ApiOrderCartFeign {
      */
     @RequestMapping("/orderCart/selectByPrimaryKey/{id}")
     public Ordercart selectByPrimaryKey(@PathVariable("id") long id);
+
+    /**
+     * 更新redis购物车数据
+     */
+    @RequestMapping("/orderCart/updateRedisOrderCart/{itemId}/{num}/{clientId}")
+    public void updateRedisOrderCart(@PathVariable("itemId")int itemId,@PathVariable("num")int num,@PathVariable("clientId")String clientId);
+
+    /**
+     * 根据id删除
+     */
+    @RequestMapping("/orderCart/delete/{id}")
+    public void delete(@PathVariable("id")long id);
+
+    /**
+     * 删除redis购物车数据
+     * @param itemId
+     */
+    @RequestMapping("/orderCart/deleteRedis/{itemId}/{clientId}")
+    public void deleteRedis(@PathVariable("itemId")int itemId,@PathVariable("clientId")String clientId);
+
+    /**
+     * 批量删除
+     */
+    @RequestMapping("/orderCart/deletePatch/{ids}")
+    public void deletePatch(@PathVariable("ids")String[] ids);
+
+    /**
+     * 批量删除redis购物车数据
+     */
+    @RequestMapping("/orderCart/deleteRedisPatch/{ids}/{clientId}")
+    public void deleteRedisPatch(@PathVariable("ids")String[] ids,@PathVariable("clientId")String clientId);
 }

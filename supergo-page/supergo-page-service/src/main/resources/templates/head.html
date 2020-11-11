@@ -168,7 +168,7 @@
                                 'Authorization': bearerToken1
                             }
                         }).then(function (res) {
-                            window.location.href = "http://www.supergo-page.com/nullShowOrderCart.html";
+                            window.location.href = "http://www.supergo-page.com/"+res.data.msg+".html";
                         }).catch(function (error) {
                             alert("生成模板失败");
                         });
