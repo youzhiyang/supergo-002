@@ -130,4 +130,12 @@ public class OrderCartController {
         System.out.println("进入deleteRedisPatch接口....");
         orderCartService.deleteRedisPatch(ids,clientId);
     }
+
+    /**
+     * 同步购物车数据
+     */
+    @RequestMapping("/synchronizeOrderCart/{clientId}/{userId}")
+    public void synchronizeOrderCart(@PathVariable("clientId")String clientId,@PathVariable("userId")int userId) {
+        orderCartService.synchronizeOrderCart(clientId,userId);
+    }
 }

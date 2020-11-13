@@ -96,4 +96,10 @@ public interface ApiOrderCartFeign {
      */
     @RequestMapping("/orderCart/deleteRedisPatch/{ids}/{clientId}")
     public void deleteRedisPatch(@PathVariable("ids")String[] ids,@PathVariable("clientId")String clientId);
+
+    /**
+     * 同步购物车数据
+     */
+    @RequestMapping("/orderCart/synchronizeOrderCart/{clientId}/{userId}")
+    public void synchronizeOrderCart(@PathVariable("clientId")String clientId,@PathVariable("userId")int userId);
 }

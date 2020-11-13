@@ -44,26 +44,50 @@
                     }
                 }).then(function (res) {
                     console.log(res);
-                    if(res.data.code == 200) {
-                        //window.location.href = 'http://localhost:9999/api/page/149187842868047.html';
-                        let bearerToken = res.data.data;
-                        console.log(bearerToken);
-                        let url = 'http://www.supergo-page.com/page/html/build/149187842868088';
-                        axios({
-                            method: 'get',
-                            url: url,
-                            headers: {
-                                'Authorization': bearerToken
-                            }
-                        }).then(function (res) {
-                            console.log(res);
-                            window.location.href = 'http://www.supergo-page.com/149187842868088.html';
-                        }).catch(function (error) {
-                            alert("生成模板失败");
-                        });
-                    } else {
+                    if (res.data.code != 200) {
                         alert(res.data.msg);
                         this.msg = res.msg;
+                    } else {
+                        let bearerToken = res.data.data;
+                        //获取当前页面url
+                        var pageUrl = window.location.href;
+                        var pageArr = pageUrl.split("?");
+                        if(pageArr.length == 2) {
+                            var pageUrl1 = pageArr[1].split("=");
+                            console.log(pageUrl1);
+                            //同步购物车数据
+                            let url = 'http://www.supergo-page.com/page/orderCart/synchronizeOrderCart';
+                            axios({
+                                method: 'get',
+                                url: url,
+                                headers: {
+                                    'Authorization': bearerToken
+                                }
+                            }).then(function (res) {
+                                if(res.data.code == 200) {
+                                    window.location.href = pageUrl1[1];
+                                }
+                            }).catch(function (error) {
+                                alert("生成模板失败");
+                            });
+                        } else {
+                            //window.location.href = 'http://localhost:9999/api/page/149187842868047.html';
+
+                            console.log(bearerToken);
+                            let url = 'http://www.supergo-page.com/page/html/build/149187842868088';
+                            axios({
+                                method: 'get',
+                                url: url,
+                                headers: {
+                                    'Authorization': bearerToken
+                                }
+                            }).then(function (res) {
+                                console.log(res);
+                                window.location.href = 'http://www.supergo-page.com/149187842868088.html';
+                            }).catch(function (error) {
+                                alert("生成模板失败");
+                            });
+                        }
                     }
                 }).catch(function (error) {
                     alert(error);

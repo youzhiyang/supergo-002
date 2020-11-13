@@ -171,6 +171,8 @@ table tfoot tr td input:first-child {
     background: #e54346;
     color: white;
     padding: 0px 15px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .total {

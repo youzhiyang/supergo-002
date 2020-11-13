@@ -102,11 +102,19 @@ public class OrderCartController {
     @RequestMapping("/deleteRedisPatch")
     public void deleteRedisPatch(@RequestParam(value="ids[]") String[] ids) {
         System.out.println("进入deletePatch接口....");
-        for(int i = 0;i < ids.length;i++) {
-            System.out.println("ids:   " + ids[i]);
-        }
         orderCartService.deleteRedisPatch(request,ids);
     }
+
+    /**
+     * 同步购物车数据
+     */
+    @RequestMapping("/synchronizeOrderCart")
+    public HttpResult synchronizeOrderCart() {
+        System.out.println("进入synchronizeOrderCart接口....");
+        orderCartService.synchronizeOrderCart(request);
+        return HttpResult.ok();
+    }
+
 }
 
 

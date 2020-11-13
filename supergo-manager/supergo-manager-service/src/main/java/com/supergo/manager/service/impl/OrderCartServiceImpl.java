@@ -6,12 +6,14 @@ import com.supergo.mapper.OrdercartMapper;
 import com.supergo.pojo.Ordercart;
 import com.supergo.pojo.User;
 import com.supergo.service.base.impl.BaseServiceImpl;
+import com.supergo.user.utils.CookieUtil;
 import com.supergo.user.utils.JsonUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
@@ -233,6 +235,54 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
     public void deleteRedisPatch(String[] ids,String clientId) {
         for(int i = 0;i < ids.length;i++) {
             stringRedisTemplate.opsForHash().delete("cart:" + clientId + ":detail",String.valueOf(ids[i]));
+        }
+    }
+
+    /**
+     * 同步购物车数据
+     */
+    public void synchronizeOrderCart(String clientId,int userId) {
+        //redis取商品缓存
+        Map<Object, Object> cartDetail = stringRedisTemplate.opsForHash().entries("cart:" + clientId + ":detail");
+        System.out.println(cartDetail);
+        //获取购物车数据
+        List<Map<Object, Object>> orderCartList = ordercartMapper.getOrderCart();
+        //如果redis购物车不为空
+        if(!cartDetail.isEmpty()) {
+            //如果购物车数据为空
+            if(orderCartList.isEmpty()) {
+                cartDetail.forEach((k,v)->{
+                    String value = (String) v;
+                    Map<Object, Object> orderCartMap = JsonUtils.jsonToMap(value, Object.class, Object.class);
+                    Ordercart ordercart = skuToOrderCart(orderCartMap, userId,(Integer)orderCartMap.get("num"));
+                    //保存该商品信息
+                    add(ordercart);
+                });
+            } else {
+                cartDetail.forEach((k,v)->{
+                    boolean isExist = false;
+                    String value = (String) v;
+                    Map<Object, Object> orderCartMap = JsonUtils.jsonToMap(value, Object.class, Object.class);
+                    for (Map<Object, Object> map : orderCartList) {
+                        String itemId = (String) map.get("item_id");
+                        System.out.println(itemId.equals(orderCartMap.get("item_id")));
+                        //如果购物车已经存在该商品，数量相加
+                        if(itemId.equals(orderCartMap.get("item_id"))) {
+                            isExist = true;
+                            int num = (Integer) orderCartMap.get("num") + (Integer) orderCartMap.get("num");
+                            Ordercart ordercart = skuToOrderCart(orderCartMap, userId,num);
+                            update(ordercart);
+                        }
+                    }
+                    if(!isExist) {
+                        String value1 = (String) v;
+                        Map<Object, Object> orderCartMap1 = JsonUtils.jsonToMap(value, Object.class, Object.class);
+                        Ordercart ordercart = skuToOrderCart(orderCartMap1, userId,(Integer)orderCartMap.get("num"));
+                        //保存该商品信息
+                        add(ordercart);
+                    }
+                });
+            }
         }
     }
 }

@@ -33,4 +33,6 @@ public interface OrderCartService extends BaseService<Ordercart> {
     public void deletePatch(String[] ids);
 
     public void deleteRedisPatch(String[] ids,String clientId);
+
+    public void synchronizeOrderCart(String clientId,int userId);
 }

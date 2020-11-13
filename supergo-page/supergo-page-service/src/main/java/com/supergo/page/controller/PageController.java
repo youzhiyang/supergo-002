@@ -84,7 +84,7 @@ public class PageController {
     @RequestMapping("/goods/unloginShowOrderCart")
     public HttpResult unloginShowOrderCart() {
         System.out.println("进入unloginShowOrderCart接口...");
-        return pageService.unloginShowOrderCart(request);
+        return pageService.unloginShowOrderCart(request,response);
     }
 
     /**

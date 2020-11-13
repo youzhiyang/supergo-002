@@ -391,7 +391,7 @@ public class PageService {
      * @param request
      * @return
      */
-    public HttpResult unloginShowOrderCart(HttpServletRequest request) {
+    public HttpResult unloginShowOrderCart(HttpServletRequest request,HttpServletResponse response) {
         String clientId = null;
         String template = null;
         Cookie[] cookies = request.getCookies();
@@ -399,6 +399,14 @@ public class PageService {
             //获取cookie信息
             Map<String, String> clientId1 = CookieUtil.readCookie(request, "clientId");
             clientId = clientId1.get("clientId");
+        } else {
+            clientId = UUIDUtil.getUUID2();
+            System.out.println("clientId：   " + clientId);
+            //如果是第一次访问，创建cookie
+            Cookie cookie = new Cookie("clientId", clientId);
+            cookie.setMaxAge(3 * 24 * 3600);
+            cookie.setPath("/");
+            response.addCookie(cookie);
         }
         //如果用户
         if(clientId != null) {

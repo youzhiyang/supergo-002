@@ -20,11 +20,26 @@ window.onload = function () {
             orderCartList:orderCartList,
             userInfo: userInfo,
             isCheckedAll: false,      //是否全选
-            checkModel: []            //双向数据绑定
+            checkModel: [],            //双向数据绑定
+            total: 0
         },
         methods:{
+            //去结算
+            goAccount: function () {
+                //如果已经登录
+                if(bearerToken != null) {
+
+                } else {
+                    //获取当前页面url
+                    var url = window.location.href;
+                    console.log(url);
+                    //跳转到登入页
+                    window.location.href = "http://www.supergo-sso.com/user/loginPage?url=" + url;
+
+                }
+            },
             //批量删除
-            deletePatch () {
+            deletePatch:function() {
                 var bearerToken1 = '';
                 if(bearerToken != null) {
                     bearerToken1 = bearerToken;
@@ -88,7 +103,8 @@ window.onload = function () {
             },
             //单选
             checkedOne:function (itemId) {
-                let idIndex = this.checkModel.indexOf(itemId)
+                this.total = 0.00;
+                let idIndex = this.checkModel.indexOf(itemId);
                 if (idIndex >= 0) {
                     // 如果已经包含了该id, 则去除(单选按钮由选中变为非选中状态)
                     this.checkModel.splice(idIndex, 1)
@@ -97,9 +113,18 @@ window.onload = function () {
                     this.checkModel.push(itemId)
                 }
                 console.log(this.checkModel);
+                var _this = this;
+                this.orderCartList.forEach(function (v) {
+                    if(_this.checkModel.indexOf(v.item_id) >= 0) {
+                        _this.total += v.price * v.num;
+                        _this.total = Math.floor(_this.total * 100) / 100;
+                    }
+                });
+                console.log(this.total);
             },
             //点击全选按钮时，判断全选是选中还是未选中状态
             checkAll:function(){
+                this.total = 0;
                 this.isCheckedAll = !this.isCheckedAll
                 if (this.isCheckedAll) {
                     // 全选时
@@ -111,6 +136,14 @@ window.onload = function () {
                     this.checkModel = []
                 }
                 console.log(this.checkModel);
+                var _this = this;
+                this.orderCartList.forEach(function (v) {
+                    if(_this.checkModel.indexOf(v.item_id) >= 0) {
+                        _this.total += v.price * v.num;
+                        _this.total = Math.floor(_this.total * 100) / 100;
+                    }
+                });
+                console.log(this.total);
             },
             //鼠标移入方法
             enter:function () {

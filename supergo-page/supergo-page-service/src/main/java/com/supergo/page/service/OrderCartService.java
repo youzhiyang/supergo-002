@@ -3,7 +3,9 @@ package com.supergo.page.service;
 import com.supergo.manager.feign.ApiGoodsFeign;
 import com.supergo.manager.feign.ApiOrderCartFeign;
 import com.supergo.pojo.Ordercart;
+import com.supergo.pojo.User;
 import com.supergo.user.utils.CookieUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -105,5 +107,26 @@ public class OrderCartService {
             clientId = clientId1.get("clientId");
         }
         apiOrderCartFeign.deleteRedisPatch(ids,clientId);
+    }
+
+    /**
+     * 同步购物车数据
+     */
+    public void synchronizeOrderCart(HttpServletRequest request) {
+        String clientId = null;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            //获取cookie信息
+            Map<String, String> clientId1 = CookieUtil.readCookie(request, "clientId");
+            clientId = clientId1.get("clientId");
+        }
+        System.out.println(clientId);
+        User userInfo = new User();
+        Claims claims = (Claims) request.getAttribute("userInfo");
+        String userId = null;
+        if(claims != null) {
+            userId = claims.getId();
+        }
+        apiOrderCartFeign.synchronizeOrderCart(clientId,Integer.parseInt(userId));
     }
 }
