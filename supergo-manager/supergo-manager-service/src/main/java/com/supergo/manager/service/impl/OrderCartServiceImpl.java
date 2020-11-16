@@ -69,13 +69,14 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
 
     private Ordercart skuToOrderCart(Map<Object, Object> skuMap,int userId,int num ) {
         Ordercart ordercart = new Ordercart();
-        ordercart.setItemId((Long) skuMap.get("item_id"));
-        ordercart.setGoodsId((Long) skuMap.get("goods_id"));
+        ordercart.setItemId(Long.parseLong(String.valueOf(skuMap.get("item_id"))));
+        ordercart.setGoodsId(Long.parseLong(String.valueOf(skuMap.get("goods_id"))));
         ordercart.setUserId((long) userId);
-        ordercart.setSellerId((Long) skuMap.get("seller_id"));
+        ordercart.setSellerId(Long.parseLong(String.valueOf(skuMap.get("seller_id"))));
         ordercart.setGoodsName((String) skuMap.get("goods_name"));
         ordercart.setNum(num);
-        ordercart.setPrice((BigDecimal) skuMap.get("price"));
+        //ordercart.setPrice((BigDecimal) skuMap.get("price"));
+        ordercart.setPrice(BigDecimal.valueOf(Double.parseDouble(String.valueOf(skuMap.get("price")))));
         ordercart.setStatus(0);
         return ordercart;
     }
@@ -254,7 +255,7 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
                 cartDetail.forEach((k,v)->{
                     String value = (String) v;
                     Map<Object, Object> orderCartMap = JsonUtils.jsonToMap(value, Object.class, Object.class);
-                    Ordercart ordercart = skuToOrderCart(orderCartMap, userId,(Integer)orderCartMap.get("num"));
+                    Ordercart ordercart = skuToOrderCart(orderCartMap, userId,Integer.parseInt(String.valueOf(orderCartMap.get("num"))));
                     //保存该商品信息
                     add(ordercart);
                 });
@@ -264,25 +265,37 @@ public class OrderCartServiceImpl extends BaseServiceImpl<Ordercart> implements 
                     String value = (String) v;
                     Map<Object, Object> orderCartMap = JsonUtils.jsonToMap(value, Object.class, Object.class);
                     for (Map<Object, Object> map : orderCartList) {
-                        String itemId = (String) map.get("item_id");
-                        System.out.println(itemId.equals(orderCartMap.get("item_id")));
+                        String itemId = String.valueOf(map.get("item_id"));
                         //如果购物车已经存在该商品，数量相加
-                        if(itemId.equals(orderCartMap.get("item_id"))) {
+                        if(itemId.equals(String.valueOf(orderCartMap.get("item_id")))) {
                             isExist = true;
-                            int num = (Integer) orderCartMap.get("num") + (Integer) orderCartMap.get("num");
+                            int num = Integer.parseInt(String.valueOf(map.get("num"))) + Integer.parseInt(String.valueOf(orderCartMap.get("num")));
                             Ordercart ordercart = skuToOrderCart(orderCartMap, userId,num);
+                            ordercart.setId(Long.parseLong(String.valueOf(map.get("id"))));
                             update(ordercart);
+                            break;
                         }
                     }
                     if(!isExist) {
                         String value1 = (String) v;
                         Map<Object, Object> orderCartMap1 = JsonUtils.jsonToMap(value, Object.class, Object.class);
-                        Ordercart ordercart = skuToOrderCart(orderCartMap1, userId,(Integer)orderCartMap.get("num"));
+                        Ordercart ordercart = skuToOrderCart(orderCartMap1, userId,Integer.parseInt(String.valueOf(orderCartMap.get("num"))));
                         //保存该商品信息
                         add(ordercart);
                     }
                 });
             }
+
+            //清空redis购物车数据
+            clearRedisOrderCart(clientId);
+
         }
+    }
+
+    /**
+     * 清空redis购物车数据
+     */
+    public void clearRedisOrderCart(String clientId) {
+        stringRedisTemplate.delete("cart:" + clientId + ":detail");
     }
 }

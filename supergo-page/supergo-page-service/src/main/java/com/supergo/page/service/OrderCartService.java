@@ -115,12 +115,15 @@ public class OrderCartService {
     public void synchronizeOrderCart(HttpServletRequest request) {
         String clientId = null;
         Cookie[] cookies = request.getCookies();
+        for(int i = 0;i < cookies.length;i++) {
+            System.out.println(cookies[i]);
+        }
         if(cookies != null) {
             //获取cookie信息
             Map<String, String> clientId1 = CookieUtil.readCookie(request, "clientId");
             clientId = clientId1.get("clientId");
+            System.out.println(clientId);
         }
-        System.out.println(clientId);
         User userInfo = new User();
         Claims claims = (Claims) request.getAttribute("userInfo");
         String userId = null;

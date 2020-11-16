@@ -34,8 +34,7 @@ window.onload = function () {
                     var url = window.location.href;
                     console.log(url);
                     //跳转到登入页
-                    window.location.href = "http://www.supergo-sso.com/user/loginPage?url=" + url;
-
+                    window.location.href = "http://sso.supergo.com/user/loginPage?url=" + url
                 }
             },
             //批量删除
@@ -43,7 +42,7 @@ window.onload = function () {
                 var bearerToken1 = '';
                 if(bearerToken != null) {
                     bearerToken1 = bearerToken;
-                    var url = "http://www.supergo-page.com/page/orderCart/deletePatch";
+                    var url = "http://page.supergo.com/page/orderCart/deletePatch";
                     axios({
                         method: 'post',
                         url: url,
@@ -55,7 +54,7 @@ window.onload = function () {
                         }
                     }).then(function (res) {
                         if(res.data.code == 200) {
-                            var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                            var url = "http://page.supergo.com/page/goods/showOrderCart";
                             axios({
                                 method: 'get',
                                 url: url,
@@ -64,7 +63,7 @@ window.onload = function () {
                                 }
                             }).then(function (res) {
                                 console.log(res);
-                                window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                                window.location.href = 'http://page.supergo.com/'+res.data.msg+'.html';
                             }).catch(function (error) {
                                 alert("生成模板失败");
                             });
@@ -73,7 +72,7 @@ window.onload = function () {
                         alert("生成模板失败");
                     });
                 } else {
-                    var url = "http://www.supergo-page.com/page/orderCart/deleteRedisPatch";
+                    var url = "http://page.supergo.com/page/orderCart/deleteRedisPatch";
                     axios({
                         method: 'get',
                         url: url,
@@ -84,7 +83,7 @@ window.onload = function () {
                             'Authorization': bearerToken1
                         }
                     }).then(function (res) {
-                        var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                        var url = "http://page.supergo.com/page/goods/unloginShowOrderCart";
                         axios({
                             method: 'get',
                             url: url,
@@ -92,7 +91,7 @@ window.onload = function () {
                                 'Authorization': bearerToken1
                             }
                         }).then(function (res) {
-                            window.location.href = "http://www.supergo-page.com/"+res.data.msg+".html";
+                            window.location.href = "http://page.supergo.com/"+res.data.msg+".html";
                         }).catch(function (error) {
                             alert("生成模板失败");
                         });
@@ -332,7 +331,7 @@ window.onload = function () {
                     var bearerToken1 = '';
                     if(bearerToken != null) {
                         bearerToken1 = bearerToken;
-                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        var url = "http://page.supergo.com/page/orderCart/getItemStock";
                         axios({
                             method: 'get',
                             url: url,
@@ -349,7 +348,7 @@ window.onload = function () {
                             if(stock < num) {
                                 alert("库存不足,无法继续添加");
                             } else {
-                                var url = "http://www.supergo-page.com/page/orderCart/updateOrderCart";
+                                var url = "http://page.supergo.com/page/orderCart/updateOrderCart";
                                 //更新购物车
                                 axios({
                                     method: 'get',
@@ -366,7 +365,7 @@ window.onload = function () {
                                         //更新输入框数据
                                         _this.$refs.inputMiddle[index].value = num;
                                         //库存信息改变，从新生成购物车模板(刷新页面)
-                                        var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                                        var url = "http://page.supergo.com/page/goods/showOrderCart";
                                         axios({
                                             method: 'get',
                                             url: url,
@@ -375,7 +374,7 @@ window.onload = function () {
                                             }
                                         }).then(function (res) {
                                             console.log(res);
-                                            window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                                            window.location.href = 'http://page.supergo.com/showOrderCart.html';
                                         }).catch(function (error) {
                                             alert("生成模板失败");
                                         });
@@ -391,7 +390,7 @@ window.onload = function () {
                             alert("获取库存信息失败");
                         });
                     } else {
-                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        var url = "http://page.supergo.com/page/orderCart/getItemStock";
                         axios({
                             method: 'get',
                             url: url,
@@ -407,7 +406,7 @@ window.onload = function () {
                             if(stock < num) {
                                 alert("库存不足,无法继续添加");
                             } else {
-                                var url = "http://www.supergo-page.com/page/orderCart/updateRedisOrderCart";
+                                var url = "http://page.supergo.com/page/orderCart/updateRedisOrderCart";
                                 //更新购物车
                                 axios({
                                     method: 'get',
@@ -423,7 +422,7 @@ window.onload = function () {
                                     //更新输入框数据
                                     _this.$refs.inputMiddle[index].value = num;
                                     //库存信息改变，从新生成购物车模板(刷新页面)
-                                    var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                                    var url = "http://page.supergo.com/page/goods/unloginShowOrderCart";
                                     axios({
                                         method: 'get',
                                         url: url,
@@ -432,7 +431,7 @@ window.onload = function () {
                                         }
                                     }).then(function (res) {
                                         console.log(res);
-                                        window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                                        window.location.href = 'http://page.supergo.com/showOrderCart.html';
                                     }).catch(function (error) {
                                         alert("生成模板失败");
                                     });
@@ -462,7 +461,7 @@ window.onload = function () {
                     var bearerToken1 = '';
                     if(bearerToken != null) {
                         bearerToken1 = bearerToken;
-                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        var url = "http://page.supergo.com/page/orderCart/getItemStock";
                         axios({
                             method: 'get',
                             url: url,
@@ -479,7 +478,7 @@ window.onload = function () {
                             if(stock < num) {
                                 alert("库存不足,无法修改");
                             } else {
-                                var url = "http://www.supergo-page.com/page/orderCart/updateOrderCart";
+                                var url = "http://page.supergo.com/page/orderCart/updateOrderCart";
                                 //更新购物车
                                 axios({
                                     method: 'get',
@@ -496,7 +495,7 @@ window.onload = function () {
                                         //更新输入框数据
                                         _this.$refs.inputMiddle[index].value = num;
                                         //库存信息改变，从新生成购物车模板(刷新页面)
-                                        var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                                        var url = "http://page.supergo.com/page/goods/showOrderCart";
                                         axios({
                                             method: 'get',
                                             url: url,
@@ -505,7 +504,7 @@ window.onload = function () {
                                             }
                                         }).then(function (res) {
                                             console.log(res);
-                                            window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                                            window.location.href = 'http://page.supergo.com/showOrderCart.html';
                                         }).catch(function (error) {
                                             alert("生成模板失败");
                                         });
@@ -520,7 +519,7 @@ window.onload = function () {
                             alert("获取库存信息失败");
                         });
                     } else {
-                        var url = "http://www.supergo-page.com/page/orderCart/getItemStock";
+                        var url = "http://page.supergo.com/page/orderCart/getItemStock";
                         axios({
                             method: 'get',
                             url: url,
@@ -537,7 +536,7 @@ window.onload = function () {
                             if(stock < num) {
                                 alert("库存不足,无法修改");
                             } else {
-                                var url = "http://www.supergo-page.com/page/orderCart/updateRedisOrderCart";
+                                var url = "http://page.supergo.com/page/orderCart/updateRedisOrderCart";
                                 //更新购物车
                                 axios({
                                     method: 'get',
@@ -553,7 +552,7 @@ window.onload = function () {
                                     //更新输入框数据
                                     _this.$refs.inputMiddle[index].value = num;
                                     //库存信息改变，从新生成购物车模板(刷新页面)
-                                    var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                                    var url = "http://page.supergo.com/page/goods/unloginShowOrderCart";
                                     axios({
                                         method: 'get',
                                         url: url,
@@ -562,7 +561,7 @@ window.onload = function () {
                                         }
                                     }).then(function (res) {
                                         console.log(res);
-                                        window.location.href = 'http://www.supergo-page.com/showOrderCart.html';
+                                        window.location.href = 'http://page.supergo.com/showOrderCart.html';
                                     }).catch(function (error) {
                                         alert("生成模板失败");
                                     });
@@ -584,7 +583,7 @@ window.onload = function () {
                 var bearerToken1 = '';
                 if(bearerToken != null) {
                     bearerToken1 = bearerToken;
-                    var url = "http://www.supergo-page.com/page/orderCart/delete";
+                    var url = "http://page.supergo.com/page/orderCart/delete";
                     axios({
                         method: 'get',
                         url: url,
@@ -596,7 +595,7 @@ window.onload = function () {
                         },
                     }).then(function (res) {
                         if(res.data.code == 200) {
-                            var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                            var url = "http://page.supergo.com/page/goods/showOrderCart";
                             axios({
                                 method: 'get',
                                 url: url,
@@ -605,7 +604,7 @@ window.onload = function () {
                                 }
                             }).then(function (res) {
                                 console.log(res);
-                                window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                                window.location.href = 'http://page.supergo.com/'+res.data.msg+'.html';
                             }).catch(function (error) {
                                 alert("生成模板失败");
                             });
@@ -615,7 +614,7 @@ window.onload = function () {
                         alert("删除商品信息失败");
                     });
                 } else {
-                    var url = "http://www.supergo-page.com/page/orderCart/deleteRedis";
+                    var url = "http://page.supergo.com/page/orderCart/deleteRedis";
                     axios({
                         method: 'get',
                         url: url,
@@ -627,7 +626,7 @@ window.onload = function () {
                         },
                     }).then(function (res) {
                         if(res.data.code == 200) {
-                            var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                            var url = "http://page.supergo.com/page/goods/unloginShowOrderCart";
                             axios({
                                 method: 'get',
                                 url: url,
@@ -636,7 +635,7 @@ window.onload = function () {
                                 }
                             }).then(function (res) {
                                 console.log(res);
-                                window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                                window.location.href = 'http://page.supergo.com/'+res.data.msg+'.html';
                             }).catch(function (error) {
                                 alert("生成模板失败");
                             });

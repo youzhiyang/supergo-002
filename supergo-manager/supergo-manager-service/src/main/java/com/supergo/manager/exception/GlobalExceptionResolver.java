@@ -25,7 +25,7 @@ public class GlobalExceptionResolver {
     public String authExceptionResolver(MyAuthException e,HttpServletRequest request) {
         System.out.println("进入认证失败异常处理器....");
         //如果认证失败，跳转到登入页
-        return "redirect:http://www.supergo-sso.com/user/loginPage";
+        return "redirect:http://sso.supergo.com/user/loginPage";
     }
 
     /**
@@ -35,7 +35,7 @@ public class GlobalExceptionResolver {
     @ResponseBody
     public String authExceptionResolver(ExpiredJwtException e) {
         System.out.println("进入jwt的token过期异常处理器....");
-        return "redirect:http://www.supergo-sso.com/user/loginPage";
+        return "redirect:http://sso.supergo.com/user/loginPage";
     }
 
     /**

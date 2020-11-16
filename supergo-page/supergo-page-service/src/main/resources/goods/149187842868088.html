@@ -44,7 +44,7 @@
                 <div class="shortcut">
                     <ul class="fl">
                         <li class="f-item">品优购欢迎您！</li>
-                        <li class="f-item">请<a href="http://www.supergo-sso.com/user/loginPage" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+                        <li class="f-item">请<a @click="login()">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
                         
                     </ul>
                     <ul class="fr">
@@ -147,9 +147,28 @@
         new Vue({
             el: '#nav-bottom',
             methods: {
+                //登录
+                login: function () {
+                    //获取当前页面url
+                    var url = window.location.href;
+                    var strArr = url.split("/");
+                    var pageArr = strArr[strArr.length-1].split(".");
+                    var page = pageArr[0]
+                    if(page == "unloginAddOrderCart") {
+                        var itemId = skuMap.item_id;
+                        var num = skuMap.selectedNum;
+                        var sellerId = skuMap.seller_id;
+                        //跳转到登入页
+                        window.location.href = "http://sso.supergo.com/user/loginPage?url=" + url + "&itemId=" + itemId + "&num=" + num + "&sellerId=" + sellerId;
+                    } else {
+                        //跳转到登入页
+                        window.location.href = "http://sso.supergo.com/user/loginPage?url=" + url
+                    }
+                },
+                //退出登录
                 loginOut:function () {
                     $.ajax({
-                        url: "http://www.supergo-sso.com/user/loginOut",
+                        url: "http://sso.supergo.com/user/loginOut",
                         type: "get",
                         data: {
                             userId: userInfo.id
@@ -157,11 +176,11 @@
                         success: function (res) {
                             console.log(res);
                             $.ajax({
-                                url: "http://www.supergo-page.com/page/html/build/149187842868088",
+                                url: "http://page.supergo.com/page/html/build/149187842868088",
                                 type: "get",
                                 success: function (res) {
                                     //跳转到登入页
-                                    window.location.href = "http://www.supergo-sso.com/user/loginPage";
+                                    window.location.href = "http://sso.supergo.com/user/loginPage";
                                 }
                             })
                         }
@@ -174,7 +193,7 @@
                         bearerToken1 = bearerToken;
                     }
                     if(userInfo.id != null) {
-                        var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                        var url = "http://page.supergo.com/page/goods/showOrderCart";
                         axios({
                             method: 'get',
                             url: url,
@@ -183,12 +202,12 @@
                             }
                         }).then(function (res) {
                             console.log(res);
-                            window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                            window.location.href = 'http://page.supergo.com/'+res.data.msg+'.html';
                         }).catch(function (error) {
                             alert("生成模板失败");
                         });
                     } else {
-                        var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                        var url = "http://page.supergo.com/page/goods/unloginShowOrderCart";
                         axios({
                             method: 'get',
                             url: url,
@@ -196,7 +215,7 @@
                                 'Authorization': bearerToken1
                             }
                         }).then(function (res) {
-                            window.location.href = "http://www.supergo-page.com/"+res.data.msg+".html";
+                            window.location.href = "http://page.supergo.com/"+res.data.msg+".html";
                         }).catch(function (error) {
                             alert("生成模板失败");
                         });

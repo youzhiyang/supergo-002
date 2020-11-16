@@ -246,6 +246,7 @@ public class PageService {
                 Cookie cookie = new Cookie("clientId", clientId);
                 cookie.setMaxAge(3 * 24 * 3600);
                 cookie.setPath("/");
+                cookie.setDomain("supergo.com");
                 response.addCookie(cookie);
             }
             System.out.println("clientId:  " + clientId);
@@ -365,7 +366,6 @@ public class PageService {
                     template = "nullloginShowOrderCart";
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -406,6 +406,7 @@ public class PageService {
             Cookie cookie = new Cookie("clientId", clientId);
             cookie.setMaxAge(3 * 24 * 3600);
             cookie.setPath("/");
+            cookie.setDomain("supergo.com");
             response.addCookie(cookie);
         }
         //如果用户

@@ -60,7 +60,7 @@
             el:'#app',
             methods:{
                 showGoodsDetail: function(){
-                    let url = 'http://www.supergo-page.com/page/html/build/' + skuMap.goods_id;
+                    let url = 'http://page.supergo.com/page/html/build/' + skuMap.goods_id;
                     axios({
                         method: 'get',
                         url: url,
@@ -68,7 +68,7 @@
                             'Authorization': bearerToken
                         }
                     }).then(function (res) {
-                        window.location.href = 'http://www.supergo-page.com/'+ skuMap.goods_id+'.html';
+                        window.location.href = 'http://page.supergo.com/'+ skuMap.goods_id+'.html';
                     }).catch(function (error) {
                         alert("生成模板失败");
                     });
@@ -80,7 +80,7 @@
                         bearerToken1 = bearerToken;
                     }
                     if(userInfo.id != null) {
-                        var url = "http://www.supergo-page.com/page/goods/showOrderCart";
+                        var url = "http://page.supergo.com/page/goods/showOrderCart";
                         axios({
                             method: 'get',
                             url: url,
@@ -89,12 +89,12 @@
                             }
                         }).then(function (res) {
                             console.log(res);
-                            window.location.href = 'http://www.supergo-page.com/'+res.data.msg+'.html';
+                            window.location.href = 'http://page.supergo.com/'+res.data.msg+'.html';
                         }).catch(function (error) {
                             alert("生成模板失败");
                         });
                     } else {
-                        var url = "http://www.supergo-page.com/page/goods/unloginShowOrderCart";
+                        var url = "http://page.supergo.com/page/goods/unloginShowOrderCart";
                         axios({
                             method: 'get',
                             url: url,
@@ -102,7 +102,7 @@
                                 'Authorization': bearerToken1
                             }
                         }).then(function (res) {
-                            window.location.href = "http://www.supergo-page.com/"+res.data.msg+".html";
+                            window.location.href = "http://page.supergo.com/"+res.data.msg+".html";
                         }).catch(function (error) {
                             alert("生成模板失败");
                         });

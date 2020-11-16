@@ -34,7 +34,7 @@ window.onload = function () {
                 }
 
                 if(bearerToken != null) {  //用户登录情况下添加购物车操作
-                    var url = "http://www.supergo-page.com/page/goods/addOrderCart";
+                    var url = "http://page.supergo.com/page/goods/addOrderCart";
                     axios({
                         method: 'get',
                         url: url,
@@ -48,12 +48,12 @@ window.onload = function () {
                         }
                     }).then(function (res) {
                         console.log(res);
-                        window.location.href = 'http://www.supergo-page.com/unloginAddOrderCart.html';
+                        window.location.href = 'http://page.supergo.com/unloginAddOrderCart.html';
                     }).catch(function (error) {
                         alert("生成模板失败");
                     });
                 } else {  //用户未登录情况下添加购物车操作
-                    var url = "http://www.supergo-page.com/page/goods/unloginAddOrderCart";
+                    var url = "http://page.supergo.com/page/goods/unloginAddOrderCart";
                     axios({
                         method: 'get',
                         url: url,
@@ -64,7 +64,7 @@ window.onload = function () {
                         }
                     }).then(function (res) {
                         console.log(res);
-                        window.location.href = 'http://www.supergo-page.com/unloginAddOrderCart.html';
+                        window.location.href = 'http://page.supergo.com/unloginAddOrderCart.html';
                     }).catch(function (error) {
                         alert("生成模板失败");
                     });
@@ -176,7 +176,7 @@ window.onload = function () {
             selectSpecification:function (key,value) {
                 this.$set(this.specificationItems,key,value);
                 var _this = this;
-                var url = "http://www.supergo-page.com/page/goods/getItemByGoodsId";
+                var url = "http://page.supergo.com/page/goods/getItemByGoodsId";
                 axios({
                     method: 'get',
                     url: url,

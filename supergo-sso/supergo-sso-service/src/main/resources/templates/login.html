@@ -24,6 +24,7 @@
 <script src="../js/jquery-3.4.1.js"></script>
 <script>
     Vue.prototype.axios = 'axios';
+    axios.defaults.withCredentials = true;
     new Vue({
         el:'#app',
         data:{
@@ -34,10 +35,40 @@
             msg: ''
         },
         methods:{
+            //解析请求url
+            parseUrl: function (parameterStr) {
+                console.log(parameterStr);
+                var myMap = new Map();
+                if(parameterStr.indexOf("&") > 0) {
+                    var keyValueArr = parameterStr.split("&");
+                    console.log(keyValueArr);
+                    for(var i = 0;i < keyValueArr.length;i++) {
+                        var keyValueStr = keyValueArr[i];
+                        var keyArr = keyValueStr.split("=");
+                        console.log(keyArr);
+                        myMap.set(keyArr[0],keyArr[1]);
+                    }
+                } else {
+                    var arr = parameterStr.split("=");
+                    console.log(arr);
+                    myMap.set(arr[0],arr[1]);
+                }
+                console.log(myMap.toString());
+                return myMap;
+            },
+            //解析从定向url
+            parseRedirectUrl: function (redirectUrl) {
+                var arr = redirectUrl.split("/");
+                var length = arr[arr.length - 1];
+                var page = length.split(".")[0];
+                console.log("page:   " + page);
+                return page;
+            },
             doLogin: function(){
+                var _this = this;
                 axios({
                     method: 'post',
-                    url: 'http://www.supergo-sso.com/user/doLogin',
+                    url: 'http://sso.supergo.com/user/doLogin',
                     data: {
                         username: this.userInfo.username,
                         password: this.userInfo.password
@@ -52,11 +83,9 @@
                         //获取当前页面url
                         var pageUrl = window.location.href;
                         var pageArr = pageUrl.split("?");
-                        if(pageArr.length == 2) {
-                            var pageUrl1 = pageArr[1].split("=");
-                            console.log(pageUrl1);
+                        if(pageArr.length >= 2) {
                             //同步购物车数据
-                            let url = 'http://www.supergo-page.com/page/orderCart/synchronizeOrderCart';
+                            let url = 'http://page.supergo.com/page/orderCart/synchronizeOrderCart';
                             axios({
                                 method: 'get',
                                 url: url,
@@ -65,16 +94,78 @@
                                 }
                             }).then(function (res) {
                                 if(res.data.code == 200) {
-                                    window.location.href = pageUrl1[1];
+                                    var map = _this.parseUrl(pageArr[1]);
+                                    var page = _this.parseRedirectUrl(map.get("url"));
+                                    if(page == "showOrderCart") {
+                                        var url = "http://page.supergo.com/page/goods/showOrderCart";
+                                        axios({
+                                            method: 'get',
+                                            url: url,
+                                            headers: {
+                                                'Authorization': bearerToken
+                                            }
+                                        }).then(function (res) {
+                                            console.log(res);
+                                            window.location.href = 'http://page.supergo.com/'+res.data.msg+'.html';
+                                        }).catch(function (error) {
+                                            alert("生成模板失败");
+                                        });
+                                    } else if(page == "unloginAddOrderCart") {
+                                        var url = "http://page.supergo.com/page/goods/addOrderCart";
+                                        axios({
+                                            method: 'get',
+                                            url: url,
+                                            params: {
+                                                itemId: map.get("itemId"),
+                                                num: map.get("num"),
+                                                sellerId: map.get("sellerId")
+                                            },
+                                            headers: {
+                                                'Authorization': bearerToken
+                                            }
+                                        }).then(function (res) {
+                                            console.log(res);
+                                            window.location.href = 'http://page.supergo.com/unloginAddOrderCart.html';
+                                        }).catch(function (error) {
+                                            alert("生成模板失败");
+                                        });
+                                    } else if(page == "nullShowOrderCart") {
+                                        var url = "http://page.supergo.com/page/goods/showOrderCart";
+                                        axios({
+                                            method: 'get',
+                                            url: url,
+                                            headers: {
+                                                'Authorization': bearerToken
+                                            }
+                                        }).then(function (res) {
+                                            console.log(res);
+                                            window.location.href = 'http://page.supergo.com/'+res.data.msg+'.html';
+                                        }).catch(function (error) {
+                                            alert("生成模板失败");
+                                        });
+                                    } else {
+                                        let url = 'http://page.supergo.com/page/html/build/' + page;
+                                        axios({
+                                            method: 'get',
+                                            url: url,
+                                            headers: {
+                                                'Authorization': bearerToken
+                                            }
+                                        }).then(function (res) {
+                                            console.log(res);
+                                            window.location.href = 'http://page.supergo.com/'+page+'.html';
+                                        }).catch(function (error) {
+                                            alert("生成模板失败");
+                                        });
+                                    }
                                 }
                             }).catch(function (error) {
-                                alert("生成模板失败");
+                                alert("同步购物车失败");
                             });
                         } else {
                             //window.location.href = 'http://localhost:9999/api/page/149187842868047.html';
-
                             console.log(bearerToken);
-                            let url = 'http://www.supergo-page.com/page/html/build/149187842868088';
+                            let url = 'http://page.supergo.com/page/html/build/149187842868088';
                             axios({
                                 method: 'get',
                                 url: url,
@@ -83,7 +174,7 @@
                                 }
                             }).then(function (res) {
                                 console.log(res);
-                                window.location.href = 'http://www.supergo-page.com/149187842868088.html';
+                                window.location.href = 'http://page.supergo.com/149187842868088.html';
                             }).catch(function (error) {
                                 alert("生成模板失败");
                             });
