@@ -121,7 +121,7 @@
 							<span class="haveChose">已选择{{checkModel.length}}件商品</span>
 							<span class="total">总价:¥{{total}}</span>
 							<span class="promotion">促销：-¥0.00</span>
-							<a class="account" @click="goAccount()">去结算</a>
+							<a class="account" :class="{ disable : disable }" @click="goAccount()">去结算</a>
 						</div>
 					</td>
 				</tr>

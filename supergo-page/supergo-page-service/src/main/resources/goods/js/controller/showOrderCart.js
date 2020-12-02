@@ -21,14 +21,32 @@ window.onload = function () {
             userInfo: userInfo,
             isCheckedAll: false,      //是否全选
             checkModel: [],            //双向数据绑定
-            total: 0
+            total: 0.00,               //商品总价格
+            disable: false             //去结算按钮是否禁用
         },
         methods:{
             //去结算
             goAccount: function () {
                 //如果已经登录
                 if(bearerToken != null) {
-
+                    //如果未选中商品、禁止跳转
+                    if(this.checkModel.length == 0) {
+                        return false;
+                    }
+                    console.log("aaaaa");
+                    var url = "http://page.supergo.com/page/orderCart/goAccount";
+                    axios({
+                        method: 'get',
+                        url: url,
+                        headers: {
+                            'Authorization': bearerToken
+                        }
+                    }).then(function (res) {
+                        console.log(res);
+                        window.location.href = 'http://page.supergo.com/orderInfo.html';
+                    }).catch(function (error) {
+                        alert("生成模板失败");
+                    });
                 } else {
                     //获取当前页面url
                     var url = window.location.href;
@@ -106,10 +124,10 @@ window.onload = function () {
                 let idIndex = this.checkModel.indexOf(itemId);
                 if (idIndex >= 0) {
                     // 如果已经包含了该id, 则去除(单选按钮由选中变为非选中状态)
-                    this.checkModel.splice(idIndex, 1)
+                    this.checkModel.splice(idIndex, 1);
                 } else {
                     // 选中该checkbox
-                    this.checkModel.push(itemId)
+                    this.checkModel.push(itemId);
                 }
                 console.log(this.checkModel);
                 var _this = this;
@@ -119,11 +137,17 @@ window.onload = function () {
                         _this.total = Math.floor(_this.total * 100) / 100;
                     }
                 });
+                //如果选择框数据为0，禁止点击
+                if(this.checkModel.length == 0) {
+                    this.disable = true;
+                } else {
+                    this.disable = false;
+                }
                 console.log(this.total);
             },
             //点击全选按钮时，判断全选是选中还是未选中状态
             checkAll:function(){
-                this.total = 0;
+                this.total = 0.00;
                 this.isCheckedAll = !this.isCheckedAll
                 if (this.isCheckedAll) {
                     // 全选时
@@ -143,6 +167,12 @@ window.onload = function () {
                     }
                 });
                 console.log(this.total);
+                //如果选择框数据为0，禁止点击
+                if(this.checkModel.length == 0) {
+                    this.disable = true;
+                } else {
+                    this.disable = false;
+                }
             },
             //鼠标移入方法
             enter:function () {
@@ -652,6 +682,8 @@ window.onload = function () {
             this.changeN(0);
             //设置配送地址默认值
             this.setDefaultAddress();
+            //默认全选
+            this.checkAll();
         }
     });
 }

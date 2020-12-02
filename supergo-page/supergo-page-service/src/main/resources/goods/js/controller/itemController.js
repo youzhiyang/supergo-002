@@ -23,7 +23,7 @@ window.onload = function () {
             leftWidth: 0,                                   //配置色底线，左边边线宽度
             rightWidth: 0,                                  //配置色底线，右边边线宽度
             haveGoods: '有货',                             //判断商品是否有货
-            disable: false
+            disable: false                                 //按钮是否禁用
         },
         methods:{
             //加入购物车实现

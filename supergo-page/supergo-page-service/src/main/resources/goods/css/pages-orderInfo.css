@@ -1,0 +1,178 @@
+.account {
+    font-size: 24px;
+    line-height: 105px;
+    letter-spacing: 0em;
+}
+
+.container {
+    width: 990px;
+    margin: 0px auto;
+}
+
+.yui3-g {
+    letter-spacing: 0em;
+    text-rendering: optimizespeed;
+    font-family: FreeSans,Arimo,"Droid Sans",Helvetica,Arial,sans-serif;
+    display: -webkit-flex;
+    -webkit-flex-flow: row wrap;
+    display: -ms-flexbox;
+    -ms-flex-flow: row wrap;
+}
+
+.py-container {
+    width: 990px;
+    margin: 0 auto;
+    font-family: "微软雅黑";
+}
+
+.border {
+    width: 160px;
+    border: 3px solid red;
+    border-radius: 5px;
+}
+
+.account-div {
+    text-align: center;
+    float: left;
+    margin-left: auto;
+}
+
+.account-div-contain {
+    width: 160px;
+    display: inline-block;
+    margin-top: auto;
+    position: relative;
+    top: 35px;
+}
+
+.al-line {
+    background: #CAECB6;
+    width: 160px;
+    height: 5px;
+    position: relative;
+    top: 12px;
+    border-radius: 50%;
+}
+
+.al-line1 {
+    background: #7ABD54;
+    width: 160px;
+    height: 5px;
+    position: relative;
+    top: 12px;
+    border-radius: 50%;
+}
+
+.al-line2 {
+    background: #CCCCCC;
+    width: 160px;
+    height: 5px;
+    position: relative;
+    top: 12px;
+    border-radius: 50%;
+}
+
+.al-circle {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: #CAECB6;
+    border-radius: 50%;
+    position: relative;
+    z-index: 999;
+    color: white;
+}
+
+.al-circle1 {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: #7ABD54;
+    border-radius: 50%;
+    position: relative;
+    z-index: 999;
+    color: white;
+}
+
+.al-circle2 {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: #CCCCCC;
+    border-radius: 50%;
+    position: relative;
+    z-index: 999;
+    color: white;
+}
+
+.order-div {
+    font-size: 16px;
+    padding-top: 20px;
+}
+
+.order-container {
+    border: 1px solid #F0F0F0;
+    margin-top: 10px;
+}
+
+.rec-div {
+    margin: 15px 20px;
+    font-size: 14px;
+}
+
+.rec-div > a {
+    float: right;
+    font-size: 12px
+}
+
+.re-div {
+    height: 32px;
+}
+
+.re-div > span:first-child {
+    border: 2px solid #c81623;
+    margin-left: 40px;
+    padding: 5px 30px;
+}
+
+.re-div > span:nth-child(2) {
+    padding: 7px;
+    width: 75%;
+}
+
+.bg-color {
+    background: #f9f0f0;
+}
+
+.bg-edit {
+    float: right;
+}
+
+.more-div {
+    margin: 15px 40px;
+}
+
+.b-line {
+    border: 1px solid #F0F0F0;
+    margin: 0px 20px;
+}
+
+.p-span {
+    padding: 5px 20px;
+    border: 1px solid #F0F0F0;
+}
+
+.p-span:hover {
+    border: 2px solid #c81623;
+}
+
+.p-left {
+    margin-left: 40px;
+    height: 32px;
+    margin-bottom: 20px;
+}
+
+.r-shop {
+    float: right;
+    font-size: 12px;
+}

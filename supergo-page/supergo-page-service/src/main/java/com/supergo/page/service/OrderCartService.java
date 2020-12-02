@@ -2,17 +2,25 @@ package com.supergo.page.service;
 
 import com.supergo.manager.feign.ApiGoodsFeign;
 import com.supergo.manager.feign.ApiOrderCartFeign;
+import com.supergo.page.util.Const;
+import com.supergo.page.util.FileUtil;
 import com.supergo.pojo.Ordercart;
 import com.supergo.pojo.User;
 import com.supergo.user.utils.CookieUtil;
+import com.supergo.user.utils.JsonUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +34,10 @@ public class OrderCartService {
     private ApiOrderCartFeign apiOrderCartFeign;
     @Autowired
     private ApiGoodsFeign apiGoodsFeign;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private TemplateEngine templateEngine;
 
     /**
      * 更新购物车信息
@@ -131,5 +143,45 @@ public class OrderCartService {
             userId = claims.getId();
         }
         apiOrderCartFeign.synchronizeOrderCart(clientId,Integer.parseInt(userId));
+    }
+
+    /**
+     * 结算页跳转
+     */
+    public void goAccount(HttpServletRequest request) {
+        try {
+            User userInfo = new User();
+            Claims claims = (Claims) request.getAttribute("userInfo");
+            System.out.println("claims:  " + claims != null);
+            String token = null;
+            if(claims != null) {
+                //如果未登入用户信息设置为null
+                userInfo.setId(Long.valueOf(claims.getId()));
+                userInfo.setUsername(claims.getSubject());
+                System.out.println("claims:  " + claims.toString());
+                //获取token值
+                Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries("loginInfo" + claims.getId());
+                System.out.println(entries);
+                token = (String) entries.get(claims.getId());
+            }
+
+            FileWriter fileWriter = new FileWriter(Const.pagePath + "orderInfo" + Const.sufferHtml);
+            //Map<Object, Object> skuMap = apiOrderCartFeign.addOrderCart(itemId, num, sellerId);
+            //System.out.println(skuMap.toString());
+            Context context = new Context();
+            //String spec = (String) skuMap.get("spec");
+            //Map<String, String> stringStringMap = JsonUtils.jsonToMap(spec, String.class, String.class);
+            //获取登入用户信息
+            context.setVariable("userInfo",userInfo);
+            context.setVariable("bearerToken","Bearer " + token);
+            //context.setVariable("skuMap",skuMap);
+            //context.setVariable("spec",stringStringMap);
+            //每次创建模板前删除原来的模板
+            boolean b = FileUtil.deleteFile(Const.pagePath + "orderInfo" + Const.sufferHtml);
+            System.out.println("删除文件成功！");
+            templateEngine.process("orderInfo", context, fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

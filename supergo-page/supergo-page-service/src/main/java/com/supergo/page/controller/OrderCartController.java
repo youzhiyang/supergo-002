@@ -115,6 +115,16 @@ public class OrderCartController {
         return HttpResult.ok();
     }
 
+    /**
+     * 结算页跳转
+     */
+    @RequestMapping("/goAccount")
+    public HttpResult goAccount() {
+        System.out.println("进入goAccount接口....");
+        orderCartService.goAccount(request);
+        return HttpResult.ok();
+    }
+
 }
 
 

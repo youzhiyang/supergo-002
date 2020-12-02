@@ -1,0 +1,126 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<header th:fragment="header">
+
+<div id="nav-bottom">
+
+    <!--顶部-->
+    <div class="nav-top">
+        <div class="top">
+            <div class="py-container">
+                <div class="shortcut">
+                    <ul class="fl">
+                        <li class="f-item">品优购欢迎您！</li>
+                        <li class="f-item" th:if="${userInfo.username == null}">请<a @click="login()">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+                        <li class="f-item" th:if="${userInfo.username != null}">
+                            <span th:text="${userInfo.username}"></span>
+                            <span id="loginOutSpan">
+                                <!--<a th:href="@{'http://localhost:9999/api/sso/user/loginOut?userId='+${userInfo.username}+'&goodsId='+${goods.id}}">退出</a>-->
+                                <a @click="loginOut()">退出</a>
+                            </span>
+                        </li>
+                    </ul>
+                    <ul class="fr">
+                        <li class="f-item">我的订单</li>
+                        <li class="f-item space"></li>
+                        <li class="f-item"><a href="home.html" target="_blank">我的品优购</a></li>
+                        <li class="f-item space"></li>
+                        <li class="f-item">品优购会员</li>
+                        <li class="f-item space"></li>
+                        <li class="f-item">企业采购</li>
+                        <li class="f-item space"></li>
+                        <li class="f-item">关注品优购</li>
+                        <li class="f-item space"></li>
+                        <li class="f-item" id="service">
+                            <span>客户服务</span>
+                            <ul class="service">
+                                <li><a href="cooperation.html" target="_blank">合作招商</a></li>
+                                <li><a href="shoplogin.html" target="_blank">商家后台</a></li>
+                                <li><a href="cooperation.html" target="_blank">合作招商</a></li>
+                                <li><a href="#">商家后台</a></li>
+                            </ul>
+                        </li>
+                        <li class="f-item space"></li>
+                        <li class="f-item">网站导航</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--头部-->
+        <div class="py-container">
+            <div class="yui3-g Logo">
+                <div class="yui3-u Left logoArea">
+                    <a class="logo-bd" title="品优购" href="JD-index.html" target="_blank"></a>
+                </div>
+                <div class="account">
+                    <span>结算页</span>
+                </div>
+                <div class="account-div">
+                    <div class="account-div-contain">
+                        <div>
+                            <div class="al-line"></div>
+                            <div class="al-circle">1</div>
+                        </div>
+                        <em>我的购物车</em>
+                    </div>
+                    <div class="account-div-contain">
+                        <div>
+                            <div class="al-line1"></div>
+                            <div class="al-circle1">2</div>
+                        </div>
+                        <em>填写核对订单信息</em>
+                    </div>
+                    <div class="account-div-contain">
+                        <div>
+                            <div class="al-line2"></div>
+                            <div class="al-circle2">3</div>
+                        </div>
+                        <em>成功提交订单</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+        new Vue({
+            el: '#nav-bottom',
+            methods: {
+                login:function () {
+                    //获取当前页面url
+                    var url = window.location.href;
+                    //跳转到登入页
+                    window.location.href = "http://sso.supergo.com/user/loginPage?url=" + url
+                },
+                loginOut:function () {
+                    var bearerToken1 = '';
+                    if(bearerToken1 != null) {
+                        bearerToken1 = bearerToken;
+                    }
+                    $.ajax({
+                        url: "http://sso.supergo.com/user/loginOut",
+                        type: "get",
+                        data: {
+                            userId: userInfo.id
+                        },
+                        headers: {
+                            'Authorization': bearerToken1
+                        },
+                        success: function (res) {
+                            console.log(res);
+                            $.ajax({
+                                url: "http://page.supergo.com/page/html/build/149187842868088",
+                                type: "get",
+                                success: function (res) {
+                                    //跳转到登入页
+                                    window.location.href = "http://sso.supergo.com/user/loginPage";
+                                }
+                            })
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</header>
+</html>

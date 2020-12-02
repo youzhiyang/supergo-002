@@ -173,6 +173,7 @@ table tfoot tr td input:first-child {
     padding: 0px 15px;
     text-decoration: none;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .total {
@@ -281,6 +282,26 @@ table tfoot tr td input:first-child {
 .fl {
     float: left;
 }
+
+.disable {
+    background: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    cursor: not-allowed;
+}
+
+.disable:hover {
+    background: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    cursor: not-allowed;
+}
+
+/*.footer-div a:last-child:hover {*/
+    /*background: #f1f1f1 ;*/
+    /*border: 1px solid #f1f1f1;*/
+    /*cursor: not-allowed ;*/
+    /*color: white;*/
+    /*text-decoration: none;*/
+/*}*/
 
 
 
